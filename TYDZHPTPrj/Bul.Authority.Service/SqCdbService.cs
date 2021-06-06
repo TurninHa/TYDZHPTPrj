@@ -15,9 +15,11 @@ namespace Bul.Authority.Service
         public SqCdbService(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         { }
 
-        public int Add(SqCdb cdb)
+        public async Task<long> Add(SqCdb cdb)
         {
-            return 1;
+            var result = await this.Db.InsertAsync(cdb);
+
+            return result.ID;
         }
     }
 }
