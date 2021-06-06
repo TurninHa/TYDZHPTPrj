@@ -13,6 +13,7 @@ namespace Bul.Authority.Entity
         /// ID
         /// </summary>
         [Column(IsPrimaryKey = true)]
+        [AutoIncrement]
         public long ID { get; set; }
         /// <summary>
         /// 菜单编码
