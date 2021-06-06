@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Chloe.Extension" Version="4.12.0" />
+    <PackageReference Include="Chloe.MySql" Version="4.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bul.Authority.DBConnection\Bul.Authority.DBConnection.csproj" />
+    <ProjectReference Include="..\Bul.Authority.Entity\Bul.Authority.Entity.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,15 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/.vs
+/TYDZHPTPrj/.vs/TYDZHPTPrj
+/TYDZHPTPrj/Bul.Authority.Application/obj
+/TYDZHPTPrj/Bul.Authority.DBConnection/obj
+/TYDZHPTPrj/Bul.Authority.Entity/bin/Debug/net5.0
+/TYDZHPTPrj/Bul.Authority.Entity/obj
+/TYDZHPTPrj/Bul.Authority.Service/obj
+/TYDZHPTPrj/Bul.Authority.Application/bin/Debug/net5.0
+/TYDZHPTPrj/Bul.Authority.DBConnection/bin/Debug/net5.0
+/TYDZHPTPrj/Bul.Authority.Service/bin/Debug/net5.0
+/TYDZHPTPrj/Bul.Authority.DBConnection/Bul.Authority.DBConnection.csproj.user
