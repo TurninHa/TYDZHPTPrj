@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,73 +18,32 @@ namespace Bul.System.Result
 
         public object Data { get; protected set; }
 
-        public object ExtensionData { get; set; }
+        public string ExtensionData { get; set; }
 
-        public abstract AbstractResult Success();
-
-        public abstract AbstractResult Success(string message);
-
-        public abstract AbstractResult Success(string message, object data);
-
-        public abstract AbstractResult SuccessForExtension(string message, object extensionData);
-
-        public abstract AbstractResult SuccessForExtension(string message, object data, object extensionData);
-
-
-        public abstract AbstractResult Fail(int code, string message);
-
-        public abstract AbstractResult Fail(int code, string message, object data);
-
-        public abstract AbstractResult FailForExtension(int code, string message, object extensionData);
-
-        public abstract AbstractResult FailForExtension(int code, string message, object data, object extensionData);
+        /// <summary>
+        /// 以0标识 被调用的方法正确执行了
+        /// </summary>
+        public int ResultSuccess { get; private set; } = 0;
     }
 
     public class BulResult<T> : AbstractResult where T : class, new()
     {
-        public override AbstractResult Fail(int code, string message)
+        public new T Data { get; protected set; }
+
+        public static BulResult<T> Fail(int code, string message = "", T data = default)
         {
-            throw new NotImplementedException();
+            return new BulResult<T> { Code = code, Message = message, Data = data };
         }
 
-        public override AbstractResult Fail(int code, string message, object data)
+        public static BulResult<T> Fail(int code, string extensionData, string message = "", T data = default)
         {
-            throw new NotImplementedException();
+            return new BulResult<T> { Code = code, Message = message, Data = data, ExtensionData = extensionData };
         }
 
-        public override AbstractResult FailForExtension(int code, string message, object extensionData)
-        {
-            throw new NotImplementedException();
-        }
 
-        public override AbstractResult FailForExtension(int code, string message, object data, object extensionData)
+        public static BulResult<T> Success(string message = "", T data = default, string extensionData = "")
         {
-            throw new NotImplementedException();
-        }
-
-        public override AbstractResult Success()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override AbstractResult Success(string message)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override AbstractResult Success(string message, object data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override AbstractResult SuccessForExtension(string message, object extensionData)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override AbstractResult SuccessForExtension(string message, object data, object extensionData)
-        {
-            throw new NotImplementedException();
+            return new BulResult<T>() { Code = 0, Message = message, Data = data, ExtensionData = extensionData };
         }
     }
 }
