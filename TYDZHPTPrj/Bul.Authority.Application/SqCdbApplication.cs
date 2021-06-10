@@ -12,7 +12,7 @@ namespace Bul.Authority.Application
     {
         public async Task<BulResult<SqCdb>> AddSqCd(SqCdb sqCdb)
         {
-            
+            return await Task.FromResult(new BulResult<SqCdb>());
         }
     }
 }

@@ -21,7 +21,40 @@ namespace Bul.System.Result
         public string ExtensionData { get; set; }
     }
 
-    public class BulResult<T> : AbstractResult where T : class, new()
+    public class BulResult : AbstractResult
+    {
+        public static AbstractResult FailNonData(int code)
+        {
+            return new BulResult { Code = code, Message = string.Empty };
+        }
+
+        public static AbstractResult FailNonData(int code, string message)
+        {
+            return new BulResult { Code = code, Message = message };
+        }
+
+        public static AbstractResult FailNonData(int code, string message, string extensionData)
+        {
+            return new BulResult { Code = code, Message = message, ExtensionData = extensionData };
+        }
+
+        public static AbstractResult SuccessNonData()
+        {
+            return new BulResult() { Code = 0, Message = string.Empty, ExtensionData = string.Empty };
+        }
+
+        public static AbstractResult SuccessNonData(string message)
+        {
+            return new BulResult() { Code = 0, Message = message, ExtensionData = string.Empty };
+        }
+
+        public static AbstractResult SuccessNonData(string message, string extensionData)
+        {
+            return new BulResult() { Code = 0, Message = message, ExtensionData = extensionData };
+        }
+    }
+
+    public class BulResult<T> : BulResult
     {
         public new T Data { get; protected set; }
 
