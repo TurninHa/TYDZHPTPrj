@@ -11,7 +11,7 @@ namespace Bul.Authority.DBConnection.ConnectionFactory
 {
     public class MySqlConnectionFactory : IDbConnectionFactory
     {
-        private string _;
+        private readonly string _;
         public MySqlConnectionFactory(string connectionString)
         {
             _ = connectionString;

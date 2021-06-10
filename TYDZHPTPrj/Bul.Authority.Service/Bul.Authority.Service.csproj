@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bul.Authority.DBConnection\Bul.Authority.DBConnection.csproj" />
     <ProjectReference Include="..\Bul.Authority.Entity\Bul.Authority.Entity.csproj" />
+    <ProjectReference Include="..\Bul.System.Result\Bul.System.Result.csproj" />
   </ItemGroup>
 
 </Project>

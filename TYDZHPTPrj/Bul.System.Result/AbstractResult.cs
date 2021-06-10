@@ -19,29 +19,53 @@ namespace Bul.System.Result
         public object Data { get; protected set; }
 
         public string ExtensionData { get; set; }
-
-        /// <summary>
-        /// 以0标识 被调用的方法正确执行了
-        /// </summary>
-        public int ResultSuccess { get; private set; } = 0;
     }
 
     public class BulResult<T> : AbstractResult where T : class, new()
     {
         public new T Data { get; protected set; }
 
-        public static BulResult<T> Fail(int code, string message = "", T data = default)
+        public static BulResult<T> Fail(int code)
         {
-            return new BulResult<T> { Code = code, Message = message, Data = data };
+            return new BulResult<T> { Code = code, Message = string.Empty, Data = default };
         }
 
-        public static BulResult<T> Fail(int code, string extensionData, string message = "", T data = default)
+        public static BulResult<T> Fail(int code, string message)
+        {
+            return new BulResult<T> { Code = code, Message = message, Data = default };
+        }
+
+        public static BulResult<T> Fail(int code, string message, string extensionData)
+        {
+            return new BulResult<T> { Code = code, Message = message, Data = default, ExtensionData = extensionData };
+        }
+
+        public static BulResult<T> Fail(int code, string message, string extensionData, T data)
         {
             return new BulResult<T> { Code = code, Message = message, Data = data, ExtensionData = extensionData };
         }
 
+        public static BulResult<T> Success()
+        {
+            return new BulResult<T>() { Code = 0, Message = string.Empty, Data = default, ExtensionData = string.Empty };
+        }
 
-        public static BulResult<T> Success(string message = "", T data = default, string extensionData = "")
+        public static BulResult<T> Success(string message)
+        {
+            return new BulResult<T>() { Code = 0, Message = message, Data = default, ExtensionData = string.Empty };
+        }
+
+        public static BulResult<T> Success(string message, string extensionData)
+        {
+            return new BulResult<T>() { Code = 0, Message = message, Data = default, ExtensionData = extensionData };
+        }
+
+        public static BulResult<T> Success(T data, string extensionData = "")
+        {
+            return new BulResult<T>() { Code = 0, Message = string.Empty, Data = data, ExtensionData = extensionData };
+        }
+
+        public static BulResult<T> Success(string message, T data, string extensionData = "")
         {
             return new BulResult<T>() { Code = 0, Message = message, Data = data, ExtensionData = extensionData };
         }
