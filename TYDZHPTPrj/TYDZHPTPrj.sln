@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bul.Authority.Application",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bul.Authority.DBConnection", "Bul.Authority.DBConnection\Bul.Authority.DBConnection.csproj", "{70193962-DFF3-4F0F-8FD0-A4BE483FD102}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bul.System.Result", "Bul.System.Result\Bul.System.Result.csproj", "{8E85DDD3-7A3E-456F-B14C-B76AA97A9762}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bul.System.Result", "Bul.System.Result\Bul.System.Result.csproj", "{8E85DDD3-7A3E-456F-B14C-B76AA97A9762}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bul.System.Extension", "Bul.System.Extension\Bul.System.Extension.csproj", "{3E10B0FB-DE63-4EDC-B9FC-1D94FDC5FC16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{8E85DDD3-7A3E-456F-B14C-B76AA97A9762}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E85DDD3-7A3E-456F-B14C-B76AA97A9762}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E85DDD3-7A3E-456F-B14C-B76AA97A9762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E10B0FB-DE63-4EDC-B9FC-1D94FDC5FC16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E10B0FB-DE63-4EDC-B9FC-1D94FDC5FC16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E10B0FB-DE63-4EDC-B9FC-1D94FDC5FC16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E10B0FB-DE63-4EDC-B9FC-1D94FDC5FC16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
