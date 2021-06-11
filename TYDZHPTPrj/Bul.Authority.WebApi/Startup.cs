@@ -1,3 +1,9 @@
+using Bul.Authority.Application;
+using Bul.Authority.DBConnection.AuthorityMySqlDbContext;
+using Bul.Authority.DBConnection.ConnectionFactory;
+using Bul.Authority.Service;
+using Chloe.Infrastructure;
+using Chloe.MySql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -27,10 +33,19 @@ namespace Bul.Authority.WebApi
         {
 
             services.AddControllers();
+
+            services.AddScoped<SqCdbService>();
+            services.AddScoped<SqCdbApplication>();
+            services.AddScoped<AuthorityDbContext>();
+
+            services.AddScoped<IDbConnectionFactory, MySqlConnectionFactory>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bul.Authority.WebApi", Version = "v1" });
             });
+
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

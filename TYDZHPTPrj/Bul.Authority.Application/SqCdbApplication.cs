@@ -1,4 +1,5 @@
 ﻿using Bul.Authority.Entity;
+using Bul.Authority.Service;
 using Bul.System.Result;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,17 @@ namespace Bul.Authority.Application
 {
     public class SqCdbApplication
     {
+        private readonly SqCdbService sqCdbService;
+        public SqCdbApplication(SqCdbService cdbService)
+        {
+            sqCdbService = cdbService;
+        }
+
         public async Task<BulResult<SqCdb>> AddSqCd(SqCdb sqCdb)
         {
-            return await Task.FromResult(new BulResult<SqCdb>());
+            var result = await this.sqCdbService.Add(sqCdb);
+
+            return result;
         }
     }
 }
