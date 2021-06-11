@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Bul.Authority.Application\Bul.Authority.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataBaseDoc\" />
+  </ItemGroup>
+
 </Project>
