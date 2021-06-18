@@ -19,7 +19,7 @@ namespace Bul.Authority.Application
 
         public async Task<BulResult<SqCdb>> AddSqCd(SqCdb sqCdb)
         {
-            var result = await this.sqCdbService.Add(sqCdb);
+            var result = await this.sqCdbService.Save(sqCdb);
 
             return result;
         }

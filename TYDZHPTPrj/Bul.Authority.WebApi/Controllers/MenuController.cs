@@ -26,18 +26,15 @@ namespace Bul.Authority.WebApi.Controllers
         /// </summary>
         /// <param name="cdb"></param>
         /// <returns></returns>
+        [HttpPost]
+        [Route("save")]
         public async Task<AbstractResult> Save(SqCdb cdb)
         {
-            if (cdb.ID == 0)
-            {
-                var vo = await this.sqCdbApplication.AddSqCd(cdb);
-                if (vo.Code == 0 && vo.Data.ID > 0)
-                    return BulResult<long>.Success(vo.Data.ID);
-                else
-                    return BulResult.FailNonData(vo.Code, vo.Message);
-            }
-
-            return BulResult.FailNonData(-10, "暂不支持");
+            var vo = await this.sqCdbApplication.AddSqCd(cdb);
+            if (vo.Code == 0 && vo.Data.ID > 0)
+                return BulResult<long>.Success(vo.Data.ID);
+            else
+                return BulResult.FailNonData(vo.Code, vo.Message);
         }
     }
 }
