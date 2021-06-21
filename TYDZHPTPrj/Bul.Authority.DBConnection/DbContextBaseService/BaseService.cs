@@ -7,7 +7,7 @@ namespace Bul.Authority.DBConnection.DbContextBaseService
 {
     public class BaseService
     {
-        protected AuthorityDbContext Db;
+        public AuthorityDbContext Db { get; private set; }
         protected readonly IHttpContextAccessor HttpContextAccessor;
 
 

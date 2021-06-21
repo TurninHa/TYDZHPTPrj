@@ -30,7 +30,7 @@ namespace Bul.Authority.WebApi.Controllers
         [Route("save")]
         public async Task<AbstractResult> Save(SqCdb cdb)
         {
-            var vo = await this.sqCdbApplication.AddSqCd(cdb);
+            var vo = await this.sqCdbApplication.SaveSqCd(cdb);
             if (vo.Code == 0 && vo.Data.ID > 0)
                 return BulResult<long>.Success(vo.Data.ID);
             else

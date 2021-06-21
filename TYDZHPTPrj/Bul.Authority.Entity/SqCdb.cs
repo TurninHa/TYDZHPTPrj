@@ -34,7 +34,7 @@ namespace Bul.Authority.Entity
         /// <summary>
         /// 排序号
         /// </summary>
-        public int PXH { get; set; }
+        public int? PXH { get; set; }
         /// <summary>
         /// 使用状态
         /// </summary>

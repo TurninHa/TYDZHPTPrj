@@ -1,15 +1,19 @@
-﻿using System;
+﻿using Chloe.Annotations;
+using System;
 
 namespace Bul.Authority.Entity
 {
     /// <summary>
     /// 菜单操作功能表
     /// </summary>
+    [Table("sq_cdczgn")]
     public class SqCdczgn
     {
         /// <summary>
         /// 
         /// </summary>
+        [Column(IsPrimaryKey = true)]
+        [AutoIncrement]
         public long ID { get; set; }
         /// <summary>
         /// 

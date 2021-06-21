@@ -20,6 +20,11 @@ namespace Bul.Authority.Service
         public SqCdbService(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         { }
 
+        /// <summary>
+        /// 保存菜单
+        /// </summary>
+        /// <param name="cdb"></param>
+        /// <returns></returns>
         public async Task<BulResult<SqCdb>> Save(SqCdb cdb)
         {
             if (cdb == null)
@@ -71,7 +76,6 @@ namespace Bul.Authority.Service
                     return BulResult<SqCdb>.Fail(-6, "保存失败");
             }
         }
-
 
     }
 }

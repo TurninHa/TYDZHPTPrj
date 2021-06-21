@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chloe.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,14 @@ namespace Bul.Authority.Entity
     /// <summary>
     /// 角色菜单表
     /// </summary>
+    [Table("sq_jscd")]
     public class SqJscd
     {
         /// <summary>
         /// 
         /// </summary>
+        [Column(IsPrimaryKey = true)]
+        [AutoIncrement]
         public long ID { get; set; }
         /// <summary>
         /// 

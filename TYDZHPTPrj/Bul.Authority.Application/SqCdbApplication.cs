@@ -17,7 +17,7 @@ namespace Bul.Authority.Application
             sqCdbService = cdbService;
         }
 
-        public async Task<BulResult<SqCdb>> AddSqCd(SqCdb sqCdb)
+        public async Task<BulResult<SqCdb>> SaveSqCd(SqCdb sqCdb)
         {
             var result = await this.sqCdbService.Save(sqCdb);
 
