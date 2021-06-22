@@ -39,14 +39,6 @@ namespace Bul.Authority.Service
             if (cdb.FCDID == null)
                 return BulResult<SqCdb>.Fail(-3, "父级菜单Id不能为空");
 
-            //Expression<Func<SqCdb, bool>> where = w => (w.CDBM == cdb.CDBM || w.CDMC == cdb.CDMC);
-
-            //if (cdb.ID > 0)
-            //{
-            //    Expression<Func<SqCdb, bool>> wherAnd = a => a.ID != cdb.ID;
-            //    where = (Expression<Func<SqCdb, bool>>)where.And(wherAnd);
-            //}
-
             var isExistMenu = this.Db.Query<SqCdb>();
             isExistMenu = isExistMenu.Where(w => (w.CDBM == cdb.CDBM || w.CDMC == cdb.CDMC));
 

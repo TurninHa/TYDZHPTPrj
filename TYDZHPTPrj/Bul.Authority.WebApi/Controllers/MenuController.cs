@@ -1,5 +1,6 @@
 ﻿using Bul.Authority.Application;
 using Bul.Authority.Entity;
+using Bul.System.Common;
 using Bul.System.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,7 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.WebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MenuController : ControllerBase
+    public class MenuController : AuthorityBaseController
     {
         private readonly SqCdbApplication sqCdbApplication;
         public MenuController(SqCdbApplication cdbApp)

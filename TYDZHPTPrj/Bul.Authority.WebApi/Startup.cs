@@ -35,6 +35,8 @@ namespace Bul.Authority.WebApi
                 option.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
 
+            services.AddScoped<Entity.SqUsers>();//为当前登录用户使用
+
             services.AddScoped<SqCdbService>();
             services.AddScoped<SqCdbApplication>();
             services.AddScoped<AuthorityDbContext>();

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bul.Authority.Application\Bul.Authority.Application.csproj" />
+    <ProjectReference Include="..\Bul.System.Common\Bul.System.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
