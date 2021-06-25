@@ -36,7 +36,9 @@ namespace Bul.Authority.WebApi.Controllers
             if (bulResult.Code == 0)
                 this.CurrentUser = bulResult.Data;
             else
-                this.HttpContext.Response.WriteAsJsonAsync<AbstractResult>(BulResult.FailNonData(-10, "非法登录"));
+                this.HttpContext.Response.WriteAsJsonAsync(BulResult.FailNonData(-10, "非法登录"));
+
+            this.HttpContext.Items.Add("CurrentUser", this.CurrentUser);
         }
     }
 }

@@ -23,5 +23,23 @@ namespace Bul.Authority.Application
 
             return result;
         }
+
+        /// <summary>
+        /// 获取子节点菜单列表
+        /// </summary>
+        /// <param name="fcdid"></param>
+        /// <returns></returns>
+        public async Task<BulResult<IEnumerable<SqCdb>>> GetChildMenuList(long fcdid)
+        {
+            if (fcdid < 0)
+                return BulResult<IEnumerable<SqCdb>>.Fail(-1, "父菜单ID不能小于0");
+
+            var query = this.sqCdbService.Db.Query<SqCdb>();
+            query = query.Where(w => w.FCDID == fcdid);
+
+            var result = await query.ToListAsync();
+
+            return BulResult<IEnumerable<SqCdb>>.Success(result);
+        }
     }
 }

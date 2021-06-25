@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Bul.System.Common
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public abstract class BaseController<T> : ControllerBase
     {

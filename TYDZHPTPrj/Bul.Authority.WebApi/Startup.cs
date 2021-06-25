@@ -2,6 +2,7 @@ using Bul.Authority.Application;
 using Bul.Authority.DBConnection.AuthorityMySqlDbContext;
 using Bul.Authority.DBConnection.ConnectionFactory;
 using Bul.Authority.Service;
+using Bul.System.Extension.NetCore;
 using Chloe.Infrastructure;
 using Chloe.MySql;
 using Microsoft.AspNetCore.Builder;
@@ -51,6 +52,8 @@ namespace Bul.Authority.WebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bul.Authority.WebApi", Version = "v1" });
             });
 
+            services.AddBulAuthentication(Configuration);
+
             services.AddHttpContextAccessor();
         }
 
@@ -65,6 +68,8 @@ namespace Bul.Authority.WebApi
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

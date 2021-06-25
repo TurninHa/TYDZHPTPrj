@@ -17,5 +17,25 @@ namespace Bul.System.Extension.NetCore
 
             return httpContext.RequestServices.GetService<T>();
         }
+
+        public static TCurrentUser GetCurrentUser<TCurrentUser>(this HttpContext httpContext)
+        {
+            if (httpContext == null)
+                return default;
+
+            if (httpContext.Items == null || httpContext.Items.Count == 0)
+                return default;
+
+            var keyName = nameof(TCurrentUser);
+            if (!httpContext.Items.ContainsKey(keyName))
+                return default;
+
+            var result = httpContext.Items[keyName];
+
+            if (result == null)
+                return default;
+
+            return (TCurrentUser)result;
+        }
     }
 }

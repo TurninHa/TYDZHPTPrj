@@ -35,5 +35,14 @@ namespace Bul.Authority.WebApi.Controllers
             else
                 return BulResult.FailNonData(vo.Code, vo.Message);
         }
+
+        [HttpGet]
+        [Route("childmenu")]
+        public async Task<BulResult<IEnumerable<SqCdb>>> GetMenuByFcdId(long fcdid)
+        {
+            var result = await this.sqCdbApplication.GetChildMenuList(fcdid);
+
+            return result;
+        }
     }
 }
