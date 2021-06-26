@@ -2,6 +2,7 @@ using Bul.Authority.Application;
 using Bul.Authority.DBConnection.AuthorityMySqlDbContext;
 using Bul.Authority.DBConnection.ConnectionFactory;
 using Bul.Authority.Service;
+using Bul.System.Common;
 using Bul.System.Extension.NetCore;
 using Chloe.Infrastructure;
 using Chloe.MySql;
@@ -40,7 +41,16 @@ namespace Bul.Authority.WebApi
 
             services.AddScoped<SqCdbService>();
             services.AddScoped<SqCdbApplication>();
+
+            services.AddScoped<SqUsersServices>();
+            services.AddScoped<SqUserApplication>();
+
+            services.AddScoped<SqUserRoleService>();
+            services.AddScoped<SqUserRoleApplication>();
+
             services.AddScoped<AuthorityDbContext>();
+
+            services.AddTransient<JwtBearer>();
 
             services.AddScoped<IDbConnectionFactory, MySqlConnectionFactory>(serviceProvider =>
             {
