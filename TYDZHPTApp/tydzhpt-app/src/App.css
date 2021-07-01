@@ -1,3 +1,7 @@
+#root{
+  height: auto;
+  display:initial;
+}
 .App {
   text-align: center;
 }
