@@ -35,5 +35,20 @@ namespace Bul.System.Extension.NetCore
 
             return services;
         }
+
+        public static IServiceCollection AddTurninCors(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddCors(option =>
+            {
+                option.AddDefaultPolicy(corsPolicyBuider =>
+                {
+                    var origins = configuration.GetSection("Cors").Value;
+                    corsPolicyBuider.AllowAnyMethod().AllowAnyHeader().WithOrigins(origins.Split(";"));
+                    //corsPolicyBuider.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
+            return services;
+        }
     }
 }

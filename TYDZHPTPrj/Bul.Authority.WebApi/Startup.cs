@@ -33,7 +33,8 @@ namespace Bul.Authority.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddJsonOptions(option=> {
+            services.AddControllers().AddJsonOptions(option =>
+            {
                 option.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
 
@@ -65,9 +66,11 @@ namespace Bul.Authority.WebApi
             services.AddBulAuthentication(Configuration);
 
             services.AddHttpContextAccessor();
+
+            services.AddTurninCors(Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -78,6 +81,8 @@ namespace Bul.Authority.WebApi
             }
 
             app.UseRouting();
+            
+            app.UseCors();
 
             app.UseAuthentication();
 
