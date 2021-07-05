@@ -3,6 +3,7 @@ import { Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from "@ant-design/icons"
 import "./Css/login.css"
 import { userLogin } from "./Api/userlogin"
+import layoutpage from "./Layout/layoutpage"
 
 class Login extends React.Component {
     constructor(props) {
@@ -31,9 +32,19 @@ class Login extends React.Component {
             return;
         }
         userLogin({ userName, password, yzm }).then(response => {
-
+            console.log("Result",response);
+            if(response.Code === 0)
+            {
+                window.location.replace("/layout");
+            }
+            else
+            {
+                message.warn(response.Message);
+                return;
+            }
         }).catch(er => {
-
+            message.error(er);
+            return;
         });
     }
     render() {
