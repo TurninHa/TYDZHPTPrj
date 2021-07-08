@@ -1,8 +1,8 @@
 import React from 'react';
 import { Input, Button, Checkbox, message } from 'antd';
-import { UserOutlined, LockOutlined } from "@ant-design/icons"
-import "./Css/login.css"
-import { userLogin } from "./Api/userlogin"
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import "./Css/login.css";
+import { userLogin } from "./Api/userlogin";
 
 class Login extends React.Component {
     constructor(props) {
