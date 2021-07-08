@@ -1,13 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Login from './Login';
+//import Login from './Login';
 import reportWebVitals from './reportWebVitals';
 import "antd/dist/antd.css"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import Layout from "./Layout/layoutpage"
+import asyncLoadComponet from "./Common/loadComponet"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Login />
+    <Router>
+      <Switch>
+        <Route path="/" exact render={props => {
+          const Login = asyncLoadComponet(() => import("./Login"))
+          return <Login {...props}></Login>
+        }}></Route>
+        <Route path="/layout" exact render={props => <Layout {...props}></Layout>}></Route>
+      </Switch>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

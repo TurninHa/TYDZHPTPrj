@@ -3,6 +3,13 @@ import { Layout, Menu } from "antd";
 
 class LayoutContainer extends React.Component {
 
+    componentDidUpdate(){
+        
+    }
+    componentDidMount(){
+        //验证是否已登录
+    }
+
     render() {
         const { SubMenu } = Menu;
         const { Header, Footer, Sider, Content } = Layout;
@@ -10,15 +17,32 @@ class LayoutContainer extends React.Component {
         return <>
             <Layout>
                 <Header>
-
+                    <div style={{color:"white",textAlign:"left"}}>
+                        统一多租户平台
+                    </div>
                 </Header>
                 <Layout>
-                    <Sider>
-
+                    <Sider style={{backgroundColor:"white"}}>
+                        <Menu mode="inline">
+                            <SubMenu key="sub1" title="权限管理">
+                                <Menu.Item key="menu1">用户管理</Menu.Item>
+                                <Menu.Item key="menu2">角色管理</Menu.Item>
+                                <Menu.Item key="menu3">菜单管理</Menu.Item>
+                            </SubMenu>
+                            <SubMenu key="sub2" title="字典管理">
+                                <Menu.Item key="menu5">用户管理</Menu.Item>
+                                <Menu.Item key="menu6">角色管理</Menu.Item>
+                                <Menu.Item key="menu7">菜单管理</Menu.Item>
+                            </SubMenu>
+                        </Menu>
                     </Sider>
-                    <Content></Content>
+                    <Content>
+                        {this.props.children}
+                    </Content>
                 </Layout>
-                <Footer></Footer>
+                <Footer style={{borderTop:"solid 0px #f0f0f0",padding:"0px 50px",backgroundColor:"white",height:"22px",lineHeight:"22px"}}>
+                    <div style={{textAlign:"center"}}>版权所有</div>
+                </Footer>
             </Layout>
         </>;
     }
