@@ -5,6 +5,7 @@ using Bul.System.Extension.NetCore;
 using Bul.System.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Digests;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,16 @@ namespace Bul.Authority.WebApi.Controllers
 
         protected override void BindCurrentUser()
         {
-            this.CurrentUser.YHM = this.User.Claims.FirstOrDefault(f => f.Type == "YHM")?.Value;
-            this.CurrentUser.SJH = this.User.Claims.FirstOrDefault(f => f.Type == "SJHM")?.Value;
+            var loginSqUser = this.User.Claims.FirstOrDefault(f => f.Type == "sub")?.Value;
+            if (string.IsNullOrEmpty(loginSqUser))
+                this.HttpContext.Response.WriteAsJsonAsync(BulResult.FailNonData(-10, "非法登录"));
 
-            var bulResult = this.userApplication.GetUserModelByYhmAndSjh(this.CurrentUser.YHM, this.CurrentUser.SJH);
+            var userEntity = JsonConvert.DeserializeObject<SqUsers>(loginSqUser);
+
+            if (userEntity == null || string.IsNullOrEmpty(userEntity.YHM) || string.IsNullOrEmpty(userEntity.SJH))
+                this.HttpContext.Response.WriteAsJsonAsync(BulResult.FailNonData(-10, "非法登录"));
+
+            var bulResult = this.userApplication.GetUserModelByYhmAndSjh(userEntity.YHM, userEntity.SJH);
 
             if (bulResult.Code == 0)
                 this.CurrentUser = bulResult.Data;

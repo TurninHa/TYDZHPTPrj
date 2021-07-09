@@ -6,7 +6,9 @@ axios.defaults.timeout = 10000;
 axios.interceptors.request.use(requestConfig => {
     console.log("requestConfig",requestConfig.data);
     requestConfig.headers["Content-Type"]="application/json";
-    requestConfig.headers["Authorization"] = "bearer "+ sessionStorage.getItem("token");
+    let user = JSON.parse( sessionStorage.getItem("user"));
+    if(user && user.token && user.token !=="")
+        requestConfig.headers["Authorization"] = "bearer "+ user.token;
     return requestConfig;
 }, er => {
     return Promise.reject(er);

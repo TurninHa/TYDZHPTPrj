@@ -31,18 +31,17 @@ class Login extends React.Component {
             return;
         }
         userLogin({ userName, password, yzm }).then(response => {
-            console.log("Result",response);
-            if(response.Code === 0)
-            {
+            console.log("Result", response);
+            if (response.Code === 0) {
+                sessionStorage.setItem("user", JSON.stringify({ name: userName, token: response.Data }));
                 window.location.replace("/layout");
             }
-            else
-            {
+            else {
                 message.warn(response.Message);
                 return;
             }
         }).catch(er => {
-            console.log("er",er);
+            console.log("er", er);
             message.error("网络异常");
             return;
         });
