@@ -36,6 +36,8 @@ namespace Bul.Authority.WebApi.Controllers
                 var jwtBearer = this.HttpContext.GetService<JwtBearer>();
                 var token = jwtBearer.LoginToken(loginResult.Data, 8);
 
+                BulLogger.Info("登录成功");
+
                 return BulResult<string>.Success(token);
             }
             catch (Exception er)
