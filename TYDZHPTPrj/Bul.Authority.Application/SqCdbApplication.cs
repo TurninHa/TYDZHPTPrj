@@ -1,4 +1,5 @@
-﻿using Bul.Authority.Entity;
+﻿using Bul.Authority.Application.DataTranslateObject;
+using Bul.Authority.Entity;
 using Bul.Authority.Service;
 using Bul.System.Result;
 using System;
@@ -40,6 +41,20 @@ namespace Bul.Authority.Application
             var result = await query.ToListAsync();
 
             return BulResult<IEnumerable<SqCdb>>.Success(result);
+        }
+
+        /// <summary>
+        /// 获取菜单树
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BulResult<IEnumerable<SqCdbDto>>> GetSqCdbTree()
+        {
+            var sqCdList = await this.sqCdbService.Db.Query<SqCdb>().ToListAsync();
+
+            if (sqCdList == null || sqCdList.Count == 0)
+                return BulResult<IEnumerable<SqCdbDto>>.Fail(-1, "未查询到菜单列表");
+
+
         }
     }
 }

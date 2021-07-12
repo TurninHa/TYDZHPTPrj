@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +34,15 @@ namespace Bul.Authority.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddJsonOptions(option =>
+            //services.AddControllers().AddJsonOptions(option =>
+            //{
+            //    option.JsonSerializerOptions.PropertyNamingPolicy = null;
+            //});
+
+            services.AddControllers().AddNewtonsoftJson(option =>
             {
-                option.JsonSerializerOptions.PropertyNamingPolicy = null;
+                option.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+                option.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
             services.AddScoped<Entity.SqUsers>();//为当前登录用户使用
@@ -70,7 +77,7 @@ namespace Bul.Authority.WebApi
             services.AddTurninCors(Configuration);
         }
 
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -81,7 +88,7 @@ namespace Bul.Authority.WebApi
             }
 
             app.UseRouting();
-            
+
             app.UseCors();
 
             app.UseAuthentication();
