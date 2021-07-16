@@ -1,4 +1,5 @@
 ﻿using Bul.Authority.Application;
+using Bul.Authority.Application.DataTranslateObject;
 using Bul.Authority.Entity;
 using Bul.System.Common;
 using Bul.System.Result;
@@ -43,6 +44,19 @@ namespace Bul.Authority.WebApi.Controllers
             var result = await this.sqCdbApplication.GetChildMenuList(fcdid);
 
             return result;
+        }
+
+        /// <summary>
+        /// 获取菜单树
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("menutree")]
+        public BulResult<IEnumerable<SqCdbDto>> GetSqCdTree()
+        {
+            var treeResult = this.sqCdbApplication.GetSqCdbTree(this.CurrentUser.SSGSID);
+
+            return treeResult;
         }
     }
 }

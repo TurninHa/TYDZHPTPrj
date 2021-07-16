@@ -68,6 +68,5 @@ namespace Bul.Authority.Service
                     return BulResult<SqCdb>.Fail(-6, "保存失败");
             }
         }
-
     }
 }
