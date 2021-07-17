@@ -15,7 +15,7 @@ namespace Bul.Authority.WebApi.Controllers
     public class MenuController : AuthorityBaseController
     {
         private readonly SqCdbApplication sqCdbApplication;
-        public MenuController(SqCdbApplication cdbApp)
+        public MenuController(SqCdbApplication cdbApp) : base()
         {
             sqCdbApplication = cdbApp;
         }

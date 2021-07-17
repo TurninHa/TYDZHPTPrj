@@ -63,7 +63,7 @@ namespace Bul.Authority.Application
             sqcdbQuery = sqcdbQuery.Where(w => w.SYZT == (int)SYZTType.Enable);
 
             if (ssgsId > 0)
-                sqcdbQuery = sqcdbQuery.Where(w => w.SSGSID == ssgsId);
+                sqcdbQuery = sqcdbQuery.Where(w => (w.SSGSID == ssgsId || w.SSGSID == 0));
 
             var sqCdList = sqcdbQuery.ToList();
 
