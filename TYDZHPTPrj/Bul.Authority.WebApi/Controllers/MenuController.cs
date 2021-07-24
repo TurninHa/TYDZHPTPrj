@@ -22,7 +22,7 @@ namespace Bul.Authority.WebApi.Controllers
 
 
         /// <summary>
-        /// 新增
+        /// 编辑
         /// </summary>
         /// <param name="cdb"></param>
         /// <returns></returns>
