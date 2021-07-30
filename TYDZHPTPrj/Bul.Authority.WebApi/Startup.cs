@@ -42,7 +42,7 @@ namespace Bul.Authority.WebApi
             services.AddControllers().AddNewtonsoftJson(option =>
             {
                 option.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                option.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                option.SerializerSettings.ContractResolver = null;
             });
 
             services.AddScoped<Entity.SqUsers>();//为当前登录用户使用

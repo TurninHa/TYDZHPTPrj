@@ -14,9 +14,14 @@ ReactDOM.render(
           const Login = asyncLoadComponet(() => import("./Login"));
           return <Login {...props}></Login>;
         }}></Route>
-        <Route path="/layout" exact render={props => {
+        <Route path="/layout" render={props => {
           const Layout = asyncLoadComponet(() => import("./Layout/layoutpage"));
-          return <Layout {...props}></Layout>;
+          return <Layout {...props}>
+            <Route path="/layout/cdgl" exact render={props => {
+              const Cdgl = asyncLoadComponet(() => import("./menu/cdgl"));
+              return <Cdgl {...props}></Cdgl>
+            }}></Route>
+          </Layout>;
         }}></Route>
       </Switch>
     </Router>
