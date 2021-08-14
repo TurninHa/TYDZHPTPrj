@@ -58,5 +58,17 @@ namespace Bul.Authority.WebApi.Controllers
 
             return treeResult;
         }
+
+        /// <summary>
+        /// 根据条件获取列表
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("list")]
+        public BulResult<IEnumerable<SqCdbListDto>> GetList(SqCdbListDto condition)
+        {
+            return this.sqCdbApplication.GetListByWhere(condition);
+        }
     }
 }

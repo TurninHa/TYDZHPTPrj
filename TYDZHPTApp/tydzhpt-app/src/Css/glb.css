@@ -1,0 +1,95 @@
+.list-page-container {
+    width: 100%;
+}
+
+.list-page-container .search-container {
+    margin-bottom: 16px;
+    padding: 24px 24px 0;
+    background-color: white;
+}
+
+.list-page-container .list-container {
+    padding: 0 24px 0;
+    background-color: white;
+}
+
+.search-tool-container {
+    display: flex;
+    margin-right: -12px;
+    margin-left: -12px;
+    flex-wrap: wrap;
+}
+
+.search-tool-container .search-tool-item {
+    flex-basis: 25%;
+    max-width: 25%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.search-tool-container .search-tool-item-action{
+    flex-grow: 1;
+}
+.search-tool-item-action .search-tool-item-action-content{
+    display: flex;
+    width: 100%;
+    margin: 0 0 24px 0;
+    justify-content: flex-end;
+    padding-right: 15px;
+}
+
+.search-tool-item-action-content div{
+     padding: 0 5px;
+}
+.search-tool-item-content {
+    display: flex;
+    width: 100%;
+    margin: 0 0 24px;
+}
+
+.search-tool-item-content-left {
+    flex: 0 0 120px;
+    overflow: hidden;
+    text-align: right;
+    line-height: 30px;
+}
+
+.search-tool-item-content-left label {
+    margin: 0 8px 0 2px;
+}
+
+.search-tool-item-content-right {
+    width: 100%;
+    display: flex;
+    flex: 1 1;
+    overflow: hidden;
+}
+
+.list-container .list-grid-container{
+    width: 100%;
+}
+.list-grid-head{
+    line-height: 1px;
+}
+.list-grid-head .list-grid-head-tool{
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+}
+.list-grid-head-tool-text{
+    line-height: 32px;
+    font-size: 16px;
+    font-weight: 500;
+}
+.list-grid-head-tool-bar{
+    display: flex;
+}
+.list-grid-head-tool-bar div{
+    padding: 0 5px;
+}
+.list-grid-body{
+    clear: both;
+    max-width: 100%;
+}

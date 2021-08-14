@@ -3,6 +3,7 @@ using Bul.Authority.Application.Enumer;
 using Bul.Authority.Entity;
 using Bul.Authority.Service;
 using Bul.System.Result;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,6 +112,54 @@ namespace Bul.Authority.Application
 
                 RecursionCd(source, item.ID, sqcdbTree);
             }
+        }
+
+        /// <summary>
+        /// 根据条件获取列表
+        /// </summary>
+        /// <param name="sqCdbListDto"></param>
+        /// <returns></returns>
+        public BulResult<IEnumerable<SqCdbListDto>> GetListByWhere(SqCdbListDto sqCdbListDto)
+        {
+            if (sqCdbListDto == null)
+                return BulResult<IEnumerable<SqCdbListDto>>.Fail(-1, "参数错误");
+
+            var query = this.sqCdbService.Db.Query<SqCdb>();
+            query = query.Where(w => w.SYZT == 1);
+
+            if (!string.IsNullOrEmpty(sqCdbListDto.CDBM))
+                query = query.Where(w => w.CDBM.Contains(sqCdbListDto.CDBM));
+
+            if (!string.IsNullOrEmpty(sqCdbListDto.CDMC))
+                query = query.Where(w => w.CDMC.Contains(sqCdbListDto.CDMC));
+
+            var result = query.ToList();
+            var resultDto = result.Adapt<IEnumerable<SqCdbListDto>>();
+
+            return BulResult<IEnumerable<SqCdbListDto>>.Success(resultDto);
+        }
+
+        public BulResult<Page<IEnumerable<SqCdbListDto>>> GetPageListByWhere(SqCdbListDto condition, int pageIndex, int pageSize)
+        {
+            if (condition == null)
+                return BulResult<IEnumerable<SqCdbListDto>>.PageFail(-1, "参数错误");
+
+            var query = this.sqCdbService.Db.Query<SqCdb>();
+            query = query.Where(w => w.SYZT == 1);
+
+            if (!string.IsNullOrEmpty(condition.CDBM))
+                query = query.Where(w => w.CDBM.Contains(condition.CDBM));
+
+            if (!string.IsNullOrEmpty(condition.CDMC))
+                query = query.Where(w => w.CDMC.Contains(condition.CDMC));
+
+            var pageCount = query.Count();
+
+            var result = query.TakePage(pageIndex, pageSize).ToList();
+
+            var resultDto = result.Adapt<IEnumerable<SqCdbListDto>>();
+
+            return BulResult<IEnumerable<SqCdbListDto>>.PageSuccess(resultDto, pageIndex, pageSize, pageCount);
         }
     }
 }
