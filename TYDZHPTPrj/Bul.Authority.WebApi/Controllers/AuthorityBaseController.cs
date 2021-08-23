@@ -24,11 +24,13 @@ namespace Bul.Authority.WebApi.Controllers
             this.CurrentUser = new SqUsers();
             this.userApplication = this.HttpContext.GetService<SqUserApplication>();
 
-            this.BindCurrentUser();
+            //this.BindCurrentUser();
         }
 
         protected override void BindCurrentUser()
         {
+            if (this.User == null) return;
+
             var loginSqUser = this.User.Claims.FirstOrDefault(f => f.Type == "sub")?.Value;
             if (string.IsNullOrEmpty(loginSqUser))
                 this.HttpContext.Response.WriteAsJsonAsync(BulResult.FailNonData(-10, "非法登录"));

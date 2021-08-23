@@ -18,6 +18,7 @@ namespace Bul.Authority.WebApi.Controllers
         public MenuController(SqCdbApplication cdbApp) : base()
         {
             sqCdbApplication = cdbApp;
+            BindCurrentUser();
         }
 
 
@@ -69,6 +70,29 @@ namespace Bul.Authority.WebApi.Controllers
         public BulResult<IEnumerable<SqCdbListDto>> GetList(SqCdbListDto condition)
         {
             return this.sqCdbApplication.GetListByWhere(condition);
+        }
+
+        /// <summary>
+        /// 获取分页列表
+        /// </summary>
+        /// <param name="pageCondition"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("page")]
+        public BulResult<Page<IEnumerable<SqCdbListDto>>> GetListPage(Page<SqCdbListDto> pageCondition)
+        {
+            if (pageCondition == null)
+                return BulResult<IEnumerable<SqCdbListDto>>.PageFail(-1, "参数错误");
+
+            if (pageCondition.PageIndex == 0)
+                pageCondition.PageIndex = 1;
+
+            if (pageCondition.PageSize == 0)
+                pageCondition.PageSize = 20;
+
+            var result = this.sqCdbApplication.GetPageListByWhere(pageCondition.Data, pageCondition.PageIndex, pageCondition.PageSize);
+
+            return result;
         }
     }
 }

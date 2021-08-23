@@ -5,7 +5,3 @@ export const userLogin = data => {
         post("/api/user/login", data).then(resp => resolve(resp.data)).catch(er => reject(er));
     });
 }
-
-export const cdgl = data => {
-
-}

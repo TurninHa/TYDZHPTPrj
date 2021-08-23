@@ -1,10 +1,16 @@
 import React from "react";
-import { Table, Button, Space } from "antd";
+import { Table, Button, Space,message } from "antd";
+import { cdgl } from "../../Api/cdglApi"
 
 class PageListPart extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { dataSource: [] };
+        this.state = {
+            dataSource: [],
+            pageIndex: 1,
+            pageSize: 20,
+            total: 0
+        };
     }
     columns = [
         {
@@ -52,9 +58,33 @@ class PageListPart extends React.Component {
     ];
 
     componentDidMount() {
-        let condition = this.props.condition;
+        this.loadData();
+    }
 
-        this.setState({ dataSource: [] });
+    loadData() {
+        let condition = {};
+        if(this.props.condition)
+            condition= this.props.condition;
+
+        let pageConditon = {
+            data: condition,
+            pageIndex: this.state.pageIndex,
+            pageSize: this.state.pageSize
+        };
+
+        cdgl(pageConditon).then(response => {
+            this.setState({
+                dataSource: response.Data.Data,
+                total: response.Data.PageCount
+            });
+        }).catch(er => {
+            // this.setState({
+            //     dataSource: [],
+            //     total: 0
+            // });
+            message.error(er.toString());
+            console.log(er);
+        });
     }
 
     render() {
@@ -74,7 +104,14 @@ class PageListPart extends React.Component {
                     </div>
                 </div>
                 <div className="list-grid-body">
-                    <Table columns={this.columns} dataSource={this.state.dataSource}></Table>
+                    <Table columns={this.columns} dataSource={this.state.dataSource} pagination={{
+                        onShowSizeChange: pageIndex => {
+                            this.setState({ pageIndex });
+                        },
+                        defaultCurrent: 1,
+                        defaultPageSize: 20,
+                        total: this.state.total
+                    }}></Table>
                 </div>
             </div>
         );
