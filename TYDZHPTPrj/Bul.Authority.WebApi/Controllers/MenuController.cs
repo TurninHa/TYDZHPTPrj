@@ -2,11 +2,13 @@
 using Bul.Authority.Application.DataTranslateObject;
 using Bul.Authority.Entity;
 using Bul.System.Common;
+using Bul.System.Extension.NetCore;
 using Bul.System.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +20,6 @@ namespace Bul.Authority.WebApi.Controllers
         public MenuController(SqCdbApplication cdbApp) : base()
         {
             sqCdbApplication = cdbApp;
-            BindCurrentUser();
         }
 
 
@@ -89,6 +90,8 @@ namespace Bul.Authority.WebApi.Controllers
 
             if (pageCondition.PageSize == 0)
                 pageCondition.PageSize = 20;
+
+            Debug.WriteLine(HttpContext.GetCurrentUser<SqUsers>().YHM);
 
             var result = this.sqCdbApplication.GetPageListByWhere(pageCondition.Data, pageCondition.PageIndex, pageCondition.PageSize);
 

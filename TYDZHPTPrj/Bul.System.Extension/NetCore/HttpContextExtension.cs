@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +24,19 @@ namespace Bul.System.Extension.NetCore
             if (httpContext == null)
                 return default;
 
-            if (httpContext.Items == null || httpContext.Items.Count == 0)
+            if (httpContext == null || httpContext.Items == null || httpContext.Items.Count == 0)
                 return default;
 
-            var keyName = nameof(TCurrentUser);
+            var keyName = "CurrentUser"; //nameof(TCurrentUser);
             if (!httpContext.Items.ContainsKey(keyName))
                 return default;
 
-            var result = httpContext.Items[keyName];
+            var result = JsonConvert.DeserializeObject<TCurrentUser>(httpContext.Items[keyName].ToString());
 
             if (result == null)
                 return default;
 
-            return (TCurrentUser)result;
+            return result;
         }
     }
 }

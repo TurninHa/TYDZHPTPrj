@@ -34,7 +34,14 @@ namespace Bul.Authority.WebApi.Controllers
                     return loginResult;
 
                 var jwtBearer = this.HttpContext.GetService<JwtBearer>();
-                var token = jwtBearer.LoginToken(loginResult.Data, 8);
+                var token = jwtBearer.LoginToken(new
+                {
+                    loginResult.Data.YHM,
+                    loginResult.Data.SJH,
+                    loginResult.Data.SSGSID,
+                    loginResult.Data.SSYGID,
+                    loginResult.Data.XM,
+                }, 8);
 
                 BulLogger.Info("登录成功");
 

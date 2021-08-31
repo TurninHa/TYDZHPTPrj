@@ -39,7 +39,11 @@ namespace Bul.Authority.WebApi
             //    option.JsonSerializerOptions.PropertyNamingPolicy = null;
             //});
 
-            services.AddControllers().AddNewtonsoftJson(option =>
+            services.AddControllers(mvcOption =>
+            {
+                mvcOption.Filters.Add<BulActionFilter>();
+
+            }).AddNewtonsoftJson(option =>
             {
                 option.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 option.SerializerSettings.ContractResolver = null;

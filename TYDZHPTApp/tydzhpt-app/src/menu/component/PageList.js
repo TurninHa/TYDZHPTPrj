@@ -74,8 +74,8 @@ class PageListPart extends React.Component {
 
         cdgl(pageConditon).then(response => {
             this.setState({
-                dataSource: response.Data.Data,
-                total: response.Data.PageCount
+                dataSource: response.data.Data.Data,
+                total: response.data.Data.PageCount
             });
         }).catch(er => {
             // this.setState({

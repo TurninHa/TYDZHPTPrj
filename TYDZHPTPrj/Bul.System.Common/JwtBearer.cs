@@ -30,7 +30,7 @@ namespace Bul.System.Common
                 //new Claim(JwtRegisteredClaimNames.Aud,adu),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString("yyyyMMddHHmmss")),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString("N")),
-                new Claim(JwtRegisteredClaimNames.Sub, JsonConvert.SerializeObject(user))
+                new Claim("ul", JsonConvert.SerializeObject(user))
             };
 
             var signKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._configuration.GetSection("Authentication:Security").Value));

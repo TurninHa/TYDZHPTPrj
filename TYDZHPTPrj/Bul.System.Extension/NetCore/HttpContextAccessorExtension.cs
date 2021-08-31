@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,16 +39,7 @@ namespace Bul.System.Extension.NetCore
             if (contextAccessor.HttpContext == null || contextAccessor.HttpContext.Items == null || contextAccessor.HttpContext.Items.Count == 0)
                 return default;
 
-            var keyName = nameof(TCurrentUser);
-            if (!contextAccessor.HttpContext.Items.ContainsKey(keyName))
-                return default;
-
-            var result = contextAccessor.HttpContext.Items[keyName];
-
-            if (result == null)
-                return default;
-
-            return (TCurrentUser)result;
+            return contextAccessor.HttpContext.GetCurrentUser<TCurrentUser>();
         }
     }
 }

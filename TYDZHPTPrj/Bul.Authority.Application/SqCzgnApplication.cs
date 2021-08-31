@@ -32,7 +32,7 @@ namespace Bul.Authority.Application
 
             if (entity.ID > 0)
             {
-                entity.Updater = HttpContextAccessor.HttpContext.GetCurrentUser<SqUsers>().ID;
+                entity.Updater = HttpContextAccessor.GetCurrentUser<SqUsers>().ID;
                 entity.UpdateTime = DateTime.Now;
             }
             else

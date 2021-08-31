@@ -17,10 +17,5 @@ namespace Bul.System.Common
         /// 当前登录用户
         /// </summary>
         public T CurrentUser { get; protected set; }
-
-        /// <summary>
-        /// 子类需实现此方法，绑定 CurrentUser
-        /// </summary>
-        protected abstract void BindCurrentUser();
     }
 }
