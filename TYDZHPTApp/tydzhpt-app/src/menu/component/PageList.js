@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Button, Space,message } from "antd";
+import { Table, Button, Space, message } from "antd";
 import { cdgl } from "../../Api/cdglApi"
 
 class PageListPart extends React.Component {
@@ -48,14 +48,16 @@ class PageListPart extends React.Component {
             dataIndex: "ID",
             key: "ID",
             render: (text, record) => {
-                return
-                <Space>
-                    <a> 编辑</a>
-                    <a>删除</a>
-                </Space>
+                return (
+                    <Space>
+                        <a data-id={record.ID}> 编辑</a>
+                        <a>删除</a>
+                    </Space>);
             }
         },
     ];
+
+    rowNo =1;
 
     componentDidMount() {
         this.loadData();
@@ -63,8 +65,8 @@ class PageListPart extends React.Component {
 
     loadData() {
         let condition = {};
-        if(this.props.condition)
-            condition= this.props.condition;
+        if (this.props.condition)
+            condition = this.props.condition;
 
         let pageConditon = {
             data: condition,
@@ -73,6 +75,12 @@ class PageListPart extends React.Component {
         };
 
         cdgl(pageConditon).then(response => {
+
+            response.data.Data.Data.forEach(element => {
+                element.XH = this.rowNo;
+                this.rowNo++;
+            });
+
             this.setState({
                 dataSource: response.data.Data.Data,
                 total: response.data.Data.PageCount
