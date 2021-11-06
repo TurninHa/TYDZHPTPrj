@@ -1,9 +1,6 @@
-﻿using Chloe.Annotations;
+﻿using Bul.Entity.Interface;
+using Chloe.Annotations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bul.Authority.Entity
 {
@@ -11,7 +8,7 @@ namespace Bul.Authority.Entity
     /// 角色菜单表
     /// </summary>
     [Table("sq_jscd")]
-    public class SqJscd
+    public class SqJscd : IBulEntity
     {
         /// <summary>
         /// 

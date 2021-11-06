@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import "antd/dist/antd.css"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { HashRouter as Router, Route, Switch } from "react-router-dom"
 import asyncLoadComponet from "./Common/loadComponet"
 
 ReactDOM.render(
@@ -19,6 +19,7 @@ ReactDOM.render(
           return <Layout {...props}>
             <Route path="/layout/cdgl" exact render={props => {
               const Cdgl = asyncLoadComponet(() => import("./menu/cdgl"));
+              console.log("cdgl props ", props)
               return <Cdgl {...props}></Cdgl>
             }}></Route>
           </Layout>;

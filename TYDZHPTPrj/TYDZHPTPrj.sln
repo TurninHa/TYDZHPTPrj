@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bul.Authority.Service", "Bul.Authority.Service\Bul.Authority.Service.csproj", "{C1BEE0D9-AC05-4D85-8401-AE59C25A4F1A}"
 EndProject
@@ -17,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bul.System.Extension", "Bul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bul.Authority.WebApi", "Bul.Authority.WebApi\Bul.Authority.WebApi.csproj", "{8BD08944-8A78-4E20-B56C-099571B7DDF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bul.System.Common", "Bul.System.Common\Bul.System.Common.csproj", "{FAAC6CBA-2205-4ED0-B584-72240BCA6F00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bul.System.Common", "Bul.System.Common\Bul.System.Common.csproj", "{FAAC6CBA-2205-4ED0-B584-72240BCA6F00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bul.Entity.Interface", "Bul.Entity.Interface\Bul.Entity.Interface.csproj", "{D43B49D0-95CD-45D5-884C-1926701515B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bul.Authority.Db.Extension", "Bul.Authority.Db.Extension\Bul.Authority.Db.Extension.csproj", "{C621B778-6FC4-457C-82CF-C54199051449}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +61,14 @@ Global
 		{FAAC6CBA-2205-4ED0-B584-72240BCA6F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAAC6CBA-2205-4ED0-B584-72240BCA6F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAAC6CBA-2205-4ED0-B584-72240BCA6F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D43B49D0-95CD-45D5-884C-1926701515B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D43B49D0-95CD-45D5-884C-1926701515B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D43B49D0-95CD-45D5-884C-1926701515B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D43B49D0-95CD-45D5-884C-1926701515B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C621B778-6FC4-457C-82CF-C54199051449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C621B778-6FC4-457C-82CF-C54199051449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C621B778-6FC4-457C-82CF-C54199051449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C621B778-6FC4-457C-82CF-C54199051449}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

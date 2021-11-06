@@ -1,9 +1,6 @@
-﻿using Chloe.Annotations;
+﻿using Bul.Entity.Interface;
+using Chloe.Annotations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bul.Authority.Entity
 {
@@ -11,7 +8,7 @@ namespace Bul.Authority.Entity
     /// 用户角色表
     /// </summary>
     [Table("sq_user_role")]
-    public class SqUserRole
+    public class SqUserRole : IBulEntity
     {
         /// <summary>
         /// 

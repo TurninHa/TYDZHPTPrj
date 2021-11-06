@@ -1,4 +1,5 @@
-﻿using Chloe.Annotations;
+﻿using Bul.Entity.Interface;
+using Chloe.Annotations;
 using System;
 
 namespace Bul.Authority.Entity
@@ -7,7 +8,7 @@ namespace Bul.Authority.Entity
     /// 菜单表
     /// </summary>
     [Table("sq_cdb")]
-    public class SqCdb
+    public class SqCdb : IBulEntity
     {
         /// <summary>
         /// ID
@@ -39,12 +40,6 @@ namespace Bul.Authority.Entity
         /// 使用状态
         /// </summary>
         public int SYZT { get; set; }
-        /// <summary>
-        /// 所属公司ID
-        /// </summary>
-        //[Navigation]
-        //[NotMapped()]//不映射任何字段
-        public long SSGSID { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>

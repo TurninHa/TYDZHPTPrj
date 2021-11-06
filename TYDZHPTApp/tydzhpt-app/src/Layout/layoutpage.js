@@ -28,11 +28,12 @@ class LayoutContainer extends React.Component {
                     <Sider style={{ backgroundColor: "white" }}>
                         <Menu mode="inline">
                             <SubMenu key="sub1" title="权限管理">
-                                <Menu.Item key="menu1">用户管理</Menu.Item>
-                                <Menu.Item key="menu2">角色管理</Menu.Item>
+                                <Menu.Item key="menu1">
+                                    <Link to="/layout/cdgl">用户管理</Link></Menu.Item>
+                                <Menu.Item key="menu2">
+                                    <Link to="/layout/cdgl">角色管理</Link></Menu.Item>
                                 <Menu.Item key="menu3">
-                                    <Link to="/layout/cdgl">
-                                        菜单管理</Link></Menu.Item>
+                                    <Link to="/layout/cdgl" replace="true">菜单管理</Link></Menu.Item>
                             </SubMenu>
                             <SubMenu key="sub2" title="字典管理">
                                 <Menu.Item key="menu5">用户管理</Menu.Item>
@@ -41,8 +42,11 @@ class LayoutContainer extends React.Component {
                             </SubMenu>
                         </Menu>
                     </Sider>
-                    <Content style={{position:"relative",margin:"24px"}}>
+                    <Content style={{ position: "relative", margin: "24px" }}>
                         {this.props.children}
+                        <br>
+                        </br>
+                        {new Date().toString()}
                     </Content>
                 </Layout>
                 <Footer style={{ borderTop: "solid 0px #f0f0f0", padding: "0px 50px", backgroundColor: "white", height: "22px", lineHeight: "22px" }}>

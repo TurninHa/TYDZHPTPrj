@@ -1,9 +1,5 @@
-﻿using Chloe.Annotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bul.Entity.Interface;
+using Chloe.Annotations;
 
 namespace Bul.Authority.Entity
 {
@@ -11,7 +7,7 @@ namespace Bul.Authority.Entity
     /// 登录日志
     /// </summary>
     [Table("sys_dlrz")]
-    public class SysDlrz
+    public class SysDlrz : IBulEntity
     {
         /// <summary>
         /// 

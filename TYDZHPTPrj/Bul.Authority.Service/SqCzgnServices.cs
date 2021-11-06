@@ -27,9 +27,6 @@ namespace Bul.Authority.Service
             if (string.IsNullOrEmpty(entity.GNMC))
                 return BulResult.FailNonData(-3, "功能名称不能为空");
 
-            if (entity.SSGSID < 0)
-                return BulResult.FailNonData(-1, "参数错误SSGSID");
-
             var isExistQueryGnbm = this.Db.Query<SqCdczgn>();
             isExistQueryGnbm = isExistQueryGnbm.Where(w => w.GNBM == entity.GNBM);
             isExistQueryGnbm = isExistQueryGnbm.Where(w => w.CDID == entity.CDID);

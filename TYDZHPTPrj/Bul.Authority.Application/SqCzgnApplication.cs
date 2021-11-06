@@ -52,8 +52,6 @@ namespace Bul.Authority.Application
             var query = this.SqCzgnService.Db.Query<SqCdczgn>();
 
             query = query.Where(w => w.CDID == cdId);
-            if (ssgsId > 0)
-                query = query.Where(w => (w.SSGSID == ssgsId || w.SSGSID == 0));
 
             var result = query.ToList();
             var dtoList = result.Adapt<IEnumerable<CdczgnRo>>();

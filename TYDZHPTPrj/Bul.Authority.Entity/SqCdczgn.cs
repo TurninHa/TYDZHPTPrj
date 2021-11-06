@@ -1,5 +1,6 @@
 ﻿using Chloe.Annotations;
 using System;
+using Bul.Entity.Interface;
 
 namespace Bul.Authority.Entity
 {
@@ -7,7 +8,7 @@ namespace Bul.Authority.Entity
     /// 菜单操作功能表
     /// </summary>
     [Table("sq_cdczgn")]
-    public class SqCdczgn
+    public class SqCdczgn : IBulEntity
     {
         /// <summary>
         /// 
@@ -31,10 +32,6 @@ namespace Bul.Authority.Entity
         /// 
         /// </summary>
         public int PXH { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public long SSGSID { get; set; }
         /// <summary>
         /// 
         /// </summary>
