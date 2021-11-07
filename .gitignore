@@ -37,3 +37,6 @@ TYDZHPTPrj/Bul.Entity.Interface/obj/Debug/net5.0/Bul.Entity.Interface.csproj.Ass
 TYDZHPTPrj/Bul.Entity.Interface/obj/Debug/net5.0/Bul.Entity.Interface.GeneratedMSBuildEditorConfig.editorconfig
 TYDZHPTPrj/Bul.Entity.Interface/obj/project.assets.json
 TYDZHPTPrj/Bul.Entity.Interface/obj/project.nuget.cache
+/TYDZHPTPrj/Bul.Authority.Db.Extension/obj/Debug/net5.0
+/TYDZHPTPrj/Bul.Entity.Interface/obj/Debug/net5.0
+/TYDZHPTPrj/Bul.Entity.Interface/Bul.Entity.Interface.csproj.user
