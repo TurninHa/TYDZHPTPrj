@@ -4,7 +4,8 @@
 
 <Workspace>
 	<Local Expanded="Yes">
-		<Model Expanded="Yes" ID="{75CD731D-7F11-4845-A88B-3E85D6F43657}" Loaded="No" Name="DataBaseDesigner" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="DataBaseDesigner.pdm"/>
+		<Model Expanded="Yes" ID="{75CD731D-7F11-4845-A88B-3E85D6F43657}" Name="DataBaseDesigner" Selected="Yes" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="DataBaseDesigner.pdm"/>
+		<Model Expanded="Yes" ID="{5DB13937-03EC-47FF-927F-F1D8E660516C}" Name="DataBaseDesigner" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="DataBaseDesigner.oom"/>
 		<Model Expanded="Yes" ID="{8F5F02F8-79A2-4BC4-8C2B-9297844A25A5}" Loaded="No" Name="YWXTDesginer" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="YWXTDesginer.pdm"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
