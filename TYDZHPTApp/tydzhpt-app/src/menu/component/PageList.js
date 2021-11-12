@@ -1,6 +1,7 @@
 import React from "react";
-import { Table, Button, Space, message } from "antd";
-import { cdgl } from "../../Api/cdglApi"
+import { Table, Button, Space, message, Modal } from "antd";
+import { cdgl } from "../../Api/cdglApi";
+import MenuEdit from "./MenuEdit";
 
 class PageListPart extends React.Component {
     constructor(props) {
@@ -9,7 +10,9 @@ class PageListPart extends React.Component {
             dataSource: [],
             pageIndex: 1,
             pageSize: 20,
-            total: 0
+            total: 0,
+            modalVisible: false,
+            id: -1,
         };
     }
     columns = [
@@ -50,14 +53,18 @@ class PageListPart extends React.Component {
             render: (text, record) => {
                 return (
                     <Space>
-                        <a data-id={record.ID}> 编辑</a>
+                        <a data-id={record.ID} onClick={() => { this.editShowForm(record.ID) }}>编辑</a>
                         <a>删除</a>
                     </Space>);
             }
         },
     ];
 
-    rowNo =1;
+    rowNo = 1;
+
+    editShowForm(id) {
+        this.setState({ modalVisible: true, id })
+    }
 
     componentDidMount() {
         this.loadData();
@@ -96,7 +103,7 @@ class PageListPart extends React.Component {
     }
 
     render() {
-        return (
+        return <>
             <div className="list-grid-container">
                 <div className="list-grid-head">
                     <div className="list-grid-head-tool">
@@ -122,7 +129,17 @@ class PageListPart extends React.Component {
                     }}></Table>
                 </div>
             </div>
-        );
+            <Modal visible={this.state.modalVisible} onCancel={() => { this.setState({ modalVisible: false }); }}
+                destroyOnClose={true} centered footer={null} maskClosable={false} >
+                <MenuEdit id={this.state.id} onSuccess={(success = false) => {
+                    this.setState({
+                        modalVisible: !success
+                    });
+                    if (success)
+                        this.loadData();
+                }} onClose={() => { this.setState({ modalVisible: false }); }}></MenuEdit>
+            </Modal>
+        </>;
     }
 }
 
