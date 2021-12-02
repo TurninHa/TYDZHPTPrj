@@ -1,4 +1,5 @@
-﻿using Bul.Authority.Entity;
+﻿using Bul.Authority.Application.ApplicationBase;
+using Bul.Authority.Entity;
 using Bul.Authority.Service;
 using Bul.System.Result;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Application
 {
-    public class SqUserRoleApplication
+    public class SqUserRoleApplication : BulAuthorityApplication
     {
         private readonly SqUserRoleService _SqUserRoleService;
         public SqUserRoleApplication(SqUserRoleService userRoleService)

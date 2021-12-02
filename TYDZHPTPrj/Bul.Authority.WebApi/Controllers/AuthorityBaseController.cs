@@ -5,6 +5,7 @@ using Bul.System.Extension.NetCore;
 using Bul.System.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Digests;
 using System;
@@ -17,12 +18,20 @@ namespace Bul.Authority.WebApi.Controllers
 
     public class AuthorityBaseController : BaseController<SqUsers>
     {
-        private readonly SqUserApplication userApplication;
-
-        public AuthorityBaseController()
+        public override SqUsers CurrentUser
         {
-            this.CurrentUser = new SqUsers();
-            this.userApplication = this.HttpContext.GetService<SqUserApplication>();
+            get
+            {
+                return this.HttpContext.GetCurrentUser<SqUsers>();
+            }
+        }
+
+        public ILogger<AuthorityBaseController> Logger
+        {
+            get
+            {
+                return this.HttpContext.GetService<ILogger<AuthorityBaseController>>();
+            }
         }
     }
 }

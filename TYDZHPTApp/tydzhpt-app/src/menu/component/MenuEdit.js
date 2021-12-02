@@ -11,6 +11,10 @@ class MenuEdit extends React.Component {
         this.props.onSuccess(true);
     }
 
+    componentDidMount(){
+        
+    }
+
     render() {
         return <div style={{ margin: "20px 0" }}>
             <Form layout="horizontal" colon={false} onFinish={this.formSubmit} labelCol={{ span: 5 }}>

@@ -91,6 +91,8 @@ namespace Bul.Authority.WebApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bul.Authority.WebApi v1"));
             }
 
+            app.AppServiceExtention();
+
             app.UseRouting();
 
             app.UseCors();

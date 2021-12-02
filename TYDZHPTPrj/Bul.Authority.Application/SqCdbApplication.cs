@@ -1,4 +1,5 @@
-﻿using Bul.Authority.Application.DataTranslateObject;
+﻿using Bul.Authority.Application.ApplicationBase;
+using Bul.Authority.Application.DataTranslateObject;
 using Bul.Authority.Application.Enumer;
 using Bul.Authority.Entity;
 using Bul.Authority.Service;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Application
 {
-    public class SqCdbApplication
+    public class SqCdbApplication : BulAuthorityApplication
     {
         private readonly SqCdbService sqCdbService;
         public SqCdbApplication(SqCdbService cdbService)

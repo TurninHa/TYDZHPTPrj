@@ -15,11 +15,7 @@ namespace Bul.System.Common
         {
             base.OnActionExecuting(context);
 
-            if (context.HttpContext.User == null) return;
-
-            var loginSqUser = context.HttpContext.User.Claims.FirstOrDefault(f => f.Type == "ul")?.Value;
-
-            context.HttpContext.Items.Add("CurrentUser", loginSqUser);
+            Console.WriteLine(context.ActionArguments.Count);
         }
     }
 }

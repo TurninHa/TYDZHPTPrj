@@ -1,4 +1,5 @@
-﻿using Bul.Authority.Application.RequestObject;
+﻿using Bul.Authority.Application.ApplicationBase;
+using Bul.Authority.Application.RequestObject;
 using Bul.Authority.Entity;
 using Bul.Authority.Service;
 using Bul.System.Extension.NetCore;
@@ -13,14 +14,12 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Application
 {
-    public class SqCzgnApplication
+    public class SqCzgnApplication : BulAuthorityApplication
     {
         private readonly SqCzgnServices SqCzgnService;
-        private readonly IHttpContextAccessor HttpContextAccessor;
-        public SqCzgnApplication(SqCzgnServices sqCzgn, IHttpContextAccessor contextAccessor)
+        public SqCzgnApplication(SqCzgnServices sqCzgn)
         {
             this.SqCzgnService = sqCzgn;
-            this.HttpContextAccessor = contextAccessor;
         }
 
         public async Task<AbstractResult> Save(CdczgnRo ro)
@@ -32,12 +31,12 @@ namespace Bul.Authority.Application
 
             if (entity.ID > 0)
             {
-                entity.Updater = HttpContextAccessor.GetCurrentUser<SqUsers>().ID;
+                entity.Updater = this.LoginUser.ID;
                 entity.UpdateTime = DateTime.Now;
             }
             else
             {
-                entity.Creater = HttpContextAccessor.HttpContext.GetCurrentUser<SqUsers>().ID;
+                entity.Creater = this.LoginUser.ID;
                 entity.CreateTime = DateTime.Now;
             }
 

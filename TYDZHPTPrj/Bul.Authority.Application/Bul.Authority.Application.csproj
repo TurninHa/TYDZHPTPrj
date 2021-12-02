@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bul.Authority.Entity\Bul.Authority.Entity.csproj" />
     <ProjectReference Include="..\Bul.Authority.Service\Bul.Authority.Service.csproj" />
+    <ProjectReference Include="..\Bul.System.Common\Bul.System.Common.csproj" />
     <ProjectReference Include="..\Bul.System.Extension\Bul.System.Extension.csproj" />
     <ProjectReference Include="..\Bul.System.Result\Bul.System.Result.csproj" />
   </ItemGroup>

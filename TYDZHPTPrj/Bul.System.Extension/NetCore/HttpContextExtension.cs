@@ -24,17 +24,24 @@ namespace Bul.System.Extension.NetCore
             if (httpContext == null)
                 return default;
 
-            if (httpContext == null || httpContext.Items == null || httpContext.Items.Count == 0)
+            if (httpContext.Items == null || httpContext.Items.Count == 0)
                 return default;
 
-            var keyName = "CurrentUser"; //nameof(TCurrentUser);
-            if (!httpContext.Items.ContainsKey(keyName))
+            var keyName = nameof(TCurrentUser);
+
+            if (httpContext.Items.ContainsKey(keyName))
+                return (TCurrentUser)httpContext.Items[keyName];
+
+            var ul = httpContext.User.Claims.FirstOrDefault(f => f.Type == "ul")?.Value;
+
+            if (string.IsNullOrEmpty(ul))
                 return default;
 
-            var result = JsonConvert.DeserializeObject<TCurrentUser>(httpContext.Items[keyName].ToString());
-
+            var result = JsonConvert.DeserializeObject<TCurrentUser>(ul);
             if (result == null)
                 return default;
+
+            httpContext.Items.Add(keyName, result);
 
             return result;
         }

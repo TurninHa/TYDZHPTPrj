@@ -16,6 +16,6 @@ namespace Bul.System.Common
         /// <summary>
         /// 当前登录用户
         /// </summary>
-        public T CurrentUser { get; protected set; }
+        public abstract T CurrentUser { get; }
     }
 }

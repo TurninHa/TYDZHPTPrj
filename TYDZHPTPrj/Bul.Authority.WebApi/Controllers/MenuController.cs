@@ -91,8 +91,6 @@ namespace Bul.Authority.WebApi.Controllers
             if (pageCondition.PageSize == 0)
                 pageCondition.PageSize = 20;
 
-            Debug.WriteLine(HttpContext.GetCurrentUser<SqUsers>().YHM);
-
             var result = this.sqCdbApplication.GetPageListByWhere(pageCondition.Data, pageCondition.PageIndex, pageCondition.PageSize);
 
             return result;

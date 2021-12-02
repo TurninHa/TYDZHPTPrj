@@ -1,4 +1,5 @@
-﻿using Bul.Authority.Application.RequestObject;
+﻿using Bul.Authority.Application.ApplicationBase;
+using Bul.Authority.Application.RequestObject;
 using Bul.Authority.Entity;
 using Bul.Authority.Service;
 using Bul.System.Extension.NetCore;
@@ -12,14 +13,12 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Application
 {
-    public class SqUserApplication
+    public class SqUserApplication : BulAuthorityApplication
     {
         private readonly SqUsersServices UsersServices;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        public SqUserApplication(SqUsersServices services, IHttpContextAccessor contextAccessor)
+        public SqUserApplication(SqUsersServices services)
         {
             this.UsersServices = services;
-            httpContextAccessor = contextAccessor;
         }
 
         public BulResult<SqUsers> GetUserModelByYhmAndSjh(string yhm, string sjh)
@@ -54,7 +53,7 @@ namespace Bul.Authority.Application
             if (model == null)
                 return BulResult<SqUsers>.Fail(-3, "用户名密码错误");
 
-            var userRoleService = this.httpContextAccessor.GetService<SqUserRoleApplication>();
+            var userRoleService = this.HttpContextAccessor.GetService<SqUserRoleApplication>();
             var userRoles = userRoleService.GetUserRoleByUserId(model.ID, model.SSGSID);
 
             if (userRoles.Code != 0 || (userRoles.Code == 0 && !userRoles.Data.Any()))
