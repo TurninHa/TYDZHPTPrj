@@ -1,6 +1,7 @@
 ﻿using Bul.Authority.Application;
 using Bul.Authority.Application.DataTranslateObject;
 using Bul.Authority.Entity;
+using Bul.Authority.Service;
 using Bul.System.Common;
 using Bul.System.Extension.NetCore;
 using Bul.System.Result;
@@ -94,6 +95,29 @@ namespace Bul.Authority.WebApi.Controllers
             var result = this.sqCdbApplication.GetPageListByWhere(pageCondition.Data, pageCondition.PageIndex, pageCondition.PageSize);
 
             return result;
+        }
+
+        /// <summary>
+        /// 获取一个实体
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("model")]
+        public BulResult<SqCdb> GetModel(long id)
+        {
+            if (id <= 0)
+                return BulResult<SqCdb>.Fail(-1, "参数错误");
+
+            //对于简单查询逻辑 可直接在此使用服务层
+            var sqCdService = this.HttpContext.GetService<SqCdbService>();
+
+            var model = sqCdService.Db.Query<SqCdb>().FirstOrDefault(f => f.ID == id);
+
+            if (model == null)
+                return BulResult<SqCdb>.Fail(-2, "参数错误");
+
+            return BulResult<SqCdb>.Success(model);
         }
     }
 }

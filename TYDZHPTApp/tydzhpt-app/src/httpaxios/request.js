@@ -16,7 +16,7 @@ export function post(uri = "", data, isFormData = false) {
     });
 }
 
-export function get(uri = "", params) {
+export function get(uri = "", params={}) {
     
     return new Promise((resolve, reject) => {
         axios.get(uri, {
