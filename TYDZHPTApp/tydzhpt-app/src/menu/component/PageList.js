@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Button, Space, message, Modal } from "antd";
+import { Table, Button, Space, message, Modal, Row, Col,Tree } from "antd";
 import { cdgl } from "../../Api/cdglApi";
 import MenuEdit from "./MenuEdit";
 
@@ -104,31 +104,41 @@ class PageListPart extends React.Component {
 
     render() {
         return <>
-            <div className="list-grid-container">
-                <div className="list-grid-head">
-                    <div className="list-grid-head-tool">
-                        <div className="list-grid-head-tool-text">菜单管理</div>
-                        <div className="list-grid-head-tool-bar">
-                            <div>
-                                <Button type="primary">新建</Button>
-                            </div>
-                            <div>
-                                <Button>删除</Button>
+            <Row>
+                <Col flex="200px">
+                    <Tree>
+                        
+                    </Tree>
+                </Col>
+                <Col flex="auto">
+                    <div className="list-grid-container">
+                        <div className="list-grid-head">
+                            <div className="list-grid-head-tool">
+                                <div className="list-grid-head-tool-text">菜单管理</div>
+                                <div className="list-grid-head-tool-bar">
+                                    <div>
+                                        <Button type="primary">新建</Button>
+                                    </div>
+                                    <div>
+                                        <Button>删除</Button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div className="list-grid-body">
+                            <Table columns={this.columns} dataSource={this.state.dataSource} pagination={{
+                                onShowSizeChange: pageIndex => {
+                                    this.setState({ pageIndex });
+                                },
+                                defaultCurrent: 1,
+                                defaultPageSize: 20,
+                                total: this.state.total
+                            }}></Table>
+                        </div>
                     </div>
-                </div>
-                <div className="list-grid-body">
-                    <Table columns={this.columns} dataSource={this.state.dataSource} pagination={{
-                        onShowSizeChange: pageIndex => {
-                            this.setState({ pageIndex });
-                        },
-                        defaultCurrent: 1,
-                        defaultPageSize: 20,
-                        total: this.state.total
-                    }}></Table>
-                </div>
-            </div>
+                </Col>
+            </Row>
+
             <Modal visible={this.state.modalVisible} onCancel={() => { this.setState({ modalVisible: false }); }}
                 destroyOnClose={true} centered footer={null} maskClosable={false} >
                 <MenuEdit id={this.state.id} onSuccess={(success = false) => {
