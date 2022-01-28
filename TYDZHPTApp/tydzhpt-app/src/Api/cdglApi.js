@@ -25,3 +25,13 @@ export const save = (sqCdb = {}) => {
         });
     });
 }
+
+export const menuTree = () => {
+    return new Promise((resolve, reject) => {
+        get("/api/menu/menutree").then(resp => {
+            resolve(resp);
+        }).catch(er => {
+            reject(er);
+        });
+    });
+}
