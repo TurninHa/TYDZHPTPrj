@@ -1,6 +1,6 @@
 import React from "react";
-import { Table, Button, Space, message, Modal, Row, Col,Tree } from "antd";
-import { cdgl } from "../../Api/cdglApi";
+import { Table, Button, Space, message, Modal, Row, Col, Tree } from "antd";
+import { cdgl, menuTree } from "../../Api/cdglApi";
 import MenuEdit from "./MenuEdit";
 
 class PageListPart extends React.Component {
@@ -13,6 +13,7 @@ class PageListPart extends React.Component {
             total: 0,
             modalVisible: false,
             id: -1,
+            treeData: []
         };
     }
     columns = [
@@ -67,7 +68,17 @@ class PageListPart extends React.Component {
     }
 
     componentDidMount() {
+        this.loadMenuTree();
         this.loadData();
+    }
+
+    loadMenuTree = () => {
+        menuTree().then(resp => {
+            console.log({ resp });
+            this.setState({ treeData: resp.data.Data })
+        }).catch(er => {
+            console.error(er);
+        });
     }
 
     loadData() {
@@ -102,12 +113,18 @@ class PageListPart extends React.Component {
         });
     }
 
+    createMenuHandle() {
+        this.setState({
+            modalVisible: true,
+            id: -1
+        });
+    }
+
     render() {
         return <>
             <Row>
-                <Col flex="200px">
-                    <Tree>
-                        
+                <Col flex="260px">
+                    <Tree showLine treeData={this.state.treeData}>
                     </Tree>
                 </Col>
                 <Col flex="auto">
@@ -117,10 +134,7 @@ class PageListPart extends React.Component {
                                 <div className="list-grid-head-tool-text">菜单管理</div>
                                 <div className="list-grid-head-tool-bar">
                                     <div>
-                                        <Button type="primary">新建</Button>
-                                    </div>
-                                    <div>
-                                        <Button>删除</Button>
+                                        <Button type="primary" onClick={() => { this.createMenuHandle(); }}>新建</Button>
                                     </div>
                                 </div>
                             </div>
@@ -141,13 +155,15 @@ class PageListPart extends React.Component {
 
             <Modal visible={this.state.modalVisible} onCancel={() => { this.setState({ modalVisible: false }); }}
                 destroyOnClose={true} centered footer={null} maskClosable={false} >
-                <MenuEdit id={this.state.id} onSuccess={(success = false) => {
-                    this.setState({
-                        modalVisible: !success
-                    });
-                    if (success)
-                        this.loadData();
-                }} onClose={() => { this.setState({ modalVisible: false }); }}></MenuEdit>
+                <MenuEdit id={this.state.id}
+                    onSuccess={(success = false) => {
+                        this.setState({
+                            modalVisible: !success
+                        });
+                        if (success)
+                            this.loadData();
+                    }}
+                    onClose={() => { this.setState({ modalVisible: false }); }}></MenuEdit>
             </Modal>
         </>;
     }
