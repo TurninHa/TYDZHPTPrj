@@ -23,6 +23,7 @@ namespace Bul.Authority.Application
 
         public async Task<BulResult<SqCdb>> SaveSqCd(SqCdb sqCdb)
         {
+            sqCdb.SYZT = 1;
             var result = await this.sqCdbService.Save(sqCdb);
 
             return result;
@@ -79,6 +80,7 @@ namespace Bul.Authority.Application
                 {
                     Title = item.CDMC,
                     Key = item.ID + "_" + item.CDBM,
+                    Value = item.ID.ToString(),
                     SqCdbDtos = new List<SqCdbDto>()
                 };
 
@@ -103,6 +105,7 @@ namespace Bul.Authority.Application
                 {
                     Title = item.CDMC,
                     Key = item.ID + "_" + item.CDBM,
+                    Value = item.ID.ToString(),
                     SqCdbDtos = new List<SqCdbDto>()
                 };
 
@@ -131,6 +134,9 @@ namespace Bul.Authority.Application
             if (!string.IsNullOrEmpty(sqCdbListDto.CDMC))
                 query = query.Where(w => w.CDMC.Contains(sqCdbListDto.CDMC));
 
+            if (sqCdbListDto.FCDID != null && sqCdbListDto.FCDID > 0)
+                query = query.Where(w => (w.FCDID == sqCdbListDto.FCDID || w.ID == sqCdbListDto.FCDID));
+
             var result = query.ToList();
             var resultDto = result.Adapt<IEnumerable<SqCdbListDto>>();
 
@@ -150,6 +156,9 @@ namespace Bul.Authority.Application
 
             if (!string.IsNullOrEmpty(condition.CDMC))
                 query = query.Where(w => w.CDMC.Contains(condition.CDMC));
+
+            if (condition.FCDID != null && condition.FCDID > 0)
+                query = query.Where(w => (w.FCDID == condition.FCDID || w.ID == condition.FCDID));
 
             var pageCount = query.Count();
 

@@ -1,5 +1,6 @@
 ﻿using Bul.Authority.Application;
 using Bul.Authority.Application.DataTranslateObject;
+using Bul.Authority.Application.RequestObject;
 using Bul.Authority.Entity;
 using Bul.Authority.Service;
 using Bul.System.Common;
@@ -118,6 +119,31 @@ namespace Bul.Authority.WebApi.Controllers
                 return BulResult<SqCdb>.Fail(-2, "参数错误");
 
             return BulResult<SqCdb>.Success(model);
+        }
+
+        /// <summary>
+        /// 删除菜单
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("delete")]
+        public async Task<AbstractResult> CdDelete(DeleteByIdRo ro)
+        {
+            if (ro == null || ro.Id <= 0)
+                return BulResult.FailNonData(-1, "参数错误");
+
+            var sqCdService = this.HttpContext.GetService<SqCdbService>();
+
+            var model = await sqCdService.Db.Query<SqCdb>().FirstOrDefaultAsync(f => f.ID == ro.Id);
+            if (model == null)
+                return BulResult.FailNonData(-2, "删除菜单数据错误");
+
+            var efft = await sqCdService.Db.DeleteAsync<SqCdb>(model);
+            if (efft > 0)
+                return BulResult.SuccessNonData();
+            else
+                return BulResult.FailNonData(-3, "删除数据失败");
         }
     }
 }

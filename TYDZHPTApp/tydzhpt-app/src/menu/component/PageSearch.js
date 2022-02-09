@@ -3,18 +3,20 @@ import { Input, Button } from "antd"
 
 function PageSearchContainer(props) {
 
-    const setSearchCondition = props.setSearchCondition;
+    const setSearchCondition = props.setCondition;
+    const resetPropHandle = props.reset;
     let cdmc = React.createRef();
     let cdbm = React.createRef();
 
     const resetHandle = () => {
         cdbm.current.input.value = "";
         cdmc.current.input.value = "";
+        resetPropHandle();
     };
     const searchHandle = () => {
         let condition = {
-            cdmc,
-            cdbm
+            cdmc:cdmc.current.input.value,
+            cdbm:cdbm.current.input.value
         };
 
         setSearchCondition(condition);

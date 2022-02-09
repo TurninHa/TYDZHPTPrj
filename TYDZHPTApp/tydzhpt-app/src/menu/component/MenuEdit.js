@@ -4,7 +4,7 @@ import { getModel, save, menuTree } from "../../Api/cdglApi";
 
 class MenuEdit extends React.Component {
 
-    state = { id: this.props.id, cdbmReadonly: true,overlay:null };
+    state = { id: this.props.id, cdbmReadonly: true, treeValue: "", treeData: [] };
     formRef = React.createRef();
 
     formSubmit = data => {
@@ -16,25 +16,33 @@ class MenuEdit extends React.Component {
             message.warn("请填写菜单名称");
         }
 
+        if (!data.FCDID || data.FCDID == "" || data.FCDID == undefined)
+            data.FCDID = "0";
+
         save(data).then(resp => {
-            //if(resp.data.Data)
-            this.props.onSuccess(true);
-        }).catch(er => {
-
-        });
-    }
-
-    initMenuDropdown() {
-       
-        menuTree().then(response => {
-
+            if (resp.data.Code === 0)
+                this.props.onSuccess(true);
+            else
+                message.warn(resp.data.Message);
         }).catch(er => {
             console.error(er);
         });
     }
 
+    initMenuTreeSelect() {
+        menuTree().then(response => {
+            this.setState({ treeData: response.data.Data });
+        }).catch(er => {
+            console.error(er);
+        });
+    }
+    treeChangeHandle(data) {
+        console.log("选中的菜单ID " + data);
+        this.setState({ treeValue: data });
+    }
+
     componentDidMount() {
-        this.initMenuDropdown();
+        this.initMenuTreeSelect();
 
         if (!this.state.id || this.state.id === -1) {
             this.setState({ cdbmReadonly: false });
@@ -57,8 +65,8 @@ class MenuEdit extends React.Component {
                 <Form.Item label="菜单名称" name="CDMC" required>
                     <Input placeholder="请输入菜单名称"></Input>
                 </Form.Item>
-                <Form.Item label="所属父菜单" name="FCDID" required>
-                    <TreeSelect></TreeSelect>
+                <Form.Item label="所属父菜单" name="FCDID">
+                    <TreeSelect showSearch placeholder="请选择父菜单" allowClear value={this.state.treeValue} onChange={value => { this.treeChangeHandle(value) }} treeData={this.state.treeData}></TreeSelect>
                 </Form.Item>
                 <Form.Item label="菜单路径" name="CDLJ">
                     <Input placeholder="请输入菜单路径"></Input>
@@ -73,7 +81,7 @@ class MenuEdit extends React.Component {
                     </Space>
                 </Form.Item>
             </Form>
-        </div>;
+        </div >;
     }
 }
 

@@ -35,3 +35,16 @@ export const menuTree = () => {
         });
     });
 }
+
+export const delOne = (id = 0) => {
+    if (id <= 0)
+        return;
+    return new Promise((resolve, reject) => {
+        post("/api/menu/delete", { id }).then(response => {
+            resolve(response);
+        }).catch(er => {
+            reject(er);
+        });
+    });
+
+};

@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Button, Space, message, Modal, Row, Col, Tree } from "antd";
-import { cdgl, menuTree } from "../../Api/cdglApi";
+import { cdgl, menuTree, delOne } from "../../Api/cdglApi";
 import MenuEdit from "./MenuEdit";
 
 class PageListPart extends React.Component {
@@ -13,7 +13,11 @@ class PageListPart extends React.Component {
             total: 0,
             modalVisible: false,
             id: -1,
-            treeData: []
+            treeData: [],
+            isShowConfirm: false,
+            isShowConfirmLoading: false,
+            defaultExpandAll: false,
+            
         };
     }
     columns = [
@@ -54,17 +58,44 @@ class PageListPart extends React.Component {
             render: (text, record) => {
                 return (
                     <Space>
-                        <a data-id={record.ID} onClick={() => { this.editShowForm(record.ID) }}>编辑</a>
-                        <a>删除</a>
+                        <a data-id={record.ID} onClick={() => { this.editShowForm(record.ID) }} >编辑</a>
+                        <a onClick={() => { this.deleteHandle(record.ID) }} >删除</a>
                     </Space>);
             }
         },
     ];
 
     rowNo = 1;
+    selectNodeValue = this.props.nodeValue;
 
     editShowForm(id) {
         this.setState({ modalVisible: true, id })
+    }
+
+    deleteHandle(id = 0) {
+        if (!id || id <= 0)
+            return;
+
+        this.setState({ isShowConfirm: true, id: id });
+    }
+
+    deleteModel() {
+        this.setState({ isShowConfirmLoading: true });
+        delOne(this.state.id).then(resp => {
+
+            if (resp.data.Code === 0) {
+                this.setState({ isShowConfirmLoading: false, isShowConfirm: false });
+                this.loadMenuTree();
+                this.loadData();
+            }
+            else {
+                this.setState({ isShowConfirmLoading: false });
+                message.error(resp.data.Message);
+            }
+        }).catch(er => {
+            this.setState({ isShowConfirmLoading: false });
+            message.error(er);
+        });
     }
 
     componentDidMount() {
@@ -72,10 +103,29 @@ class PageListPart extends React.Component {
         this.loadData();
     }
 
+    static getDerivedStateFromProps(prop, state) {
+        console.log({ prop });
+        console.log({ state });
+
+        
+        return null;
+    }
+
+    // shouldComponentUpdate(nextProps, nextState) {
+
+    //     console.log({ nextProps });
+    //     console.log({ nextState });
+        
+    //     return false;
+    // }
+
     loadMenuTree = () => {
         menuTree().then(resp => {
             console.log({ resp });
-            this.setState({ treeData: resp.data.Data })
+            this.setState({
+                treeData: resp.data.Data,
+                defaultExpandAll: true
+            });
         }).catch(er => {
             console.error(er);
         });
@@ -92,6 +142,11 @@ class PageListPart extends React.Component {
             pageSize: this.state.pageSize
         };
 
+        if (this.selectNodeValue && this.selectNodeValue != "")
+            pageConditon.data.FCDID = this.selectNodeValue;
+
+        this.rowNo = 1;
+
         cdgl(pageConditon).then(response => {
 
             response.data.Data.Data.forEach(element => {
@@ -104,10 +159,6 @@ class PageListPart extends React.Component {
                 total: response.data.Data.PageCount
             });
         }).catch(er => {
-            // this.setState({
-            //     dataSource: [],
-            //     total: 0
-            // });
             message.error(er.toString());
             console.log(er);
         });
@@ -120,12 +171,22 @@ class PageListPart extends React.Component {
         });
     }
 
+    clicckTreeNodeHandle(node, e) {
+        this.selectNodeValue = e.node.value;
+        this.loadData();
+    }
+
     render() {
         return <>
             <Row>
-                <Col flex="260px">
-                    <Tree showLine treeData={this.state.treeData}>
-                    </Tree>
+                <Col flex="250px">
+                    <div style={{ marginTop: "15px", borderRight: "1px solid #DCDCDC", height: "96%", marginRight: "10px" }}>
+                        <Tree showLine={true}
+                            treeData={this.state.treeData}
+                            defaultExpandAll={this.state.defaultExpandAll}
+                            onSelect={(node, e) => { this.clicckTreeNodeHandle(node, e) }}>
+                        </Tree>
+                    </div>
                 </Col>
                 <Col flex="auto">
                     <div className="list-grid-container">
@@ -152,7 +213,13 @@ class PageListPart extends React.Component {
                     </div>
                 </Col>
             </Row>
-
+            <Modal onCancel={() => {
+                this.setState({ isShowConfirm: false });
+            }} onOk={() => {
+                this.deleteModel();
+            }} centered visible={this.state.isShowConfirm} confirmLoading={this.state.isShowConfirmLoading} title="提示">
+                确认删除吗？
+            </Modal>
             <Modal visible={this.state.modalVisible} onCancel={() => { this.setState({ modalVisible: false }); }}
                 destroyOnClose={true} centered footer={null} maskClosable={false} >
                 <MenuEdit id={this.state.id}
@@ -160,8 +227,10 @@ class PageListPart extends React.Component {
                         this.setState({
                             modalVisible: !success
                         });
-                        if (success)
+                        if (success) {
                             this.loadData();
+                            this.loadMenuTree();
+                        }
                     }}
                     onClose={() => { this.setState({ modalVisible: false }); }}></MenuEdit>
             </Modal>
