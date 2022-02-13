@@ -4,19 +4,29 @@ import { Input, Button } from "antd"
 function PageSearchContainer(props) {
 
     const setSearchCondition = props.setCondition;
-    const resetPropHandle = props.reset;
+
     let cdmc = React.createRef();
     let cdbm = React.createRef();
 
+    //重置
     const resetHandle = () => {
         cdbm.current.input.value = "";
         cdmc.current.input.value = "";
-        resetPropHandle();
+
+        let condition = {
+            cdmc: "",
+            cdbm: "",
+            reset: true
+        };
+
+        setSearchCondition(condition);
     };
+    //查询
     const searchHandle = () => {
         let condition = {
-            cdmc:cdmc.current.input.value,
-            cdbm:cdbm.current.input.value
+            cdmc: cdmc.current.input.value,
+            cdbm: cdbm.current.input.value,
+            reset: false
         };
 
         setSearchCondition(condition);

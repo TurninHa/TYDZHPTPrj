@@ -17,7 +17,7 @@ class PageListPart extends React.Component {
             isShowConfirm: false,
             isShowConfirmLoading: false,
             defaultExpandAll: false,
-            
+            condition: this.props.condition,
         };
     }
     columns = [
@@ -66,7 +66,6 @@ class PageListPart extends React.Component {
     ];
 
     rowNo = 1;
-    selectNodeValue = this.props.nodeValue;
 
     editShowForm(id) {
         this.setState({ modalVisible: true, id })
@@ -104,20 +103,35 @@ class PageListPart extends React.Component {
     }
 
     static getDerivedStateFromProps(prop, state) {
+
+        console.log("我执行了 getDerivedStateFromProps ");
         console.log({ prop });
         console.log({ state });
 
-        
-        return null;
+
+        return { condition: prop.condition };
     }
 
-    // shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
-    //     console.log({ nextProps });
-    //     console.log({ nextState });
-        
-    //     return false;
-    // }
+        console.log("我执行了 shouldComponentUpdate ");
+        console.log({ nextProps });
+        console.log({ nextState });
+
+        //if(this.conditionObj == this.props.condition)
+        //return false;
+
+        return true;
+    }
+
+    getSnapshotBeforeUpdate(prevProps, prevState) {
+        console.log({prevProps});
+        console.log({prevState});
+    }
+
+    componentDidUpdate() {
+        console.log("componentDidUpdate 我已经执行了更新");
+    }
 
     loadMenuTree = () => {
         menuTree().then(resp => {
@@ -133,8 +147,8 @@ class PageListPart extends React.Component {
 
     loadData() {
         let condition = {};
-        if (this.props.condition)
-            condition = this.props.condition;
+        if (this.state.condition)
+            condition = this.state.condition;
 
         let pageConditon = {
             data: condition,

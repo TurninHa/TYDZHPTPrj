@@ -10,7 +10,12 @@ const ListComponent = React.lazy(() => import("./component/PageList"));
 class MenuMng extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { searchCondition: {}, nodeValue: -1 }
+        this.state = {
+            searchCondition: {
+                cdmc: "",
+                cdbm: "",
+            }
+        }
     }
 
     setSearchCondition(condition = {}) {
@@ -19,21 +24,16 @@ class MenuMng extends React.Component {
         this.setState({ searchCondition: condition });
     }
 
-    resetHandle() {
-        console.log("点击了重置");
-        this.setState({ nodeValue: Math.random() });
-    }
-
     render() {
 
         return (
             <div className="list-page-container">
                 <Suspense fallback={<Spin></Spin>}>
                     <div className="search-container">
-                        <SearchTool setCondition={(condition) => this.setSearchCondition(condition)} reset={() => { this.resetHandle() }}></SearchTool>
+                        <SearchTool setCondition={(condition) => this.setSearchCondition(condition)}></SearchTool>
                     </div>
                     <div className="list-container">
-                        <ListComponent condition={this.state.searchCondition} nodeValue={this.state.nodeValue}></ListComponent>
+                        <ListComponent condition={this.state.searchCondition}></ListComponent>
                     </div>
                 </Suspense>
             </div>
