@@ -17,7 +17,7 @@ class PageListPart extends PureComponent {
             isShowConfirm: false,
             isShowConfirmLoading: false,
             defaultExpandAll: false,
-            
+            condition: this.props.condition,
         };
     }
     columns = [
@@ -66,7 +66,6 @@ class PageListPart extends PureComponent {
     ];
 
     rowNo = 1;
-    selectNodeValue = this.props.nodeValue;
 
     editShowForm(id) {
         this.setState({ modalVisible: true, id })
@@ -113,11 +112,17 @@ class PageListPart extends PureComponent {
 
     // shouldComponentUpdate(nextProps, nextState) {
 
-    //     console.log({ nextProps });
-    //     console.log({ nextState });
-        
-    //     return false;
+    //     return true;
     // }
+
+    getSnapshotBeforeUpdate(prevProps, prevState) {
+        console.log({prevProps});
+        console.log({prevState});
+    }
+
+    componentDidUpdate() {
+        console.log("componentDidUpdate 我已经执行了更新");
+    }
 
     loadMenuTree = () => {
         menuTree().then(resp => {
@@ -133,8 +138,8 @@ class PageListPart extends PureComponent {
 
     loadData() {
         let condition = {};
-        if (this.props.condition)
-            condition = this.props.condition;
+        if (this.state.condition)
+            condition = this.state.condition;
 
         let pageConditon = {
             data: condition,
