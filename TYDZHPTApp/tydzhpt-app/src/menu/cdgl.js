@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense,PureComponent } from "react";
 import "../Css/glb.css";
 import { Spin } from "antd";
 // import SearchTool from "./component/PageSearch";
@@ -7,7 +7,7 @@ import { Spin } from "antd";
 const SearchTool = React.lazy(() => import("./component/PageSearch"));
 const ListComponent = React.lazy(() => import("./component/PageList"));
 
-class MenuMng extends React.Component {
+class MenuMng extends PureComponent {
     constructor(props) {
         super(props)
         this.state = { searchCondition: {}, nodeValue: -1 }

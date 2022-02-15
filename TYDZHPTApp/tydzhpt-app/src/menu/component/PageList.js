@@ -1,9 +1,9 @@
-import React from "react";
+import React,{PureComponent} from "react";
 import { Table, Button, Space, message, Modal, Row, Col, Tree } from "antd";
 import { cdgl, menuTree, delOne } from "../../Api/cdglApi";
 import MenuEdit from "./MenuEdit";
 
-class PageListPart extends React.Component {
+class PageListPart extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -103,13 +103,13 @@ class PageListPart extends React.Component {
         this.loadData();
     }
 
-    static getDerivedStateFromProps(prop, state) {
-        console.log({ prop });
-        console.log({ state });
+    // static getDerivedStateFromProps(prop, state) {
+    //     console.log({ prop });
+    //     console.log({ state });
 
         
-        return null;
-    }
+    //     return null;
+    // }
 
     // shouldComponentUpdate(nextProps, nextState) {
 
