@@ -34,7 +34,7 @@ class Login extends React.Component {
             console.log("Result", response);
             if (response.Code === 0) {
                 sessionStorage.setItem("user", JSON.stringify({ name: userName, token: response.Data }));
-                window.location.hash="/layout";
+                window.location.replace("/layout");
             }
             else {
                 message.warn(response.Message);
