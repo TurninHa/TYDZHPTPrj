@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input, Button } from "antd"
 
 function PageSearchContainer(props) {
 
     const setSearchCondition = props.setCondition;
 
-    let cdmc = React.createRef();
-    let cdbm = React.createRef();
+    const [cdmc, setCdmc] = useState("");
+    const [cdbm, setCdbm] = useState("");
 
     //重置
     const resetHandle = () => {
-        cdbm.current.input.value = "";
-        cdmc.current.input.value = "";
 
+        setCdmc("");
+        setCdbm("");
         let condition = {
             cdmc: "",
             cdbm: "",
+            search: true,
             reset: true
         };
 
@@ -24,13 +25,22 @@ function PageSearchContainer(props) {
     //查询
     const searchHandle = () => {
         let condition = {
-            cdmc: cdmc.current.input.value,
-            cdbm: cdbm.current.input.value,
+            cdbm,
+            cdmc,
+            search: true,
             reset: false
         };
 
         setSearchCondition(condition);
     };
+
+    const cdmcChangeHandle = e => {
+        setCdmc(e.target.value);
+    }
+
+    const cdbmChangeHandle = e => {
+        setCdbm(e.target.value);
+    }
 
     return (
         <div className="search-tool-container">
@@ -40,7 +50,7 @@ function PageSearchContainer(props) {
                         <label>菜单名称:</label>
                     </div>
                     <div className="search-tool-item-content-right">
-                        <Input ref={cdmc}></Input>
+                        <Input value={cdmc} onChange={cdmcChangeHandle}></Input>
                     </div>
                 </div>
             </div>
@@ -50,7 +60,7 @@ function PageSearchContainer(props) {
                         <label>菜单编码:</label>
                     </div>
                     <div className="search-tool-item-content-right">
-                        <Input ref={cdbm}></Input>
+                        <Input value={cdbm} onChange={cdbmChangeHandle}></Input>
                     </div>
                 </div>
             </div>

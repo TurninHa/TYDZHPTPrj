@@ -1,9 +1,9 @@
-import React,{PureComponent} from "react";
+import React from "react";
 import { Table, Button, Space, message, Modal, Row, Col, Tree } from "antd";
 import { cdgl, menuTree, delOne } from "../../Api/cdglApi";
 import MenuEdit from "./MenuEdit";
 
-class PageListPart extends PureComponent {
+class PageListPart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -101,23 +101,18 @@ class PageListPart extends PureComponent {
         this.loadMenuTree();
         this.loadData();
     }
+    
+    shouldComponentUpdate(nextProps, nextState) {
 
-    // static getDerivedStateFromProps(prop, state) {
-    //     console.log({ prop });
-    //     console.log({ state });
-
-        
-    //     return null;
-    // }
-
-    // shouldComponentUpdate(nextProps, nextState) {
-
-    //     return true;
-    // }
-
-    getSnapshotBeforeUpdate(prevProps, prevState) {
-        console.log({prevProps});
-        console.log({prevState});
+        if (nextProps.condition && nextProps.condition.search) {
+            this.state.condition = {
+                cdmc: nextProps.condition.cdmc,
+                cdbm: nextProps.condition.cdbm
+            };
+            this.loadData();
+            nextProps.condition.search = false;
+        }
+        return true;
     }
 
     componentDidUpdate() {
