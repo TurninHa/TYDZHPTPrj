@@ -6,6 +6,7 @@ using Bul.Authority.Service;
 using Bul.System.Common;
 using Bul.System.Extension.NetCore;
 using Bul.System.Result;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -105,10 +106,10 @@ namespace Bul.Authority.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("model")]
-        public BulResult<SqCdb> GetModel(long id)
+        public BulResult<SqCdbListDto> GetModel(long id)
         {
             if (id <= 0)
-                return BulResult<SqCdb>.Fail(-1, "参数错误");
+                return BulResult<SqCdbListDto>.Fail(-1, "参数错误");
 
             //对于简单查询逻辑 可直接在此使用服务层
             var sqCdService = this.HttpContext.GetService<SqCdbService>();
@@ -116,9 +117,16 @@ namespace Bul.Authority.WebApi.Controllers
             var model = sqCdService.Db.Query<SqCdb>().FirstOrDefault(f => f.ID == id);
 
             if (model == null)
-                return BulResult<SqCdb>.Fail(-2, "参数错误");
+                return BulResult<SqCdbListDto>.Fail(-2, "参数错误");
 
-            return BulResult<SqCdb>.Success(model);
+            var result = model.Adapt<SqCdbListDto>();
+
+            if (result.FCDID > 0)
+            {
+
+            }
+
+            return BulResult<SqCdbListDto>.Success(result);
         }
 
         /// <summary>
