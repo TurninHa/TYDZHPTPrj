@@ -6,6 +6,7 @@ class MenuEdit extends React.Component {
 
     state = { id: this.props.id, cdbmReadonly: true, treeValue: "", treeData: [] };
     formRef = React.createRef();
+    cdid = 0;
 
     formSubmit = data => {
         console.log(data);
@@ -16,9 +17,9 @@ class MenuEdit extends React.Component {
             message.warn("请填写菜单名称");
         }
 
-        if (!data.FCDID || data.FCDID == "" || data.FCDID == undefined)
-            data.FCDID = "0";
-
+        data.FCDID = this.state.treeValue;
+        data.ID = this.cdid;
+        
         save(data).then(resp => {
             if (resp.data.Code === 0)
                 this.props.onSuccess(true);
@@ -49,8 +50,12 @@ class MenuEdit extends React.Component {
             return;
         }
         getModel(this.state.id).then(resp => {
-            console.log({ resp });
+
             this.formRef.current.setFieldsValue(resp.data.Data);
+            this.cdid = resp.data.Data.ID;
+            let fcdid = resp.data.Data.FCDID !== 0 ? resp.data.Data.FCDID.toString() : "";
+            this.setState({ treeValue: fcdid });
+
         }).catch(er => {
             console.log(er);
         });
@@ -65,8 +70,12 @@ class MenuEdit extends React.Component {
                 <Form.Item label="菜单名称" name="CDMC" required>
                     <Input placeholder="请输入菜单名称"></Input>
                 </Form.Item>
-                <Form.Item label="所属父菜单" name="FCDID">
-                    <TreeSelect showSearch placeholder="请选择父菜单" allowClear value={this.state.treeValue} onChange={value => { this.treeChangeHandle(value) }} treeData={this.state.treeData}></TreeSelect>
+                <Form.Item label="所属父菜单">
+                    <TreeSelect showSearch allowClear
+                        placeholder={this.state.fcdmc || "请选择父菜单"}
+                        value={this.state.treeValue}
+                        onChange={value => { this.treeChangeHandle(value) }}
+                        treeData={this.state.treeData}></TreeSelect>
                 </Form.Item>
                 <Form.Item label="菜单路径" name="CDLJ">
                     <Input placeholder="请输入菜单路径"></Input>

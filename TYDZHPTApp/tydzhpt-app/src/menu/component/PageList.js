@@ -101,7 +101,7 @@ class PageListPart extends React.Component {
         this.loadMenuTree();
         this.loadData();
     }
-    
+
     shouldComponentUpdate(nextProps, nextState) {
 
         if (nextProps.condition && nextProps.condition.search) {
@@ -123,9 +123,9 @@ class PageListPart extends React.Component {
         menuTree().then(resp => {
             console.log({ resp });
             this.setState({
-                treeData: resp.data.Data,
-                defaultExpandAll: true
+                treeData: resp.data.Data
             });
+            this.setState({ defaultExpandAll: true });
         }).catch(er => {
             console.error(er);
         });
@@ -142,7 +142,7 @@ class PageListPart extends React.Component {
             pageSize: this.state.pageSize
         };
 
-        if (this.selectNodeValue && this.selectNodeValue != "")
+        if (this.selectNodeValue && this.selectNodeValue !== "")
             pageConditon.data.FCDID = this.selectNodeValue;
 
         this.rowNo = 1;
@@ -184,6 +184,7 @@ class PageListPart extends React.Component {
                         <Tree showLine={true}
                             treeData={this.state.treeData}
                             defaultExpandAll={this.state.defaultExpandAll}
+                            defaultExpandParent={this.state.defaultExpandAll}
                             onSelect={(node, e) => { this.clicckTreeNodeHandle(node, e) }}>
                         </Tree>
                     </div>

@@ -123,7 +123,10 @@ namespace Bul.Authority.WebApi.Controllers
 
             if (result.FCDID > 0)
             {
+                var parentMenuModel = sqCdService.Db.Query<SqCdb>().FirstOrDefault(f => f.ID == result.FCDID);
 
+                if (parentMenuModel != null)
+                    result.FCDMC = parentMenuModel.CDMC;
             }
 
             return BulResult<SqCdbListDto>.Success(result);
