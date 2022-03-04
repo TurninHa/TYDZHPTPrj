@@ -48,3 +48,16 @@ export const delOne = (id = 0) => {
     });
 
 };
+
+export const getOperateFuncList = (cdId = 0) => {
+    if (cdId <= 0)
+        return;
+    return new Promise((resolve, reject) => {
+        get("/api/Operation/list", { cdId }).then(response => {
+            resolve(response);
+        }).catch(er => {
+            reject(er);
+        });
+    });
+
+};

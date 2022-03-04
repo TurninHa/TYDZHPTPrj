@@ -60,6 +60,7 @@ class PageListPart extends React.Component {
                     <Space>
                         <a data-id={record.ID} onClick={() => { this.editShowForm(record.ID) }} >编辑</a>
                         <a onClick={() => { this.deleteHandle(record.ID) }} >删除</a>
+                        <a>操作按钮</a>
                     </Space>);
             }
         },
