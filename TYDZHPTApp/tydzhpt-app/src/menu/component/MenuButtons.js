@@ -52,8 +52,8 @@ const MenuButtons = (props) => {
             let editing = isEditing(record.key);
             return (
                 editing ? <Space>
-                    <a>保存</a>
-                    <a>取消</a>
+                    <a onClick={ ()=> saveHandle() }>保存</a>
+                    <a onClick={()=> setEditKey("") }>取消</a>
                 </Space> :
                     <Space>
                         <a onClick={() => { editHandle(record); }}>编辑</a>
@@ -62,6 +62,14 @@ const MenuButtons = (props) => {
             );
         }
     }];
+
+    const saveHandle = async ()=>{
+
+        let submitData = await form.validateFields();
+        console.log({submitData});
+
+        
+    };
 
     const newColumns = columns.map(cur => {
         if (!cur.editable)
