@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Table, Space, message, Form, Input, InputNumber } from "antd";
-import { getOperateFuncList } from "../../Api/cdglApi";
+import { Table, Space, message, Form, Input, InputNumber, Button, Row, Col } from "antd";
+import { getOperateFuncList, saveCzGn, deleteCzgn } from "../../Api/cdglApi";
 
-const MenuButtons = (props) => {
+export const MenuButtons = (props) => {
     const cdId = props.Id;
     const [dataSource, setDataSource] = useState([]);
     const [form] = Form.useForm();
@@ -52,23 +52,55 @@ const MenuButtons = (props) => {
             let editing = isEditing(record.key);
             return (
                 editing ? <Space>
-                    <a onClick={ ()=> saveHandle() }>保存</a>
-                    <a onClick={()=> setEditKey("") }>取消</a>
+                    <a onClick={() => saveHandle()}>保存</a>
+                    <a onClick={() => setEditKey("")}>取消</a>
                 </Space> :
                     <Space>
                         <a onClick={() => { editHandle(record); }}>编辑</a>
-                        <a>删除</a>
+                        <a onClick={() => { deleteHandle(record.ID) }}>删除</a>
                     </Space>
             );
         }
     }];
 
-    const saveHandle = async ()=>{
+    const saveHandle = async () => {
 
         let submitData = await form.validateFields();
-        console.log({submitData});
+        console.log({ submitData });
 
-        
+        let isExit = dataSource.findIndex(f => f.GNBM == submitData.GNBM);
+
+        if (isExit >= 0)
+            submitData.ID = dataSource[isExit].ID;
+
+        submitData.CDID = cdId;
+
+        saveCzGn(submitData).then(resp => {
+            message.success("保存成功");
+            setEditKey("");
+        }).then(er => {
+            console.error(er);
+            message.error("保存失败");
+        });
+    };
+
+    const deleteHandle = (id = 0) => {
+        if (id <= 0) {
+            message.warn("请选择要删除的数据");
+            return;
+        }
+
+        deleteCzgn(id).then(resp => {
+            if (resp.data.Code == 0) {
+                message.success("删除成功", () => {
+                    loadDataList();
+                });
+            }
+        }).catch(er => {
+            message.error("请求出现错误");
+            console.error(er);
+        });
+
     };
 
     const newColumns = columns.map(cur => {
@@ -79,17 +111,22 @@ const MenuButtons = (props) => {
             ...cur,
             onCell: record => (
                 {
+                    editing: isEditing(record.key),
                     record,
                     dataIndex: cur.dataIndex,
                     inputType: cur.inputType,
                     title: cur.title,
-                    editing: isEditing(record.key)
                 }
             )
         }
     });
 
     useEffect(() => {
+        loadDataList();
+    }, [cdId]);
+
+    const loadDataList = () => {
+        console.log({ cdId });
         getOperateFuncList(cdId).then(resp => {
             if (resp.data.Code === 0)
                 setDataSource(resp.data.Data);
@@ -98,30 +135,37 @@ const MenuButtons = (props) => {
         }).catch(er => {
             console.error(er);
         });
-    }, [cdId]);
+    }
 
     return (
-        <Form form={form}>
-            <Table
-                columns={newColumns}
-                dataSource={dataSource}
-                components={
-                    {
-                        body: {
-                            cell: TableCellEdtor
+        <>
+            <div style={{ marginBottom: "10px", textAlign: "right", paddingRight: "10px" }}>
+                <Space>
+                    <Button type="primary">新增</Button>
+                </Space>
+            </div>
+            <div>
+                <Form form={form}>
+                    <Table
+                        columns={newColumns}
+                        dataSource={dataSource}
+                        components={
+                            {
+                                body: {
+                                    cell: TableCellEdtor
+                                }
+                            }
                         }
-                    }
-                }
-                size="small"
-                pagination={false}
-            ></Table>
-        </Form>
+                        size="small"
+                        pagination={false}
+                    ></Table>
+                </Form>
+            </div>
+        </>
     );
 }
 
-export default MenuButtons;
-
-const TableCellEdtor = (
+const TableCellEdtor = ({
     editing,
     record,
     dataIndex,
@@ -129,12 +173,14 @@ const TableCellEdtor = (
     title,
     children,
     ...restProps
-) => {
-    console.log({ restProps }, { children }, record);
+}) => {
+
+    //console.log({ restProps }, { children }, record);
+    console.log(editing);
     const InputNode = inputType === "text" ? <Input /> : <InputNumber />;
     return (
         <td {...restProps}>
-            {editing ? (<Form.Item name={dataIndex} style={{ margin: 0 }} rules={[{required:true,message: `${title}不能为空`}]}>
+            {editing ? (<Form.Item name={dataIndex} style={{ margin: 0 }} rules={[{ required: true, message: `${title}不能为空` }]}>
                 {InputNode}
             </Form.Item>) : (children)}
         </td>

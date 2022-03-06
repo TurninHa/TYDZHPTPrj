@@ -2,6 +2,7 @@ import React from "react";
 import { Table, Button, Space, message, Modal, Row, Col, Tree } from "antd";
 import { cdgl, menuTree, delOne } from "../../Api/cdglApi";
 import MenuEdit from "./MenuEdit";
+import { MenuButtons } from "./MenuButtons";
 
 class PageListPart extends React.Component {
     constructor(props) {
@@ -18,6 +19,7 @@ class PageListPart extends React.Component {
             isShowConfirmLoading: false,
             defaultExpandAll: false,
             condition: this.props.condition,
+            visibleMnBtns: false,
         };
     }
     columns = [
@@ -60,7 +62,7 @@ class PageListPart extends React.Component {
                     <Space>
                         <a data-id={record.ID} onClick={() => { this.editShowForm(record.ID) }} >编辑</a>
                         <a onClick={() => { this.deleteHandle(record.ID) }} >删除</a>
-                        <a>操作按钮</a>
+                        <a onClick={() => { this.setState({ id: record.ID, visibleMnBtns: true }); }}>操作按钮</a>
                     </Space>);
             }
         },
@@ -218,15 +220,31 @@ class PageListPart extends React.Component {
                     </div>
                 </Col>
             </Row>
-            <Modal onCancel={() => {
-                this.setState({ isShowConfirm: false });
-            }} onOk={() => {
-                this.deleteModel();
-            }} centered visible={this.state.isShowConfirm} confirmLoading={this.state.isShowConfirmLoading} title="提示">
+            <Modal
+                onCancel={() => {
+                    this.setState({ isShowConfirm: false });
+                }}
+                onOk={() => {
+                    this.deleteModel();
+                }}
+                okText="删除"
+                okType="danger"
+                cancelText="取消"
+                centered
+                visible={this.state.isShowConfirm}
+                confirmLoading={this.state.isShowConfirmLoading}
+                title="提示"
+                width="260px"
+            >
                 确认删除吗？
             </Modal>
-            <Modal visible={this.state.modalVisible} onCancel={() => { this.setState({ modalVisible: false }); }}
-                destroyOnClose={true} centered footer={null} maskClosable={false} >
+            <Modal
+                visible={this.state.modalVisible}
+                onCancel={() => { this.setState({ modalVisible: false }); }}
+                destroyOnClose={true}
+                centered footer={null}
+                maskClosable={false}
+                title="菜单编辑" >
                 <MenuEdit id={this.state.id}
                     onSuccess={(success = false) => {
                         this.setState({
@@ -238,6 +256,24 @@ class PageListPart extends React.Component {
                         }
                     }}
                     onClose={() => { this.setState({ modalVisible: false }); }}></MenuEdit>
+            </Modal>
+            <Modal visible={this.state.visibleMnBtns}
+                onCancel={() => { this.setState({ visibleMnBtns: false }); }}
+                destroyOnClose={true}
+                centered
+                maskClosable={false}
+                title="操作功能管理"
+                footer={[
+                    <div style={{ marginLeft: "auto", marginRight: "auto", textAlign: "center" }}>
+                        <Button type="default" onClick={() => { this.setState({ visibleMnBtns: false }); }}>
+                            关闭
+                        </Button>
+                    </div>
+                ]}
+                width="700px"
+                
+            >
+                <MenuButtons Id={this.state.id}></MenuButtons>
             </Modal>
         </>;
     }

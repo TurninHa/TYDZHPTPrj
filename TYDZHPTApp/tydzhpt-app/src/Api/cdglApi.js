@@ -50,8 +50,6 @@ export const delOne = (id = 0) => {
 };
 
 export const getOperateFuncList = (cdId = 0) => {
-    if (cdId <= 0)
-        return;
     return new Promise((resolve, reject) => {
         get("/api/Operation/list", { cdId }).then(response => {
             resolve(response);
@@ -60,4 +58,22 @@ export const getOperateFuncList = (cdId = 0) => {
         });
     });
 
+};
+
+export const saveCzGn = (data = {}) => {
+    return new Promise((resolve, reject) => {
+        post("/api/Operation/save", data).then(resp => resolve(resp))
+            .catch(er => {
+                reject(er);
+            });
+    });
+};
+
+export const deleteCzgn = (id = 0) => {
+    return new Promise((resolve, reject) => {
+        post("/api/Operation/delete", { id }).then(resp => resolve(resp))
+            .catch(er => {
+                reject(er);
+            });
+    });
 };
