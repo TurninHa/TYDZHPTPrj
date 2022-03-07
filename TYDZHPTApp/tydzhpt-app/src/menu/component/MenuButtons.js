@@ -68,7 +68,7 @@ export const MenuButtons = (props) => {
         let submitData = await form.validateFields();
         console.log({ submitData });
 
-        let isExit = dataSource.findIndex(f => f.GNBM == submitData.GNBM);
+        let isExit = dataSource.findIndex(f => f.GNBM === submitData.GNBM);
 
         if (isExit >= 0)
             submitData.ID = dataSource[isExit].ID;
@@ -91,7 +91,7 @@ export const MenuButtons = (props) => {
         }
 
         deleteCzgn(id).then(resp => {
-            if (resp.data.Code == 0) {
+            if (resp.data.Code === 0) {
                 message.success("删除成功", () => {
                     loadDataList();
                 });
