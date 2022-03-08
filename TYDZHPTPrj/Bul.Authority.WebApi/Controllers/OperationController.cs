@@ -51,19 +51,19 @@ namespace Bul.Authority.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("delete")]
-        public AbstractResult DeleteCzgn(long id)
+        public AbstractResult DeleteCzgn(DeleteByIdRo ro)
         {
-            if (id <= 0)
+            if (ro == null || ro.Id <= 0)
                 return BulResult.FailNonData(-1, "参数错误");
 
             var SqCzgnService = HttpContext.GetService<SqCzgnServices>();
 
-            var model = SqCzgnService.Db.Query<SqCdczgn>().Where(w => w.ID == id).FirstOrDefault();
+            var model = SqCzgnService.Db.Query<SqCdczgn>().Where(w => w.ID == ro.Id).FirstOrDefault();
 
             if (model == null)
                 return BulResult.FailNonData(-1, "参数错误");
 
-            var result = SqCzgnService.Db.DeleteByKey<SqCdczgn>(id);
+            var result = SqCzgnService.Db.DeleteByKey<SqCdczgn>(ro.Id);
 
             if (result > 0)
                 return BulResult.SuccessNonData();

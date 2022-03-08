@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Table, Space, message, Form, Input, InputNumber, Button, Row, Col } from "antd";
+import { useEffect, useState, useRef } from "react";
+import { Table, Space, message, Form, Input, InputNumber, Button } from "antd";
 import { getOperateFuncList, saveCzGn, deleteCzgn } from "../../Api/cdglApi";
 
 export const MenuButtons = (props) => {
@@ -9,14 +9,31 @@ export const MenuButtons = (props) => {
 
     const [editKey, setEditKey] = useState("");
 
+    const GnRef = useRef(-1);
+
     const editHandle = record => {
+
         form.setFieldsValue({
             GNBM: "",
             GNMC: "",
             PXH: "",
             ...record
         });
+
+        if (record.ID && record.ID > 0)
+            GnRef.current = record.ID;
+
         setEditKey(record.key);
+    };
+
+    const cancelEditHandle = () => {
+        form.setFieldsValue({
+            GNBM: "",
+            GNMC: "",
+            PXH: "",
+        });
+        GnRef.current = -1;
+        setEditKey("");
     };
 
     const isEditing = key => editKey === key;
@@ -38,7 +55,7 @@ export const MenuButtons = (props) => {
         editable: true,
         inputType: "text"
     }, {
-        title: "序号",
+        title: "排序号",
         dataIndex: "PXH",
         key: "cPXH",
         editable: true,
@@ -48,16 +65,20 @@ export const MenuButtons = (props) => {
         dataIndex: "ID",
         key: "cID",
         render: (text, record) => {
-            console.log(text, record);
             let editing = isEditing(record.key);
             return (
                 editing ? <Space>
                     <a onClick={() => saveHandle()}>保存</a>
-                    <a onClick={() => setEditKey("")}>取消</a>
+                    <a onClick={() => cancelEditHandle()}>取消</a>
                 </Space> :
                     <Space>
                         <a onClick={() => { editHandle(record); }}>编辑</a>
-                        <a onClick={() => { deleteHandle(record.ID) }}>删除</a>
+                        <a onClick={() => {
+                            if (record.ID < 0)
+                                deleteNotSaveRow(record.key);
+                            else
+                                deleteHandle(record.ID)
+                        }}>删除</a>
                     </Space>
             );
         }
@@ -68,20 +89,26 @@ export const MenuButtons = (props) => {
         let submitData = await form.validateFields();
         console.log({ submitData });
 
-        let isExit = dataSource.findIndex(f => f.GNBM === submitData.GNBM);
-
-        if (isExit >= 0)
-            submitData.ID = dataSource[isExit].ID;
+        submitData.ID = GnRef.current;
 
         submitData.CDID = cdId;
 
         saveCzGn(submitData).then(resp => {
-            message.success("保存成功");
-            setEditKey("");
-        }).then(er => {
+
+            if (resp.data.Code === 0) {
+                message.success("保存成功");
+                setEditKey("");
+                loadDataList();
+            }
+            else
+                message.error(resp.data.Message);
+
+        }).catch(er => {
             console.error(er);
             message.error("保存失败");
         });
+
+        cancelEditHandle();
     };
 
     const deleteHandle = (id = 0) => {
@@ -92,15 +119,43 @@ export const MenuButtons = (props) => {
 
         deleteCzgn(id).then(resp => {
             if (resp.data.Code === 0) {
-                message.success("删除成功", () => {
-                    loadDataList();
-                });
+                loadDataList();
+                message.success("删除成功");
             }
+            else
+                message.error(resp.data.Message);
         }).catch(er => {
             message.error("请求出现错误");
             console.error(er);
         });
 
+    };
+
+    const deleteNotSaveRow = (key = "") => {
+        if (key === "")
+            return;
+        const newDataSoure = [...dataSource];
+
+        setDataSource(newDataSoure.filter(f => f.key !== key));
+    }
+
+    const addRowHandle = () => {
+        const newDataSoure = [...dataSource];
+
+        let row = {
+            No: newDataSoure.length + 1,
+            GNBM: "",
+            GNMC: "",
+            PXH: "",
+            ID: -1,
+            CDID: cdId,
+            key: ("add" + newDataSoure.length + 1)
+        };
+
+        newDataSoure.push(row);
+
+        setDataSource(newDataSoure);
+        setEditKey(row.key);
     };
 
     const newColumns = columns.map(cur => {
@@ -126,10 +181,14 @@ export const MenuButtons = (props) => {
     }, [cdId]);
 
     const loadDataList = () => {
-        console.log({ cdId });
         getOperateFuncList(cdId).then(resp => {
-            if (resp.data.Code === 0)
+            if (resp.data.Code === 0) {
+                resp.data.Data.forEach((cur, index) => {
+                    cur.No = (index + 1);
+                    cur.key = ("row" + index + 1)
+                });
                 setDataSource(resp.data.Data);
+            }
             else
                 message.warn(resp.data.Message);
         }).catch(er => {
@@ -138,10 +197,10 @@ export const MenuButtons = (props) => {
     }
 
     return (
-        <>
+        <div style={{ height: "400px" }}>
             <div style={{ marginBottom: "10px", textAlign: "right", paddingRight: "10px" }}>
                 <Space>
-                    <Button type="primary">新增</Button>
+                    <Button type="primary" onClick={addRowHandle}>新增</Button>
                 </Space>
             </div>
             <div>
@@ -161,7 +220,7 @@ export const MenuButtons = (props) => {
                     ></Table>
                 </Form>
             </div>
-        </>
+        </div>
     );
 }
 
