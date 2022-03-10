@@ -42,6 +42,7 @@ export const MenuButtons = (props) => {
         title: "序号",
         dataIndex: "No",
         key: "cNo",
+        width:"45px"
     }, {
         title: "功能编码",
         dataIndex: "GNBM",
@@ -64,6 +65,7 @@ export const MenuButtons = (props) => {
         title: "操作",
         dataIndex: "ID",
         key: "cID",
+        width:"100px",
         render: (text, record) => {
             let editing = isEditing(record.key);
             return (
@@ -97,7 +99,8 @@ export const MenuButtons = (props) => {
 
             if (resp.data.Code === 0) {
                 message.success("保存成功");
-                setEditKey("");
+
+                cancelEditHandle();
                 loadDataList();
             }
             else
@@ -107,8 +110,6 @@ export const MenuButtons = (props) => {
             console.error(er);
             message.error("保存失败");
         });
-
-        cancelEditHandle();
     };
 
     const deleteHandle = (id = 0) => {
@@ -206,6 +207,7 @@ export const MenuButtons = (props) => {
             <div>
                 <Form form={form}>
                     <Table
+                        bordered
                         columns={newColumns}
                         dataSource={dataSource}
                         components={

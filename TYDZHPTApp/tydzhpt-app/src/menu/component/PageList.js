@@ -207,7 +207,7 @@ class PageListPart extends React.Component {
                         <div className="list-grid-body">
                             <Table columns={this.columns} dataSource={this.state.dataSource}
                                 bordered
-                                size="middle"
+                                size="small"
                                 pagination={{
                                     onShowSizeChange: pageIndex => {
                                         this.setState({ pageIndex });

@@ -29,16 +29,6 @@ namespace Bul.Authority.Application
 
             var entity = ro.Adapt<SqCdczgn>();
 
-            var isExist = this.SqCzgnService.Db.Query<SqCdczgn>().Where(w => w.GNBM == ro.GNBM && w.CDID == ro.CDID);
-
-            if (ro.ID > 0)
-                isExist = isExist.Where(w => w.ID != ro.ID);
-
-            var exist = await isExist.FirstOrDefaultAsync();
-
-            if (exist != null)
-                return BulResult.FailNonData(-1, "功能编码已经存在");
-
             if (entity.ID > 0)
             {
                 entity.Updater = this.LoginUser.ID;

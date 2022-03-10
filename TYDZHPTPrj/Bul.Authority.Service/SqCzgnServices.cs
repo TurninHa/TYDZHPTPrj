@@ -28,15 +28,14 @@ namespace Bul.Authority.Service
                 return BulResult.FailNonData(-3, "功能名称不能为空");
 
             var isExistQueryGnbm = this.Db.Query<SqCdczgn>();
-            isExistQueryGnbm = isExistQueryGnbm.Where(w => w.GNBM == entity.GNBM);
-            isExistQueryGnbm = isExistQueryGnbm.Where(w => w.CDID == entity.CDID);
+            isExistQueryGnbm = isExistQueryGnbm.Where(w => w.GNBM == entity.GNBM && w.CDID == entity.CDID);
 
             if (entity.ID > 0)
                 isExistQueryGnbm = isExistQueryGnbm.Where(w => w.ID != entity.ID);
 
-            var isExistGnbnList = await isExistQueryGnbm.ToListAsync();
+            var isExistGnbnList = await isExistQueryGnbm.FirstOrDefaultAsync();
 
-            if (isExistGnbnList != null && isExistGnbnList.Any())
+            if (isExistGnbnList != null)
                 return BulResult.FailNonData(-4, "功能编码已存在");
 
             if (entity.ID <= 0)
@@ -49,6 +48,11 @@ namespace Bul.Authority.Service
             }
             else
             {
+                var oriEntity = await this.Db.Query<SqCdczgn>().FirstOrDefaultAsync(f => f.ID == entity.ID);
+
+                entity.CreateTime = oriEntity.CreateTime;
+                entity.Creater = oriEntity.Creater;
+
                 var isSuc = await this.Db.UpdateAsync(entity);
 
                 if (isSuc > 0)
