@@ -34,10 +34,12 @@ export const RoleList = (props) => {
     }];
 
     useEffect(()=>{
-
+        loadData();
     },[]);
 
-    
+    const loadData=()=>{
+
+    };
 
     return (
         <>
