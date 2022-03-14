@@ -1,4 +1,5 @@
 ﻿using Bul.Authority.Application;
+using Bul.Authority.Application.BO;
 using Bul.Authority.Entity;
 using Bul.System.Common;
 using Bul.System.Extension.NetCore;
@@ -22,7 +23,7 @@ namespace Bul.Authority.WebApi.Controllers
         {
             get
             {
-                return this.HttpContext.GetCurrentUser<SqUsers>();
+                return this.HttpContext.GetCurrentUser<SqUserBo>();
             }
         }
 

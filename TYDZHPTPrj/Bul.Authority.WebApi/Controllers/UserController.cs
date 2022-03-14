@@ -33,14 +33,20 @@ namespace Bul.Authority.WebApi.Controllers
                 if (loginResult.Code != 0)
                     return loginResult;
 
+                var sqUserRoleApplication = HttpContext.GetService<SqUserRoleApplication>();
+
+                var userRoles = sqUserRoleApplication.GetUserRoleByUserId(loginResult.Data.ID, loginResult.Data.SSGSID);
+
                 var jwtBearer = this.HttpContext.GetService<JwtBearer>();
                 var token = jwtBearer.LoginToken(new
                 {
+                    loginResult.Data.ID,
                     loginResult.Data.YHM,
                     loginResult.Data.SJH,
                     loginResult.Data.SSGSID,
                     loginResult.Data.SSYGID,
                     loginResult.Data.XM,
+                    SqUserRoles = userRoles?.Data
                 }, 8);
 
                 BulLogger.Info("登录成功");

@@ -1,4 +1,5 @@
-﻿using Bul.Authority.Entity;
+﻿using Bul.Authority.Application.BO;
+using Bul.Authority.Entity;
 using Bul.Entity.Interface;
 using Bul.System.Common;
 using Bul.System.Extension.NetCore;
@@ -25,7 +26,7 @@ namespace Bul.Authority.Application.ApplicationBase
         {
             get
             {
-                return this.HttpContextAccessor.GetCurrentUser<SqUsers>();
+                return this.HttpContextAccessor.GetCurrentUser<SqUserBo>();
             }
         }
     }

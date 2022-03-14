@@ -24,7 +24,7 @@ namespace Bul.System.Extension.NetCore
             if (httpContext == null)
                 return default;
 
-            if (httpContext.Items == null || httpContext.Items.Count == 0)
+            if (httpContext.Items == null)
                 return default;
 
             var keyName = nameof(TCurrentUser);
@@ -34,7 +34,7 @@ namespace Bul.System.Extension.NetCore
 
             var ul = httpContext.User.Claims.FirstOrDefault(f => f.Type == "ul")?.Value;
 
-            if (string.IsNullOrEmpty(ul))
+            if (string.IsNullOrEmpty(ul) || ul == "undefined")
                 return default;
 
             var result = JsonConvert.DeserializeObject<TCurrentUser>(ul);

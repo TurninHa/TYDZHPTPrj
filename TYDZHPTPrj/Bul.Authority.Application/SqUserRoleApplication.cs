@@ -20,7 +20,7 @@ namespace Bul.Authority.Application
 
         public BulResult<IEnumerable<SqUserRole>> GetUserRoleByUserId(long userId, long ssgsId)
         {
-            if (userId <= 0 || ssgsId <= 0)
+            if (userId <= 0 || ssgsId < 0)
                 return BulResult<IEnumerable<SqUserRole>>.Fail(-1, "请传入用户id或公司Id");
 
             var query = this._SqUserRoleService.Db.Query<SqUserRole>();
