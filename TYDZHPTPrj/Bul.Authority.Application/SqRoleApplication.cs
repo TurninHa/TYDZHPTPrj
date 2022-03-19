@@ -75,10 +75,72 @@ namespace Bul.Authority.Application
             return BulResult<IEnumerable<SqRoleDto>>.PageSuccess(result, roleRo.PageIndex, roleRo.PageSize, count);
         }
 
+        /// <summary>
+        /// 保存角色
+        /// </summary>
+        /// <param name="saveRoleRo"></param>
+        /// <returns></returns>
 
-        public async Task<AbstractResult> SaveRole(SaveRoleRo roleRo)
+        public async Task<AbstractResult> SaveRole(SaveRoleRo saveRoleRo)
         {
-            
+            if (this.LoginUser.SFGLY == 0)
+                return BulResult<AbstractResult>.Fail(-3, "非管理员不能增加角色");
+
+            if (saveRoleRo == null)
+                return BulResult<AbstractResult>.Fail(-1, "参数错误");
+
+            if (string.IsNullOrEmpty(saveRoleRo.JSBM) || string.IsNullOrEmpty(saveRoleRo.JSMC))
+                return BulResult<AbstractResult>.Fail(-1, "参数错误");
+
+            var query = this._services.Db.Query<SqRoles>();
+
+            query = query.Where(w => w.JSBM == saveRoleRo.JSBM && w.SSGSID == this.LoginUser.SSGSID && w.SFSC == 0);
+
+            if (saveRoleRo.ID != null && saveRoleRo.ID > 0)
+                query = query.Where(w => w.ID != saveRoleRo.ID);
+
+            var model = query.FirstOrDefault();
+
+            if (model != null)
+                return BulResult<AbstractResult>.Fail(-2, "角色编码已存在");
+
+            if (saveRoleRo.ID != null && saveRoleRo.ID > 0)
+            {
+                var addModel = saveRoleRo.Adapt<SqRoles>();
+
+                if (addModel == null)
+                    return BulResult<AbstractResult>.Fail(-4, "转换数据失败");
+
+                addModel.Creater = this.LoginUser.ID;
+                addModel.CreateTime = DateTime.Now;
+
+                addModel.SSGSID = this.LoginUser.SSGSID;
+                addModel.SFSC = 0;
+
+                var newAddModel = await this._services.Db.InsertAsync(addModel);
+
+                if (newAddModel == null || newAddModel.ID <= 0)
+                    return BulResult<AbstractResult>.Fail(-5, "保存失败");
+
+                return BulResult.SuccessNonData();
+            }
+            else
+            {
+                var updateModel = await this._services.Db.Query<SqRoles>().FirstOrDefaultAsync(f => f.ID == saveRoleRo.ID && f.SSGSID == this.LoginUser.SSGSID);
+
+                updateModel.Updater = this.LoginUser.ID;
+                updateModel.UpdateTime = DateTime.Now;
+
+                updateModel.SYZT = saveRoleRo.SYZT.Value;
+                updateModel.JSMC = saveRoleRo.JSMC;
+
+                var isSuc = await this._services.Db.UpdateAsync(updateModel);
+
+                if (isSuc <= 0)
+                    return BulResult<AbstractResult>.Fail(-5, "更新失败");
+
+                return BulResult.SuccessNonData();
+            }
         }
     }
 }
