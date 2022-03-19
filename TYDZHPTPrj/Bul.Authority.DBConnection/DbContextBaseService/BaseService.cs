@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bul.Authority.DBConnection.DbContextBaseService
 {
-    public class BaseService
+    public abstract class BaseService
     {
         public AuthorityDbContext Db { get; private set; }
         protected readonly IHttpContextAccessor HttpContextAccessor;
