@@ -3,6 +3,7 @@ using Bul.Authority.Application.DataTranslateObject;
 using Bul.Authority.Application.RequestObject;
 using Bul.Authority.Entity;
 using Bul.Authority.Service;
+using Bul.System.Extension.NetCore;
 using Bul.System.Result;
 using Mapster;
 using System;
@@ -141,6 +142,40 @@ namespace Bul.Authority.Application
 
                 return BulResult.SuccessNonData();
             }
+        }
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="ro"></param>
+        /// <returns></returns>
+        public async Task<AbstractResult> DeleteRole(DeleteByIdRo ro)
+        {
+            if (ro == null || ro.Id <= 0)
+                return BulResult.FailNonData(-1, "参数错误");
+
+            var model = await this._services.Db.Query<SqRoles>().FirstOrDefaultAsync(f => f.ID == ro.Id && f.SSGSID == this.LoginUser.SSGSID);
+
+            if (model == null)
+                return BulResult.FailNonData(-2, "未检索到数据");
+
+            var userRoleService = HttpContextAccessor.GetService<SqUserRoleService>();
+
+            var userRoleCount = await userRoleService.Db.Query<SqUserRole>().Where(w => w.RoleID == model.ID && w.SSGSID == this.LoginUser.SSGSID).CountAsync();
+
+            if (userRoleCount > 0)
+                return BulResult.FailNonData(-3, "当前角色正在被使用，不能删除");
+
+            model.SFSC = 1;
+            model.Updater = this.LoginUser.ID;
+            model.UpdateTime = DateTime.Now;
+
+            var isSuc = await this._services.Db.DeleteAsync(model);
+
+            if (isSuc > 0)
+                return BulResult.SuccessNonData();
+
+            return BulResult.FailNonData(-10, "删除失败");
         }
     }
 }
