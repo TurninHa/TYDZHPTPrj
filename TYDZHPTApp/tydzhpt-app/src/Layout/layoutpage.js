@@ -32,10 +32,10 @@ class LayoutContainer extends React.PureComponent {
                                     用户管理
                                 </Menu.Item>
                                 <Menu.Item key="menu2">
-                                    角色管理
+                                    <Link to="/layout/jsgl" key="link_jsgl">角色管理</Link>
                                 </Menu.Item>
                                 <Menu.Item key="menu3">
-                                    <Link to="/layout/cdgl" replace>菜单管理</Link>
+                                    <Link to="/layout/cdgl" key="link_cdgl" replace>菜单管理</Link>
                                 </Menu.Item>
                             </SubMenu>
                             <SubMenu key="sub2" title="字典管理">

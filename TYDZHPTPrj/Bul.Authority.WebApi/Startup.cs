@@ -63,6 +63,9 @@ namespace Bul.Authority.WebApi
             services.AddScoped<SqCzgnApplication>();
             services.AddScoped<SqCzgnServices>();
 
+            services.AddScoped<SqRoleServices>();
+            services.AddScoped<SqRoleApplication>();
+
             services.AddScoped<AuthorityDbContext>();
 
             services.AddTransient<JwtBearer>();

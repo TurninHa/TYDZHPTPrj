@@ -21,6 +21,10 @@ ReactDOM.render(
               const Cdgl = asyncLoadComponet(() => import("./menu/cdgl"));
               return <Cdgl {...props}></Cdgl>
             }}></Route>
+            <Route path="/layout/jsgl" exact render={props => {
+              const Jsgl = asyncLoadComponet(() => import("./Role/RoleList"));
+              return <Jsgl {...props}></Jsgl>
+            }}></Route>
           </Layout>;
         }}></Route>
       </Switch>
