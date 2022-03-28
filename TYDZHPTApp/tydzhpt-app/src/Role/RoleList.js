@@ -9,6 +9,7 @@ const RoleList = (props) => {
     const [dataSource, setDataSource] = useState([]);
     const [pagination, setPagination] = useState({
         pageIndex: 1,
+        pageSize: 20,
         total: 0
     });
 
@@ -28,8 +29,14 @@ const RoleList = (props) => {
         key: "col_jsmc"
     }, {
         title: "使用状态",
-        dataIndex: "SYZTName",
-        key: "col_syztname"
+        dataIndex: "StatusName",
+        key: "col_syztname",
+        render: (text, r) => {
+            if (r.SYZT === 1)
+                return (<span style={{ color: "green" }}>{text}</span>)
+            else
+                return text
+        }
     }, {
         title: "所属客户",
         dataIndex: "SSGSID",
@@ -41,10 +48,25 @@ const RoleList = (props) => {
     }, []);
 
     const loadData = () => {
-        getRoleList({}).then(resp => {
-            setDataSource(resp.data.Data);
-        }).catch(er => {
 
+        let reqData = {
+            pageIndex: pagination.pageIndex,
+            pageSize: pagination.pageSize
+        };
+
+        getRoleList(reqData).then(resp => {
+            let pgnt = { ...pagination };
+
+            pgnt.total = resp.data.Data.PageCount;
+            setPagination(pgnt);
+
+            resp.data.Data.Data.forEach((element, index) => {
+                element.XH = (index + 1);
+            });
+
+            setDataSource(resp.data.Data.Data);
+        }).catch(er => {
+            console.error(er);
         });
     };
 
@@ -125,15 +147,16 @@ const RoleList = (props) => {
                             bordered
                             size="small"
                             pagination={{
-                                onShowSizeChange: pageIndex => {
+                                onShowSizeChange: (pageIndex, pageSize) => {
                                     const pagnt = { ...pagination };
 
                                     pagnt.pageIndex = pageIndex;
+                                    pagnt.pageSize = pageSize;
 
                                     setPagination(pagnt);
                                 },
                                 defaultCurrent: 1,
-                                defaultPageSize: 20,
+                                defaultPageSize: pagination.pageSize,
                                 total: pagination.total
                             }}></Table>
                     </div>
