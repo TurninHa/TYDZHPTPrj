@@ -13,6 +13,8 @@ const RoleList = (props) => {
         total: 0
     });
 
+    const [roleModalVisb, setRoleModalVisb] = useState(false);
+
     const { Option } = Select;
 
     const columns = [{
@@ -40,7 +42,18 @@ const RoleList = (props) => {
     }, {
         title: "所属客户",
         dataIndex: "SSGSID",
-        key: "col_ssgsid"
+        key: "col_ssgsid",
+        render: (text, r) => {
+            if (text === 0)
+                return "本公司人员";
+            else
+                return "-";
+        }
+    },
+    {
+        title: "操作",
+        dataIndex: "ID",
+        key: "col__role_ID_CZ",
     }];
 
     useEffect(() => {
@@ -71,99 +84,110 @@ const RoleList = (props) => {
     };
 
     return (
-        <div className="list-page-container">
-            <div className="search-container">
-                <div className="search-tool-container">
-                    <div className="search-tool-item">
-                        <div className="search-tool-item-content">
-                            <div className="search-tool-item-content-left">
-                                <label>角色名称:</label>
-                            </div>
-                            <div className="search-tool-item-content-right">
-                                <Input name="JSMC"></Input>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="search-tool-item">
-                        <div className="search-tool-item-content">
-                            <div className="search-tool-item-content-left">
-                                <label>角色编码:</label>
-                            </div>
-                            <div className="search-tool-item-content-right">
-                                <Input name="JSBM"></Input>
+        <>
+            <div className="list-page-container">
+                <div className="search-container">
+                    <div className="search-tool-container">
+                        <div className="search-tool-item">
+                            <div className="search-tool-item-content">
+                                <div className="search-tool-item-content-left">
+                                    <label>角色名称:</label>
+                                </div>
+                                <div className="search-tool-item-content-right">
+                                    <Input name="JSMC"></Input>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="search-tool-item">
-                        <div className="search-tool-item-content">
-                            <div className="search-tool-item-content-left">
-                                <label>使用状态:</label>
-                            </div>
-                            <div className="search-tool-item-content-right">
-                                <Select defaultValue="1" placeholder="请选择" allowClear>
-                                    <Option value="">-请选择-</Option>
-                                    <Option value="1">启用</Option>
-                                    <Option value="2">禁用</Option>
-                                </Select>
+                        <div className="search-tool-item">
+                            <div className="search-tool-item-content">
+                                <div className="search-tool-item-content-left">
+                                    <label>角色编码:</label>
+                                </div>
+                                <div className="search-tool-item-content-right">
+                                    <Input name="JSBM"></Input>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="search-tool-item">
-                        <div className="search-tool-item-content">
-                            <div className="search-tool-item-content-left">
-                                <label>所属客户:</label>
-                            </div>
-                            <div className="search-tool-item-content-right">
-                                <AutoComplete></AutoComplete>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="search-tool-item-action">
-                        <div className="search-tool-item-action-content">
-                            <div>
-                                <Button >重置</Button>
-                            </div>
-                            <div>
-                                <Button type="primary" >查询</Button>
+                        <div className="search-tool-item">
+                            <div className="search-tool-item-content">
+                                <div className="search-tool-item-content-left">
+                                    <label>使用状态:</label>
+                                </div>
+                                <div className="search-tool-item-content-right">
+                                    <Select defaultValue="1" placeholder="请选择" allowClear>
+                                        <Option value="">-请选择-</Option>
+                                        <Option value="1">启用</Option>
+                                        <Option value="2">禁用</Option>
+                                    </Select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div className="list-container">
-                <div className="list-grid-container">
-                    <div className="list-grid-head">
-                        <div className="list-grid-head-tool">
-                            <div className="list-grid-head-tool-text">角色管理</div>
-                            <div className="list-grid-head-tool-bar">
+                        <div className="search-tool-item">
+                            <div className="search-tool-item-content">
+                                <div className="search-tool-item-content-left">
+                                    <label>所属客户:</label>
+                                </div>
+                                <div className="search-tool-item-content-right">
+                                    <AutoComplete></AutoComplete>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="search-tool-item-action">
+                            <div className="search-tool-item-action-content">
                                 <div>
-                                    <Button type="primary" onClick={() => { this.createMenuHandle(); }}>添加角色</Button>
+                                    <Button >重置</Button>
+                                </div>
+                                <div>
+                                    <Button type="primary" >查询</Button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="list-grid-body">
-                        <Table columns={columns} dataSource={dataSource}
-                            bordered
-                            size="small"
-                            pagination={{
-                                onShowSizeChange: (pageIndex, pageSize) => {
-                                    const pagnt = { ...pagination };
+                </div>
+                <div className="list-container">
+                    <div className="list-grid-container">
+                        <div className="list-grid-head">
+                            <div className="list-grid-head-tool">
+                                <div className="list-grid-head-tool-text">角色管理</div>
+                                <div className="list-grid-head-tool-bar">
+                                    <div>
+                                        <Button type="primary" onClick={() => { setRoleModalVisb(true); }}>添加角色</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="list-grid-body">
+                            <Table columns={columns} dataSource={dataSource}
+                                bordered
+                                size="small"
+                                pagination={{
+                                    onShowSizeChange: (pageIndex, pageSize) => {
+                                        const pagnt = { ...pagination };
 
-                                    pagnt.pageIndex = pageIndex;
-                                    pagnt.pageSize = pageSize;
+                                        pagnt.pageIndex = pageIndex;
+                                        pagnt.pageSize = pageSize;
 
-                                    setPagination(pagnt);
-                                },
-                                defaultCurrent: 1,
-                                defaultPageSize: pagination.pageSize,
-                                total: pagination.total
-                            }}></Table>
+                                        setPagination(pagnt);
+                                    },
+                                    defaultCurrent: 1,
+                                    defaultPageSize: pagination.pageSize,
+                                    total: pagination.total
+                                }}></Table>
+                        </div>
+
                     </div>
-
                 </div>
             </div>
-        </div>
+            <Modal
+                title="角色编辑"
+                visible={roleModalVisb}
+                footer={null}
+                onCancel={() => { setRoleModalVisb(false); }}
+                destroyOnClose={true}
+                maskClosable={false}
+                centered
+            ></Modal>
+        </>
     );
 }
 
