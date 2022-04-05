@@ -46,6 +46,7 @@ namespace Bul.Authority.WebApi.Controllers
                     loginResult.Data.SSGSID,
                     loginResult.Data.SSYGID,
                     loginResult.Data.XM,
+                    loginResult.Data.SFGLY,
                     SqUserRoles = userRoles?.Data
                 }, 8);
 

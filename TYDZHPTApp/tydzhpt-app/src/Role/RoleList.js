@@ -1,8 +1,9 @@
-import { Input, Button, Table, Select, AutoComplete, Modal } from "antd";
+import { Input, Button, Table, Select, AutoComplete, Modal, Space, message } from "antd";
 import { useState, useEffect } from "react";
-import { getRoleList, getModel, deleteRole } from "../Api/jsgl";
+import { getRoleList, deleteRole } from "../Api/jsgl";
 import '../index.css';
 import "../Css/glb.css";
+import { RoleEdit } from "./RoleEdit"
 
 const RoleList = (props) => {
 
@@ -14,6 +15,7 @@ const RoleList = (props) => {
     });
 
     const [roleModalVisb, setRoleModalVisb] = useState(false);
+    const [roleId, setRoleId] = useState(0);
 
     const { Option } = Select;
 
@@ -45,7 +47,7 @@ const RoleList = (props) => {
         key: "col_ssgsid",
         render: (text, r) => {
             if (text === 0)
-                return "本公司人员";
+                return "本公司角色";
             else
                 return "-";
         }
@@ -54,6 +56,26 @@ const RoleList = (props) => {
         title: "操作",
         dataIndex: "ID",
         key: "col__role_ID_CZ",
+        render: (text, rec) => {
+            if (rec.SSGSID !== 0) {
+                return (
+                    <a>禁用</a>
+                );
+            }
+            else {
+                return (
+                    <Space>
+                        <a onClick={() => {
+                            setRoleModalVisb(true);
+                            setRoleId(rec.ID);
+                        }}>编辑</a>
+                        <a onClick={() => {
+                            deleteData(rec.ID);
+                        }}>删除</a>
+                    </Space>
+                );
+            }
+        }
     }];
 
     useEffect(() => {
@@ -80,6 +102,37 @@ const RoleList = (props) => {
             setDataSource(resp.data.Data.Data);
         }).catch(er => {
             console.error(er);
+        });
+    };
+
+    const { confirm } = Modal;
+
+    const deleteData = (id = 0) => {
+
+        if (id <= 0) {
+            message.error("参数错误");
+            return;
+        }
+
+        confirm({
+            title: "提示",
+            okText: "确认",
+            cancelText: "取消",
+            onOk: () => {
+                deleteRole(id).then(resp => {
+                    if (resp && resp.data.Code === 0) {
+                        message.success("删除成功");
+                        loadData();
+                    }
+                    else {
+                        message.warn(resp.data.Message);
+                    }
+                }).catch(er => {
+                    console.error(er);
+                    message.error(er);
+                });
+            },
+            content: "确认删除吗？"
         });
     };
 
@@ -186,7 +239,13 @@ const RoleList = (props) => {
                 destroyOnClose={true}
                 maskClosable={false}
                 centered
-            ></Modal>
+            >
+                <RoleEdit roleId={roleId} onClose={(isRefList = false) => {
+                    if (isRefList)
+                        loadData();
+                    setRoleModalVisb(false);
+                }}></RoleEdit>
+            </Modal>
         </>
     );
 }

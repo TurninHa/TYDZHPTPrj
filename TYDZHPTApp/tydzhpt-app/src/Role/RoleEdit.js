@@ -1,22 +1,94 @@
-import { Form, Input, Button } from "antd";
+import { useEffect, useState } from "react"
+import { Form, Input, Button, Switch, message, Space } from "antd";
+import { getModel, saveRole } from "../Api/jsgl"
 
-const RoleEdit = (props) => {
-    const form = Form.useForm();
+export const RoleEdit = (props) => {
+    const [form] = Form.useForm();
+    const [isOpenSwtich, SetSwitchOpen] = useState(false);
+
+    const roleId = props.roleId;
+    const onCloseForm = props.onClose;
+
+    useEffect(() => {
+        showPageDataForEdit();
+    }, []);
+
+    const showPageDataForEdit = () => {
+
+        if (!roleId)
+            return;
+
+        getModel(roleId).then(resp => {
+            form.setFieldsValue(resp.data.Data);
+
+            if (resp.data.Data && resp.data.Data.SYZT === 1)
+                SetSwitchOpen(true);
+            else
+                SetSwitchOpen(false);
+
+        }).catch(er => {
+            message.error(er);
+            console.error(er);
+        });
+    };
+
+    const saveRoleData = () => {
+        let errData = form.getFieldsError();
+        let errs = errData.filter(f => f.errors.length > 0);
+
+        console.log({ errData });
+
+        if (errs && errs.length > 0) {
+            message.warn(errs[0]);
+            return;
+        }
+
+        let data = form.getFieldsValue();
+
+        console.log({ data });
+
+        if (roleId && roleId > 0)
+            data.ID = roleId;
+
+        saveRole(data).then(resp => {
+            if (resp.data.Code == 0) {
+                message.success("保存成功");
+                if (typeof (onCloseForm) == "function")
+                    onCloseForm(true);
+            }
+            else {
+                message.warn(resp.data.Message);
+            }
+        }).catch(er => {
+            message.error(er);
+            console.error(er);
+        });
+    };
+
     return (
-        <>
-            <Form form={form}>
-                <Form.Item label="角色编码" name="JSBM" required rules={[{ len: 10 }]}>
-                    <Input></Input>
-                </Form.Item>
-                <Form.Item label="角色名称" name="JSMC" required rules={[{ len: 50 }]}>
-                    <Input></Input>
-                </Form.Item>
-                <Form.Item label="使用状态" name="SYZT">
-                    
-                </Form.Item>
-            </Form>
-        </>
+
+        <Form form={form} name="rolesaveform">
+            <Form.Item label="角色编码" name="JSBM" required rules={[{ max: 15 }]}>
+                <Input disabled={roleId ? true : false}></Input>
+            </Form.Item>
+            <Form.Item label="角色名称" name="JSMC" required rules={[{ max: 50 }]}>
+                <Input></Input>
+            </Form.Item>
+            <Form.Item label="使用状态" name="SYZT">
+                <Switch checkedChildren="开启" unCheckedChildren="禁用" checked={isOpenSwtich} ></Switch>
+            </Form.Item>
+            <Form.Item>
+                <div style={{ marginLeft: "auto", marginRight: "auto",textAlign:"center" }}>
+                    <Space>
+                        <Button htmlType="button" onClick={saveRoleData}>保存</Button>
+                        <Button onClick={() => {
+                            if (typeof (onCloseForm) == "function")
+                                onCloseForm(false);
+                        }}>取消</Button>
+                    </Space>
+                </div>
+            </Form.Item>
+        </Form>
+
     );
 }
-
-export default RoleEdit;

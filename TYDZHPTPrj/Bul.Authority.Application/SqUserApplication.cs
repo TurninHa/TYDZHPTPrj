@@ -46,7 +46,7 @@ namespace Bul.Authority.Application
                 return BulResult<SqUsers>.Fail(-2, "请输入用户名密码");
 
             var query = this.UsersServices.Db.Query<SqUsers>();
-            query = query.Where(w => w.YHM == userRo.UserName && w.MM == userRo.Password);//TODO 处理加密
+            query = query.Where(w => w.YHM == userRo.UserName && w.MM == userRo.Password && w.SFSC == 0 && w.SYZT == 1);//TODO 处理加密
 
 
             var model = query.FirstOrDefault();

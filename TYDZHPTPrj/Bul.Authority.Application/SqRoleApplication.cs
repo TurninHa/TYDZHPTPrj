@@ -105,7 +105,7 @@ namespace Bul.Authority.Application
             if (model != null)
                 return BulResult<AbstractResult>.Fail(-2, "角色编码已存在");
 
-            if (saveRoleRo.ID != null && saveRoleRo.ID > 0)
+            if (saveRoleRo.ID == null || saveRoleRo.ID <= 0)
             {
                 var addModel = saveRoleRo.Adapt<SqRoles>();
 
