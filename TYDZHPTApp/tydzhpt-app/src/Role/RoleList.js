@@ -204,7 +204,7 @@ const RoleList = (props) => {
                                 <div className="list-grid-head-tool-text">角色管理</div>
                                 <div className="list-grid-head-tool-bar">
                                     <div>
-                                        <Button type="primary" onClick={() => { setRoleModalVisb(true); }}>添加角色</Button>
+                                        <Button type="primary" onClick={() => { setRoleId(0); setRoleModalVisb(true); }}>添加角色</Button>
                                     </div>
                                 </div>
                             </div>

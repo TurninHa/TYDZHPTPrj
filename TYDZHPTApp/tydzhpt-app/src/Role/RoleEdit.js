@@ -50,6 +50,14 @@ export const RoleEdit = (props) => {
         if (roleId && roleId > 0)
             data.ID = roleId;
 
+        if (data.SYZT === true)
+            data.SYZT = 1;
+        else if (data.SYZT === false)
+            data.SYZT = 0;
+
+        if (typeof (data.SYZT) == "undefined")
+            data.SYZT = 0;
+
         saveRole(data).then(resp => {
             if (resp.data.Code == 0) {
                 message.success("保存成功");
@@ -78,9 +86,9 @@ export const RoleEdit = (props) => {
                 <Switch checkedChildren="开启" unCheckedChildren="禁用" checked={isOpenSwtich} ></Switch>
             </Form.Item>
             <Form.Item>
-                <div style={{ marginLeft: "auto", marginRight: "auto",textAlign:"center" }}>
+                <div style={{ marginLeft: "auto", marginRight: "auto", textAlign: "center" }}>
                     <Space>
-                        <Button htmlType="button" onClick={saveRoleData}>保存</Button>
+                        <Button htmlType="button" onClick={saveRoleData} type="primary">保存</Button>
                         <Button onClick={() => {
                             if (typeof (onCloseForm) == "function")
                                 onCloseForm(false);
