@@ -73,6 +73,11 @@ export const RoleEdit = (props) => {
         });
     };
 
+    const SwitchChangeHandle = chk => {
+
+        SetSwitchOpen(chk);
+    }
+
     return (
 
         <Form form={form} name="rolesaveform">
@@ -83,7 +88,7 @@ export const RoleEdit = (props) => {
                 <Input></Input>
             </Form.Item>
             <Form.Item label="使用状态" name="SYZT">
-                <Switch checkedChildren="开启" unCheckedChildren="禁用" checked={isOpenSwtich} ></Switch>
+                <Switch checkedChildren="开启" unCheckedChildren="禁用" onChange={SwitchChangeHandle} checked={isOpenSwtich} ></Switch>
             </Form.Item>
             <Form.Item>
                 <div style={{ marginLeft: "auto", marginRight: "auto", textAlign: "center" }}>
