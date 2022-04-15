@@ -139,7 +139,7 @@ namespace Bul.Authority.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("delete")]
-        public async Task<AbstractResult> CdDelete(DeleteByIdRo ro)
+        public async Task<AbstractResult> CdDelete(EntityIdRo ro)
         {
             if (ro == null || ro.Id <= 0)
                 return BulResult.FailNonData(-1, "参数错误");

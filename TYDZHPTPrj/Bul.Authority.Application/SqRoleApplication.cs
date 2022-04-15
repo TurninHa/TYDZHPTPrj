@@ -149,7 +149,7 @@ namespace Bul.Authority.Application
         /// </summary>
         /// <param name="ro"></param>
         /// <returns></returns>
-        public async Task<AbstractResult> DeleteRole(DeleteByIdRo ro)
+        public async Task<AbstractResult> DeleteRole(EntityIdRo ro)
         {
             if (ro == null || ro.Id <= 0)
                 return BulResult.FailNonData(-1, "参数错误");

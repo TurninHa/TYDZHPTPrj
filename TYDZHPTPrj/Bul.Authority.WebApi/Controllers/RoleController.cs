@@ -7,6 +7,7 @@ using Bul.System.Extension.NetCore;
 using Bul.System.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -74,12 +75,40 @@ namespace Bul.Authority.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("delete")]
-        public async Task<AbstractResult> DeleteRole(DeleteByIdRo ro)
+        public async Task<AbstractResult> DeleteRole(EntityIdRo ro)
         {
             if (ro == null || ro.Id <= 0)
                 return BulResult.FailNonData(-1, "参数错误");
 
             return await this.SqRoleApplication.DeleteRole(ro);
+        }
+
+        /// <summary>
+        /// 禁用 启用 角色
+        /// </summary>
+        /// <param name="ro">启用禁用参数</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("disen")]
+        public async Task<AbstractResult> DisEnRole(DisEnRoleRo ro)
+        {
+            if (ro == null || ro.Id <= 0)
+                return BulResult.FailNonData(-1, "参数错误");
+
+            var roleService = HttpContext.GetService<SqRoleServices>();
+
+            var model = await roleService.Db.QueryByKeyAsync<SqRoles>(ro.Id);
+
+            model.SYZT = ro.RoleStatue;
+            model.Updater = this.CurrentUser.ID;
+            model.UpdateTime = DateTime.Now;
+
+            var isSuc = await roleService.Db.UpdateAsync(model);
+
+            if (isSuc > 0)
+                return BulResult.SuccessNonData();
+            else
+                return BulResult.FailNonData(-1, "保存失败");
         }
     }
 }

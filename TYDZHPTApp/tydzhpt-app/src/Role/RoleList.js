@@ -59,7 +59,12 @@ const RoleList = (props) => {
         render: (text, rec) => {
             if (rec.SSGSID !== 0) {
                 return (
-                    <a>禁用</a>
+                    <Space>
+                        <a onClick={() => {
+                            disabledRole(rec.ID);
+                        }}>禁用</a>
+                        <a>启用</a>
+                    </Space>
                 );
             }
             else {
@@ -136,6 +141,10 @@ const RoleList = (props) => {
         });
     };
 
+    const disabledRole = (id = 0) => {
+
+    };
+
     return (
         <>
             <div className="list-page-container">
@@ -147,7 +156,7 @@ const RoleList = (props) => {
                                     <label>角色名称:</label>
                                 </div>
                                 <div className="search-tool-item-content-right">
-                                    <Input name="JSMC"></Input>
+                                    <Input name="JSMC" placeholder="角色名称"></Input>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +166,7 @@ const RoleList = (props) => {
                                     <label>角色编码:</label>
                                 </div>
                                 <div className="search-tool-item-content-right">
-                                    <Input name="JSBM"></Input>
+                                    <Input name="JSBM" placeholder="角色编码"></Input>
                                 </div>
                             </div>
                         </div>
@@ -182,9 +191,10 @@ const RoleList = (props) => {
                                 </div>
                                 <div className="search-tool-item-content-right">
                                     <AutoComplete
-                                        options={ }
+                                        style={{ width: "120px" }}
+                                        options={[{ label: "test", value: "tet" }]}
+                                        placeholder="请选择单位"
                                     >
-
                                     </AutoComplete>
                                 </div>
                             </div>

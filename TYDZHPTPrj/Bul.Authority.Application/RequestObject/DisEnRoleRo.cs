@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Application.RequestObject
 {
-    public class EntityIdRo
+    public class DisEnRoleRo : EntityIdRo
     {
-        public long Id { get; set; }
+        /// <summary>
+        /// 启用 1 禁用 0
+        /// </summary>
+        public int RoleStatue { get; set; }
     }
 }
