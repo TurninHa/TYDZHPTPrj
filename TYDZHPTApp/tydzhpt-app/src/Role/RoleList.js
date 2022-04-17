@@ -1,6 +1,6 @@
 import { Input, Button, Table, Select, AutoComplete, Modal, Space, message } from "antd";
-import { useState, useEffect } from "react";
-import { getRoleList, deleteRole } from "../Api/jsgl";
+import React, { useState, useEffect, useRef } from "react";
+import { getRoleList, deleteRole, disEnRole } from "../Api/jsgl";
 import '../index.css';
 import "../Css/glb.css";
 import { RoleEdit } from "./RoleEdit"
@@ -18,6 +18,11 @@ const RoleList = (props) => {
     const [roleId, setRoleId] = useState(0);
 
     const { Option } = Select;
+
+    const jsbm = useRef("");
+    const jsmc = useRef("");
+    let syzt = 1;
+    let ssgId = -1;
 
     const columns = [{
         title: "序号",
@@ -61,9 +66,11 @@ const RoleList = (props) => {
                 return (
                     <Space>
                         <a onClick={() => {
-                            disabledRole(rec.ID);
+                            disableOrEnabledRole({ Id: rec.ID, RoleStatue: 0 });
                         }}>禁用</a>
-                        <a>启用</a>
+                        <a onClick={() => {
+                            disableOrEnabledRole({ Id: rec.ID, RoleStatue: 1 });
+                        }}>启用</a>
                     </Space>
                 );
             }
@@ -89,9 +96,15 @@ const RoleList = (props) => {
 
     const loadData = () => {
 
+        console.log({ jsbm });
+
         let reqData = {
             pageIndex: pagination.pageIndex,
-            pageSize: pagination.pageSize
+            pageSize: pagination.pageSize,
+            JSBM: jsbm.current.input.value,
+            JSMC: jsmc.current.input.value,
+            SYZT: syzt,
+            SSGSID: ssgId
         };
 
         getRoleList(reqData).then(resp => {
@@ -123,6 +136,7 @@ const RoleList = (props) => {
             title: "提示",
             okText: "确认",
             cancelText: "取消",
+            centered: true,
             onOk: () => {
                 deleteRole(id).then(resp => {
                     if (resp && resp.data.Code === 0) {
@@ -141,8 +155,48 @@ const RoleList = (props) => {
         });
     };
 
-    const disabledRole = (id = 0) => {
+    const disableOrEnabledRole = (data = {}) => {
+        confirm({
+            title: "提示",
+            okText: "确认",
+            cancelText: "取消",
+            centered: true,
+            onOk: () => {
 
+                disEnRole(data).then(resp => {
+                    if (resp.data.Code === 0) {
+                        loadData();
+                    }
+                    else {
+                        message.warn(resp.data.Message);
+                    }
+                }).catch(er => {
+                    console.error(er);
+                });
+            },
+            content: "确认" + (data.RoleStatue === 0 ? "禁用" : "启用") + "吗？"
+        });
+
+    };
+
+    const syztHandle = (value, options) => {
+        console.log(value, { options });
+        if (value == "" || typeof value == "undefined")
+            syzt = -1;
+        syzt = value;
+    };
+
+    const sskhHandle = (value, option) => {
+        ssgId = option.id;
+    };
+
+    const searchReset = () => {
+        
+        jsbm.current.input.value = "";
+        jsbm.current.state.value = "";
+        jsmc.current.input.value = "";
+        jsmc.current.state.value = "";
+        message.info("重置功能计划屏蔽");
     };
 
     return (
@@ -156,7 +210,7 @@ const RoleList = (props) => {
                                     <label>角色名称:</label>
                                 </div>
                                 <div className="search-tool-item-content-right">
-                                    <Input name="JSMC" placeholder="角色名称"></Input>
+                                    <Input name="JSMC" ref={jsmc} placeholder="角色名称"></Input>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +220,7 @@ const RoleList = (props) => {
                                     <label>角色编码:</label>
                                 </div>
                                 <div className="search-tool-item-content-right">
-                                    <Input name="JSBM" placeholder="角色编码"></Input>
+                                    <Input name="JSBM" ref={jsbm} placeholder="角色编码"></Input>
                                 </div>
                             </div>
                         </div>
@@ -176,10 +230,14 @@ const RoleList = (props) => {
                                     <label>使用状态:</label>
                                 </div>
                                 <div className="search-tool-item-content-right">
-                                    <Select defaultValue="1" placeholder="请选择" allowClear>
+                                    <Select defaultValue="1"
+                                        placeholder="请选择"
+                                        onChange={syztHandle}
+                                        style={{ width: "120px" }}
+                                    >
                                         <Option value="">-请选择-</Option>
                                         <Option value="1">启用</Option>
-                                        <Option value="2">禁用</Option>
+                                        <Option value="0">禁用</Option>
                                     </Select>
                                 </div>
                             </div>
@@ -191,9 +249,11 @@ const RoleList = (props) => {
                                 </div>
                                 <div className="search-tool-item-content-right">
                                     <AutoComplete
+                                        key="autocompl_sskh"
                                         style={{ width: "120px" }}
-                                        options={[{ label: "test", value: "tet" }]}
+                                        options={[{ value: "本公司", id: 0 }]}
                                         placeholder="请选择单位"
+                                        onSelect={sskhHandle}
                                     >
                                     </AutoComplete>
                                 </div>
@@ -202,10 +262,10 @@ const RoleList = (props) => {
                         <div className="search-tool-item-action">
                             <div className="search-tool-item-action-content">
                                 <div>
-                                    <Button >重置</Button>
+                                    <Button onClick={() => { searchReset(); }}>重置</Button>
                                 </div>
                                 <div>
-                                    <Button type="primary" >查询</Button>
+                                    <Button type="primary" onClick={() => { loadData(); }}>查询</Button>
                                 </div>
                             </div>
                         </div>

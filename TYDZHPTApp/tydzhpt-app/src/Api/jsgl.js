@@ -43,3 +43,14 @@ export const deleteRole = (id) => {
         });
     });
 }
+
+export const disEnRole = (disenData={}) => {
+    return new Promise((resolve, reject) => {
+
+        post("/api/Role/disen", disenData).then(resp => {
+            resolve(resp);
+        }).catch(er => {
+            reject(er);
+        });
+    });
+}

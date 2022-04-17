@@ -51,7 +51,7 @@ namespace Bul.Authority.Application
             else
             {
                 //此时说明不是客户操作
-                if (roleRo.SSGSID != null)
+                if (roleRo.SSGSID != null && roleRo.SSGSID.Value > 0)
                     query = query.Where(r => r.SSGSID == roleRo.SSGSID);
             }
 
