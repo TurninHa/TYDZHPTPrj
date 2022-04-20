@@ -12,7 +12,7 @@ namespace Bul.Authority.DBConnection.DbContextBaseService
         {
             get
             {
-                return this.HttpContextAccessor.GetService<AuthorityDbContext>();
+                return this.HttpContextAccessor.GetService<IDbContext>();
             }
         }
 
