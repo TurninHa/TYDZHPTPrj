@@ -29,7 +29,7 @@ class LayoutContainer extends React.PureComponent {
                         <Menu mode="inline">
                             <SubMenu key="sub1" title="权限管理">
                                 <Menu.Item key="menu1">
-                                    用户管理
+                                    <Link to="/layout/yhgl" key="link_yhgl">用户管理</Link>
                                 </Menu.Item>
                                 <Menu.Item key="menu2">
                                     <Link to="/layout/jsgl" key="link_jsgl">角色管理</Link>

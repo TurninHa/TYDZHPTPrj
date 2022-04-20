@@ -25,6 +25,10 @@ ReactDOM.render(
               const Jsgl = asyncLoadComponet(() => import("./Role/RoleList"));
               return <Jsgl {...props}></Jsgl>
             }}></Route>
+            <Route path="/layout/yhgl" exact render={props => {
+              const UserM = asyncLoadComponet(() => import("./users/UserList"));
+              return <UserM {...props}></UserM>
+            }}></Route>
           </Layout>;
         }}></Route>
       </Switch>

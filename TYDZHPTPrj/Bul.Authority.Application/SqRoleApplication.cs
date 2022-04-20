@@ -33,7 +33,7 @@ namespace Bul.Authority.Application
             if (roleRo == null)
                 return BulResult<IEnumerable<SqRoleDto>>.PageFail(-1, "参数错误");
 
-            var query = this._services.Db.Query<SqRoles>();
+            var query = this._services.DbContext.Query<SqRoles>();
 
             if (!string.IsNullOrEmpty(roleRo.JSBM))
                 query = query.Where(r => r.JSBM == roleRo.JSBM);
@@ -44,9 +44,9 @@ namespace Bul.Authority.Application
             if (roleRo.SYZT != null)
                 query = query.Where(r => r.SYZT == roleRo.SYZT);
 
-            if (this.LoginUser.SSGSID != 0)//说明是客户操作的
+            if (this.CurrentLoginUser.SSGSID != 0)//说明是客户操作的
             {
-                query = query.Where(r => r.SSGSID == this.LoginUser.SSGSID);
+                query = query.Where(r => r.SSGSID == this.CurrentLoginUser.SSGSID);
             }
             else
             {
@@ -84,7 +84,7 @@ namespace Bul.Authority.Application
 
         public async Task<AbstractResult> SaveRole(SaveRoleRo saveRoleRo)
         {
-            if (this.LoginUser.SFGLY == 0)
+            if (this.CurrentLoginUser.SFGLY == 0)
                 return BulResult<AbstractResult>.Fail(-3, "非管理员不能增加角色");
 
             if (saveRoleRo == null)
@@ -93,9 +93,9 @@ namespace Bul.Authority.Application
             if (string.IsNullOrEmpty(saveRoleRo.JSBM) || string.IsNullOrEmpty(saveRoleRo.JSMC))
                 return BulResult<AbstractResult>.Fail(-1, "参数错误");
 
-            var query = this._services.Db.Query<SqRoles>();
+            var query = this._services.DbContext.Query<SqRoles>();
 
-            query = query.Where(w => w.JSBM == saveRoleRo.JSBM && w.SSGSID == this.LoginUser.SSGSID && w.SFSC == 0);
+            query = query.Where(w => w.JSBM == saveRoleRo.JSBM && w.SSGSID == this.CurrentLoginUser.SSGSID && w.SFSC == 0);
 
             if (saveRoleRo.ID != null && saveRoleRo.ID > 0)
                 query = query.Where(w => w.ID != saveRoleRo.ID);
@@ -112,13 +112,13 @@ namespace Bul.Authority.Application
                 if (addModel == null)
                     return BulResult<AbstractResult>.Fail(-4, "转换数据失败");
 
-                addModel.Creater = this.LoginUser.ID;
+                addModel.Creater = this.CurrentLoginUser.ID;
                 addModel.CreateTime = DateTime.Now;
 
-                addModel.SSGSID = this.LoginUser.SSGSID;
+                addModel.SSGSID = this.CurrentLoginUser.SSGSID;
                 addModel.SFSC = 0;
 
-                var newAddModel = await this._services.Db.InsertAsync(addModel);
+                var newAddModel = await this._services.DbContext.InsertAsync(addModel);
 
                 if (newAddModel == null || newAddModel.ID <= 0)
                     return BulResult<AbstractResult>.Fail(-5, "保存失败");
@@ -127,15 +127,15 @@ namespace Bul.Authority.Application
             }
             else
             {
-                var updateModel = await this._services.Db.Query<SqRoles>().FirstOrDefaultAsync(f => f.ID == saveRoleRo.ID && f.SSGSID == this.LoginUser.SSGSID);
+                var updateModel = await this._services.DbContext.Query<SqRoles>().FirstOrDefaultAsync(f => f.ID == saveRoleRo.ID && f.SSGSID == this.CurrentLoginUser.SSGSID);
 
-                updateModel.Updater = this.LoginUser.ID;
+                updateModel.Updater = this.CurrentLoginUser.ID;
                 updateModel.UpdateTime = DateTime.Now;
 
                 updateModel.SYZT = saveRoleRo.SYZT.Value;
                 updateModel.JSMC = saveRoleRo.JSMC;
 
-                var isSuc = await this._services.Db.UpdateAsync(updateModel);
+                var isSuc = await this._services.DbContext.UpdateAsync(updateModel);
 
                 if (isSuc <= 0)
                     return BulResult<AbstractResult>.Fail(-5, "更新失败");
@@ -154,23 +154,23 @@ namespace Bul.Authority.Application
             if (ro == null || ro.Id <= 0)
                 return BulResult.FailNonData(-1, "参数错误");
 
-            var model = await this._services.Db.Query<SqRoles>().FirstOrDefaultAsync(f => f.ID == ro.Id && f.SSGSID == this.LoginUser.SSGSID);
+            var model = await this._services.DbContext.Query<SqRoles>().FirstOrDefaultAsync(f => f.ID == ro.Id && f.SSGSID == this.CurrentLoginUser.SSGSID);
 
             if (model == null)
                 return BulResult.FailNonData(-2, "未检索到数据");
 
             var userRoleService = HttpContextAccessor.GetService<SqUserRoleService>();
 
-            var userRoleCount = await userRoleService.Db.Query<SqUserRole>().Where(w => w.RoleID == model.ID && w.SSGSID == this.LoginUser.SSGSID).CountAsync();
+            var userRoleCount = await userRoleService.DbContext.Query<SqUserRole>().Where(w => w.RoleID == model.ID && w.SSGSID == this.CurrentLoginUser.SSGSID).CountAsync();
 
             if (userRoleCount > 0)
                 return BulResult.FailNonData(-3, "当前角色正在被使用，不能删除");
 
             model.SFSC = 1;
-            model.Updater = this.LoginUser.ID;
+            model.Updater = this.CurrentLoginUser.ID;
             model.UpdateTime = DateTime.Now;
 
-            var isSuc = await this._services.Db.DeleteAsync(model);
+            var isSuc = await this._services.DbContext.DeleteAsync(model);
 
             if (isSuc > 0)
                 return BulResult.SuccessNonData();

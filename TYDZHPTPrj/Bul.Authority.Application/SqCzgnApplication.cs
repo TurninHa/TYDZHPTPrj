@@ -16,8 +16,8 @@ namespace Bul.Authority.Application
 {
     public class SqCzgnApplication : BulAuthorityApplication
     {
-        private readonly SqCzgnServices SqCzgnService;
-        public SqCzgnApplication(SqCzgnServices sqCzgn)
+        private readonly SqCzgnService SqCzgnService;
+        public SqCzgnApplication(SqCzgnService sqCzgn)
         {
             this.SqCzgnService = sqCzgn;
         }
@@ -31,12 +31,12 @@ namespace Bul.Authority.Application
 
             if (entity.ID > 0)
             {
-                entity.Updater = this.LoginUser.ID;
+                entity.Updater = this.CurrentLoginUser.ID;
                 entity.UpdateTime = DateTime.Now;
             }
             else
             {
-                entity.Creater = this.LoginUser.ID;
+                entity.Creater = this.CurrentLoginUser.ID;
                 entity.CreateTime = DateTime.Now;
             }
 
@@ -48,7 +48,7 @@ namespace Bul.Authority.Application
             if (cdId <= 0)
                 return BulResult<IEnumerable<CdczgnRo>>.Fail(-1, "请选择菜单并传入菜单Id");
 
-            var query = this.SqCzgnService.Db.Query<SqCdczgn>();
+            var query = this.SqCzgnService.DbContext.Query<SqCdczgn>();
 
             query = query.Where(w => w.CDID == cdId);
 

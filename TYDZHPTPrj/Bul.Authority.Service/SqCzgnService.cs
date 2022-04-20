@@ -1,5 +1,6 @@
 ﻿using Bul.Authority.DBConnection.DbContextBaseService;
 using Bul.Authority.Entity;
+using Bul.Authority.Service.AuthorityServiceBase;
 using Bul.System.Result;
 using Chloe;
 using Microsoft.AspNetCore.Http;
@@ -11,11 +12,8 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Service
 {
-    public class SqCzgnServices : BaseService
+    public class SqCzgnService : AuthorityBaseService
     {
-        public SqCzgnServices(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-        { }
-
         public async Task<AbstractResult> Save(SqCdczgn entity)
         {
             if (entity.CDID <= 0)
@@ -27,7 +25,7 @@ namespace Bul.Authority.Service
             if (string.IsNullOrEmpty(entity.GNMC))
                 return BulResult.FailNonData(-3, "功能名称不能为空");
 
-            var isExistQueryGnbm = this.Db.Query<SqCdczgn>();
+            var isExistQueryGnbm = this.DbContext.Query<SqCdczgn>();
             isExistQueryGnbm = isExistQueryGnbm.Where(w => w.GNBM == entity.GNBM && w.CDID == entity.CDID);
 
             if (entity.ID > 0)
@@ -40,7 +38,7 @@ namespace Bul.Authority.Service
 
             if (entity.ID <= 0)
             {
-                var isSuc = await this.Db.InsertAsync(entity);
+                var isSuc = await this.DbContext.InsertAsync(entity);
                 if (isSuc != null && isSuc.ID > 0)
                     return BulResult.SuccessNonData("保存成功", isSuc.ID.ToString());
                 else
@@ -48,12 +46,12 @@ namespace Bul.Authority.Service
             }
             else
             {
-                var oriEntity = await this.Db.Query<SqCdczgn>().FirstOrDefaultAsync(f => f.ID == entity.ID);
+                var oriEntity = await this.DbContext.Query<SqCdczgn>().FirstOrDefaultAsync(f => f.ID == entity.ID);
 
                 entity.CreateTime = oriEntity.CreateTime;
                 entity.Creater = oriEntity.Creater;
 
-                var isSuc = await this.Db.UpdateAsync(entity);
+                var isSuc = await this.DbContext.UpdateAsync(entity);
 
                 if (isSuc > 0)
                     return BulResult.SuccessNonData("更新成功");

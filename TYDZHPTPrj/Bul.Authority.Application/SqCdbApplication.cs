@@ -39,7 +39,7 @@ namespace Bul.Authority.Application
             if (fcdid < 0)
                 return BulResult<IEnumerable<SqCdb>>.Fail(-1, "父菜单ID不能小于0");
 
-            var query = this.sqCdbService.Db.Query<SqCdb>();
+            var query = this.sqCdbService.DbContext.Query<SqCdb>();
             query = query.Where(w => w.FCDID == fcdid);
 
             var result = await query.ToListAsync();
@@ -62,7 +62,7 @@ namespace Bul.Authority.Application
         /// <returns></returns>
         public BulResult<IEnumerable<SqCdbDto>> GetSqCdbTree(long ssgsId)
         {
-            var sqcdbQuery = this.sqCdbService.Db.Query<SqCdb>();
+            var sqcdbQuery = this.sqCdbService.DbContext.Query<SqCdb>();
             sqcdbQuery = sqcdbQuery.Where(w => w.SYZT == (int)SYZTType.Enable);
 
             var sqCdList = sqcdbQuery.ToList();
@@ -125,7 +125,7 @@ namespace Bul.Authority.Application
             if (sqCdbListDto == null)
                 return BulResult<IEnumerable<SqCdbListDto>>.Fail(-1, "参数错误");
 
-            var query = this.sqCdbService.Db.Query<SqCdb>();
+            var query = this.sqCdbService.DbContext.Query<SqCdb>();
             query = query.Where(w => w.SYZT == 1);
 
             if (!string.IsNullOrEmpty(sqCdbListDto.CDBM))
@@ -148,7 +148,7 @@ namespace Bul.Authority.Application
             if (condition == null)
                 return BulResult<IEnumerable<SqCdbListDto>>.PageFail(-1, "参数错误");
 
-            var query = this.sqCdbService.Db.Query<SqCdb>();
+            var query = this.sqCdbService.DbContext.Query<SqCdb>();
             query = query.Where(w => w.SYZT == 1);
 
             if (!string.IsNullOrEmpty(condition.CDBM))

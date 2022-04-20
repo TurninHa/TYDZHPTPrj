@@ -1,4 +1,5 @@
 ﻿using Bul.Authority.DBConnection.DbContextBaseService;
+using Bul.Authority.Service.AuthorityServiceBase;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,7 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Service
 {
-    public class SqUserRoleService : BaseService
+    public class SqUserRoleService : AuthorityBaseService
     {
-        public SqUserRoleService(IHttpContextAccessor contextAccessor) : base(contextAccessor)
-        {
-        }
     }
 }

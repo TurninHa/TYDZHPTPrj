@@ -1,5 +1,6 @@
 ﻿using Bul.Authority.DBConnection.DbContextBaseService;
 using Bul.Authority.Entity;
+using Bul.Authority.Service.AuthorityServiceBase;
 using Bul.System.Result;
 using Chloe;
 using Chloe.Extensions;
@@ -14,12 +15,8 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Service
 {
-    public class SqCdbService : BaseService
+    public class SqCdbService : AuthorityBaseService
     {
-
-        public SqCdbService(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-        { }
-
         /// <summary>
         /// 保存菜单
         /// </summary>
@@ -39,7 +36,7 @@ namespace Bul.Authority.Service
             if (cdb.FCDID == null)
                 return BulResult<SqCdb>.Fail(-3, "父级菜单Id不能为空");
 
-            var isExistMenu = this.Db.Query<SqCdb>();
+            var isExistMenu = this.DbContext.Query<SqCdb>();
             isExistMenu = isExistMenu.Where(w => (w.CDBM == cdb.CDBM || w.CDMC == cdb.CDMC));
 
             if (cdb.ID > 0)
@@ -51,7 +48,7 @@ namespace Bul.Authority.Service
 
             if (cdb.ID > 0)
             {
-                var result = await this.Db.UpdateAsync<SqCdb>(cdb);
+                var result = await this.DbContext.UpdateAsync<SqCdb>(cdb);
 
                 if (result > 0)
                     return BulResult<SqCdb>.Success(cdb, result.ToString());
@@ -60,7 +57,7 @@ namespace Bul.Authority.Service
             }
             else
             {
-                var result = await this.Db.InsertAsync<SqCdb>(cdb);
+                var result = await this.DbContext.InsertAsync<SqCdb>(cdb);
 
                 if (result != null)
                     return BulResult<SqCdb>.Success(cdb);

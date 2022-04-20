@@ -60,7 +60,7 @@ namespace Bul.Authority.WebApi.Controllers
 
             var roleService = HttpContext.GetService<SqRoleServices>();
 
-            var model = await roleService.Db.Query<SqRoles>().FirstOrDefaultAsync(f => f.ID == id && f.SSGSID == this.CurrentUser.SSGSID);
+            var model = await roleService.DbContext.Query<SqRoles>().FirstOrDefaultAsync(f => f.ID == id && f.SSGSID == this.CurrentUser.SSGSID);
 
             if (model == null)
                 return BulResult<SqRoles>.Fail(-2, "参数错误");
@@ -97,13 +97,13 @@ namespace Bul.Authority.WebApi.Controllers
 
             var roleService = HttpContext.GetService<SqRoleServices>();
 
-            var model = await roleService.Db.QueryByKeyAsync<SqRoles>(ro.Id);
+            var model = await roleService.DbContext.QueryByKeyAsync<SqRoles>(ro.Id);
 
             model.SYZT = ro.RoleStatue;
             model.Updater = this.CurrentUser.ID;
             model.UpdateTime = DateTime.Now;
 
-            var isSuc = await roleService.Db.UpdateAsync(model);
+            var isSuc = await roleService.DbContext.UpdateAsync(model);
 
             if (isSuc > 0)
                 return BulResult.SuccessNonData();

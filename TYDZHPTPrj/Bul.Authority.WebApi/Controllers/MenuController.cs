@@ -114,7 +114,7 @@ namespace Bul.Authority.WebApi.Controllers
             //对于简单查询逻辑 可直接在此使用服务层
             var sqCdService = this.HttpContext.GetService<SqCdbService>();
 
-            var model = sqCdService.Db.Query<SqCdb>().FirstOrDefault(f => f.ID == id);
+            var model = sqCdService.DbContext.Query<SqCdb>().FirstOrDefault(f => f.ID == id);
 
             if (model == null)
                 return BulResult<SqCdbListDto>.Fail(-2, "参数错误");
@@ -123,7 +123,7 @@ namespace Bul.Authority.WebApi.Controllers
 
             if (result.FCDID > 0)
             {
-                var parentMenuModel = sqCdService.Db.Query<SqCdb>().FirstOrDefault(f => f.ID == result.FCDID);
+                var parentMenuModel = sqCdService.DbContext.Query<SqCdb>().FirstOrDefault(f => f.ID == result.FCDID);
 
                 if (parentMenuModel != null)
                     result.FCDMC = parentMenuModel.CDMC;
@@ -146,11 +146,11 @@ namespace Bul.Authority.WebApi.Controllers
 
             var sqCdService = this.HttpContext.GetService<SqCdbService>();
 
-            var model = await sqCdService.Db.Query<SqCdb>().FirstOrDefaultAsync(f => f.ID == ro.Id);
+            var model = await sqCdService.DbContext.Query<SqCdb>().FirstOrDefaultAsync(f => f.ID == ro.Id);
             if (model == null)
                 return BulResult.FailNonData(-2, "删除菜单数据错误");
 
-            var efft = await sqCdService.Db.DeleteAsync<SqCdb>(model);
+            var efft = await sqCdService.DbContext.DeleteAsync<SqCdb>(model);
             if (efft > 0)
                 return BulResult.SuccessNonData();
             else

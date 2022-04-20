@@ -23,7 +23,7 @@ namespace Bul.Authority.Application
             if (userId <= 0 || ssgsId < 0)
                 return BulResult<IEnumerable<SqUserRole>>.Fail(-1, "请传入用户id或公司Id");
 
-            var query = this._SqUserRoleService.Db.Query<SqUserRole>();
+            var query = this._SqUserRoleService.DbContext.Query<SqUserRole>();
 
             query = query.Where(w => w.UserID == userId && w.SSGSID == ssgsId);
 

@@ -1,6 +1,6 @@
 ﻿using Bul.Authority.Application;
-using Bul.Authority.Application.BO;
 using Bul.Authority.Entity;
+using Bul.Authority.Entity.ExtObj;
 using Bul.System.Common;
 using Bul.System.Extension.NetCore;
 using Bul.System.Result;
@@ -19,11 +19,11 @@ namespace Bul.Authority.WebApi.Controllers
 
     public class AuthorityBaseController : BaseController<SqUsers>
     {
-        public override SqUsers CurrentUser
+        public override SqLoginUser CurrentUser
         {
             get
             {
-                return this.HttpContext.GetCurrentUser<SqUserBo>();
+                return this.HttpContext.GetCurrentUser<SqLoginUser>();
             }
         }
 

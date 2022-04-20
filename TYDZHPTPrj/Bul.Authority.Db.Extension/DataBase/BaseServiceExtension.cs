@@ -14,7 +14,7 @@ namespace Bul.Authority.Db.Extension
     {
         public static BulResult<Page<IEnumerable<IBulEntity>>> GetPageListByWhere(this BaseService baseService, Expression<Func<IBulEntity, bool>> expression, int pageIndex, int pageSize)
         {
-            var query = baseService.Db.Query<IBulEntity>().Where(expression);
+            var query = baseService.DbContext.Query<IBulEntity>().Where(expression);
 
             var count = query.Count();
 

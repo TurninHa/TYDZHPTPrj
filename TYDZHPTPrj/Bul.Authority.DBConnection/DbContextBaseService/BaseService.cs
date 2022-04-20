@@ -1,5 +1,6 @@
 ﻿using Bul.Authority.DBConnection.AuthorityMySqlDbContext;
 using Bul.System.Extension.NetCore;
+using Chloe;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,15 +8,17 @@ namespace Bul.Authority.DBConnection.DbContextBaseService
 {
     public abstract class BaseService
     {
-        public AuthorityDbContext Db { get; private set; }
-        protected readonly IHttpContextAccessor HttpContextAccessor;
-
-
-        public BaseService(IHttpContextAccessor contextAccessor)
+        public IDbContext DbContext
         {
-            this.HttpContextAccessor = contextAccessor;
+            get
+            {
+                return this.HttpContextAccessor.GetService<AuthorityDbContext>();
+            }
+        }
 
-            this.Db = this.HttpContextAccessor.GetService<AuthorityDbContext>();
+        protected abstract IHttpContextAccessor HttpContextAccessor
+        {
+            get;
         }
 
         protected T GetService<T>()

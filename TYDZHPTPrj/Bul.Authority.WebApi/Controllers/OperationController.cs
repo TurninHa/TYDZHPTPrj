@@ -56,14 +56,14 @@ namespace Bul.Authority.WebApi.Controllers
             if (ro == null || ro.Id <= 0)
                 return BulResult.FailNonData(-1, "参数错误");
 
-            var SqCzgnService = HttpContext.GetService<SqCzgnServices>();
+            var SqCzgnService = HttpContext.GetService<SqCzgnService>();
 
-            var model = SqCzgnService.Db.Query<SqCdczgn>().Where(w => w.ID == ro.Id).FirstOrDefault();
+            var model = SqCzgnService.DbContext.Query<SqCdczgn>().Where(w => w.ID == ro.Id).FirstOrDefault();
 
             if (model == null)
                 return BulResult.FailNonData(-1, "参数错误");
 
-            var result = SqCzgnService.Db.DeleteByKey<SqCdczgn>(ro.Id);
+            var result = SqCzgnService.DbContext.DeleteByKey<SqCdczgn>(ro.Id);
 
             if (result > 0)
                 return BulResult.SuccessNonData();

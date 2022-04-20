@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bul.System.Common
+namespace Bul.System.Extension.NetCore
 {
     public class BulActionFilter : ActionFilterAttribute
     {

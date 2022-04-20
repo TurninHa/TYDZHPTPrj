@@ -4,6 +4,7 @@ using Bul.Authority.DBConnection.ConnectionFactory;
 using Bul.Authority.Service;
 using Bul.System.Common;
 using Bul.System.Extension.NetCore;
+using Chloe;
 using Chloe.Infrastructure;
 using Chloe.MySql;
 using Microsoft.AspNetCore.Builder;
@@ -54,19 +55,19 @@ namespace Bul.Authority.WebApi
             services.AddScoped<SqCdbService>();
             services.AddScoped<SqCdbApplication>();
 
-            services.AddScoped<SqUsersServices>();
+            services.AddScoped<SqUsersService>();
             services.AddScoped<SqUserApplication>();
 
             services.AddScoped<SqUserRoleService>();
             services.AddScoped<SqUserRoleApplication>();
 
             services.AddScoped<SqCzgnApplication>();
-            services.AddScoped<SqCzgnServices>();
+            services.AddScoped<SqCzgnService>();
 
             services.AddScoped<SqRoleServices>();
             services.AddScoped<SqRoleApplication>();
 
-            services.AddScoped<AuthorityDbContext>();
+            services.AddScoped<IDbContext, AuthorityDbContext>();
 
             services.AddTransient<JwtBearer>();
 
