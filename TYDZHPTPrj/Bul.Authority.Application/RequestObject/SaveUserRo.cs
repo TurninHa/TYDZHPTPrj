@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Bul.Authority.Application.RequestObject
 {
-    public class SaveUserRo
+    public class SaveUserRo : EntityIdRo
     {
-        public long ID { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -21,9 +20,9 @@ namespace Bul.Authority.Application.RequestObject
         /// 
         /// </summary>
         public string MM { get; set; }
-        
+
         public string QRMM { get; set; }
-        
+
         /// <summary>
         /// 
         /// </summary>
