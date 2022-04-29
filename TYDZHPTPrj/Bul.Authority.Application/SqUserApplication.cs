@@ -86,6 +86,36 @@ namespace Bul.Authority.Application
                     return BulResult.FailNonData(-5, "请选择所属员工");
             }
 
+            if (string.IsNullOrEmpty(userRo.SJH))
+                return BulResult.FailNonData(-4, "手机号不能为空");
+
+            if (userRo.Roles == null || !userRo.Roles.Any())
+                return BulResult.FailNonData(-4, "请选择用户所属角色");
+
+
+            if (userRo.Id > 0)
+            {
+                var userModel = await this.UsersServices.DbContext.QueryByKeyAsync<SqUsers>(userRo.Id);
+                if (userModel == null)
+                    return BulResult.FailNonData(-6, "未检索到数据");
+
+                userModel.XM = userRo.XM;
+                userModel.SSYGID = userRo.SSYGID;
+                userModel.SFGLY = userRo.SFGLY;
+                userModel.SJH = userRo.SJH;
+                userModel.SYZT = userRo.SYZT;
+
+                userModel.Updater = this.CurrentLoginUser.ID;
+                userModel.UpdateTime = DateTime.Now;
+
+                var isSucc = await this.UsersServices.DbContext.UpdateAsync(userModel);
+                if (isSucc <= 0)
+                    return BulResult.FailNonData(-7, "修改失败");
+
+
+            }
+
+
             return BulResult.FailNonData(-6, "");
         }
     }
