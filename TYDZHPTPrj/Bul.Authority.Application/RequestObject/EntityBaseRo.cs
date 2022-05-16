@@ -4,16 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bul.System.Result
+namespace Bul.Authority.Application.RequestObject
 {
-    public class Page<T>
+    public class EntityBaseRo
     {
-        public T Data { get; set; }
-
-        public int PageSize { get; set; } = 20;
-
-        public int Count { get; set; }
-
         public int PageIndex { get; set; }
+
+        public int PageSize { get; set; }
     }
 }

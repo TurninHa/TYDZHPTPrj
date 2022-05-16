@@ -62,6 +62,11 @@ namespace Bul.Authority.Application
             return BulResult<SqUsers>.Success(model);
         }
 
+        /// <summary>
+        /// 保存用户信息
+        /// </summary>
+        /// <param name="userRo"></param>
+        /// <returns></returns>
         public async Task<AbstractResult> SaveUser(SaveUserRo userRo)
         {
             if (userRo == null)
@@ -92,6 +97,7 @@ namespace Bul.Authority.Application
             if (userRo.Roles == null || !userRo.Roles.Any())
                 return BulResult.FailNonData(-4, "请选择用户所属角色");
 
+            var userRoleService = HttpContextAccessor.GetService<SqUserRoleService>();
 
             if (userRo.Id > 0)
             {
@@ -112,11 +118,55 @@ namespace Bul.Authority.Application
                 if (isSucc <= 0)
                     return BulResult.FailNonData(-7, "修改失败");
 
+                var isDelSuc = await userRoleService.DbContext.DeleteAsync<SqUserRole>(w => w.UserID == userRo.Id && w.SSGSID == this.CurrentLoginUser.SSGSID);
 
+                if (isDelSuc > 0)
+                {
+                    await userRoleService.AddUserRole(userRo.Id, userRo.Roles);
+
+                    return BulResult.SuccessNonData();
+                }
+                else
+                    return BulResult.FailNonData(-8, "保存用户信息失败");
             }
+            else
+            {
+                var isExistQuery = UsersServices.DbContext.Query<SqUsers>();
 
+                isExistQuery = isExistQuery.Where(w => w.YHM == userRo.YHM && w.SFSC == 0);//此处只检查没有删除的用户
 
-            return BulResult.FailNonData(-6, "");
+                var yhCount = await isExistQuery.CountAsync();
+
+                if (yhCount > 0)
+                    return BulResult.FailNonData(-9, "用户名已被使用");
+
+                var userModel = new SqUsers
+                {
+                    YHM = userRo.YHM,
+                    XM = userRo.XM,
+                    MM = userRo.QRMM,
+                    SJH = userRo.SJH,
+                    SSYGID = userRo.SSYGID,
+                    SSGSID = this.CurrentLoginUser.SSGSID,
+                    SFGLY = userRo.SFGLY,
+                    SYZT = userRo.SYZT,
+                    SFSC = 0,
+                    Creater = this.CurrentLoginUser.ID,
+                    CreateTime = DateTime.Now
+                };
+
+                var userAddModel = await UsersServices.DbContext.InsertAsync(userModel);
+
+                if (userAddModel != null && userAddModel.ID > 0)
+                {
+                    await userRoleService.AddUserRole(userAddModel.ID, userRo.Roles);
+
+                    return BulResult.SuccessNonData();
+                }
+                else
+                    return BulResult.FailNonData(-10, "添加用户失败");
+            }
         }
+
     }
 }

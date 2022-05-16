@@ -109,17 +109,17 @@ namespace Bul.System.Result
         /// <param name="data"></param>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
-        /// <param name="pageCount"></param>
+        /// <param name="totalCount"></param>
         /// <param name="extensionData"></param>
         /// <returns></returns>
-        public static BulResult<Page<T>> PageSuccess(T data, int pageIndex, int pageSize, int pageCount, string extensionData = "")
+        public static BulResult<Page<T>> PageSuccess(T data, int pageIndex, int pageSize, int totalCount, string extensionData = "")
         {
             Page<T> page = new()
             {
                 Data = data,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                PageCount = pageCount
+                Count = totalCount
             };
 
             return new BulResult<Page<T>> { Data = page, ExtensionData = extensionData, Code = 0, Message = string.Empty };
@@ -133,7 +133,7 @@ namespace Bul.System.Result
                 Data = default,
                 PageIndex = 0,
                 PageSize = 0,
-                PageCount = 0
+                Count = 0
             };
 
             return new BulResult<Page<T>> { Data = page, ExtensionData = extensionData, Code = code, Message = message };
