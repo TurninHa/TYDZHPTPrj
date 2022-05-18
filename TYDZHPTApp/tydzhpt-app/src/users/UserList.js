@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Form, Button, Table, Select, AutoComplete, Modal, message } from "antd";
+import { Input, Form, Button, Table, Select, AutoComplete, Modal, message, Space } from "antd";
 import '../index.css';
 import "../Css/glb.css";
 import { getUserList, getModel, saveUser, disEnUser, deleteUser } from '../Api/yhgl'
@@ -23,7 +23,7 @@ class UserList extends React.Component {
         }
     }
 
-    //form =  React.createRef();
+    form = React.createRef();
 
     columns = [{
         title: "序号",
@@ -72,11 +72,11 @@ class UserList extends React.Component {
 
             return <span style={{ color: "red" }}>{text}</span>
         }
-    },{
-        title:"操作",
-        dataIndex:"ID",
-        key:"ID",
-        render:(text,record)=>{
+    }, {
+        title: "操作",
+        dataIndex: "ID",
+        key: "ID",
+        render: (text, record) => {
             return "编辑";
         }
     }];
@@ -116,43 +116,28 @@ class UserList extends React.Component {
         });
     }
 
+    searchHandle() {
+
+        console.log(this.form);
+        let schData = this.form.current.getFieldsValue(true);
+
+        console.log(schData);
+    }
+
     render() {
         return <div className="list-page-container">
             <div className="search-container">
                 <div className="search-tool-container">
-
-                    <div className="search-tool-item">
-                        <div className="search-tool-item-content">
-                            <div className="search-tool-item-content-left">
-                                <label>用户名:</label>
-                            </div>
-                            <div className="search-tool-item-content-right">
-
+                    <div className="search-tool-antd-form">
+                        <Form layout="inline" ref={this.form} >
+                            <Form.Item name="YHM" label="用户名">
                                 <Input placeholder="用户名"></Input>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="search-tool-item">
-                        <div className="search-tool-item-content">
-                            <div className="search-tool-item-content-left">
-                                <label>姓名:</label>
-                            </div>
-                            <div className="search-tool-item-content-right">
-
-                                <Input name="XM" placeholder="姓名"></Input>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="search-tool-item">
-                        <div className="search-tool-item-content">
-                            <div className="search-tool-item-content-left">
-                                <label>使用状态:</label>
-                            </div>
-                            <div className="search-tool-item-content-right">
-
-                                <Select defaultValue="1"
+                            </Form.Item>
+                            <Form.Item name="XM" label="姓名">
+                                <Input placeholder="姓名"></Input>
+                            </Form.Item>
+                            <Form.Item name="SYZT" label="使用状态" initialValue="1">
+                                <Select
                                     placeholder="请选择"
                                     style={{ width: "120px" }}
                                 >
@@ -160,17 +145,8 @@ class UserList extends React.Component {
                                     <Option value="1">启用</Option>
                                     <Option value="0">禁用</Option>
                                 </Select>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="search-tool-item">
-                        <div className="search-tool-item-content">
-                            <div className="search-tool-item-content-left">
-                                <label>所属客户:</label>
-                            </div>
-                            <div className="search-tool-item-content-right">
-
+                            </Form.Item>
+                            <Form.Item name="SSKH" label="所属客户">
                                 <AutoComplete
                                     key="autocompl_sskh"
                                     style={{ width: "120px" }}
@@ -178,20 +154,14 @@ class UserList extends React.Component {
                                     placeholder="请选择单位"
                                 >
                                 </AutoComplete>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="search-tool-item-action">
-                        <div className="search-tool-item-action-content">
-                            <div>
-                                <Button onClick={() => { }}>重置</Button>
-                            </div>
-                            <div>
-                                <Button type="primary" onClick={() => { }}>查询</Button>
-                            </div>
-                        </div>
+                            </Form.Item>
+                            <Form.Item>
+                                <Space>
+                                    <Button type="primary" onClick={() => this.searchHandle()}>查询</Button>
+                                    <Button onClick={() => { }}>重置</Button>
+                                </Space>
+                            </Form.Item>
+                        </Form>
                     </div>
                 </div>
             </div>

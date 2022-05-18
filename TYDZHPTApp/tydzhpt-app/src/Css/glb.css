@@ -32,6 +32,9 @@
 .search-tool-container .search-tool-item-action{
     flex-grow: 1;
 }
+.search-tool-container .search-tool-antd-form{
+    padding-bottom: 16px;
+}
 .search-tool-item-action .search-tool-item-action-content{
     display: flex;
     width: 100%;
