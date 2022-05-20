@@ -112,7 +112,7 @@ namespace Bul.Authority.WebApi.Controllers
             }
             else
             {
-                if (ro.SSGSID != null)
+                if (ro.SSGSID != null && ro.SSGSID.Value > 0)
                     userQuery = userQuery.Where(w => w.SSGSID == ro.SSGSID.Value);
             }
 

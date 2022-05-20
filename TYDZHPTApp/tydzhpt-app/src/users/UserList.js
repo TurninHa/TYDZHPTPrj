@@ -2,7 +2,8 @@ import React from "react";
 import { Input, Form, Button, Table, Select, AutoComplete, Modal, message, Space } from "antd";
 import '../index.css';
 import "../Css/glb.css";
-import { getUserList, getModel, saveUser, disEnUser, deleteUser } from '../Api/yhgl'
+import { getUserList, getModel, disEnUser, deleteUser } from '../Api/yhgl'
+import UserEdit from "./UserEdit";
 
 
 const { Option } = Select;
@@ -19,11 +20,13 @@ class UserList extends React.Component {
                 pageIndex: 1,
                 pageSize: 20,
                 total: 0
-            }
+            },
+            userFormVis: false
         }
     }
 
     form = React.createRef();
+    SltSSGID = -1;
 
     columns = [{
         title: "序号",
@@ -86,10 +89,16 @@ class UserList extends React.Component {
     }
 
     loadUserDataList() {
-        getUserList({
-            pageIndex: this.state.pagination.pageIndex,
-            pageSize: this.state.pagination.pageSize
-        }).then(resp => {
+        let schData = this.form.current.getFieldsValue(true);
+
+        if (!schData || typeof schData == "undefined")
+            schData = {};
+
+        schData.pageIndex = this.state.pagination.pageIndex;
+        schData.pageSize = this.state.pagination.pageSize;
+        schData.SSGSID = this.SltSSGID;
+
+        getUserList(schData).then(resp => {
             let data = resp.data;
 
             if (data.Code === 0) {
@@ -118,87 +127,123 @@ class UserList extends React.Component {
 
     searchHandle() {
 
-        console.log(this.form);
-        let schData = this.form.current.getFieldsValue(true);
+        this.loadUserDataList();
+    }
 
-        console.log(schData);
+    autoCompleteSelectHandle(option) {
+        console.log(option);
+        this.SltSSGID = option.id;
+    }
+    autoCompleteChangeHandle(v) {
+
+        if (!v || typeof v == "undefined")
+            this.SltSSGID = -1;
+    }
+
+    resetHandle() {
+        this.form.current.setFieldsValue({
+            YHM: "",
+            XM: "",
+            SJH: "",
+            SYZT: "1",
+            SSKH: ""
+        });
     }
 
     render() {
-        return <div className="list-page-container">
-            <div className="search-container">
-                <div className="search-tool-container">
-                    <div className="search-tool-antd-form">
-                        <Form layout="inline" ref={this.form} >
-                            <Form.Item name="YHM" label="用户名">
-                                <Input placeholder="用户名"></Input>
-                            </Form.Item>
-                            <Form.Item name="XM" label="姓名">
-                                <Input placeholder="姓名"></Input>
-                            </Form.Item>
-                            <Form.Item name="SYZT" label="使用状态" initialValue="1">
-                                <Select
-                                    placeholder="请选择"
-                                    style={{ width: "120px" }}
-                                >
-                                    <Option value="">-请选择-</Option>
-                                    <Option value="1">启用</Option>
-                                    <Option value="0">禁用</Option>
-                                </Select>
-                            </Form.Item>
-                            <Form.Item name="SSKH" label="所属客户">
-                                <AutoComplete
-                                    key="autocompl_sskh"
-                                    style={{ width: "120px" }}
-                                    options={[{ value: "本公司", id: 0 }]}
-                                    placeholder="请选择单位"
-                                >
-                                </AutoComplete>
-                            </Form.Item>
-                            <Form.Item>
-                                <Space>
-                                    <Button type="primary" onClick={() => this.searchHandle()}>查询</Button>
-                                    <Button onClick={() => { }}>重置</Button>
-                                </Space>
-                            </Form.Item>
-                        </Form>
+        return (<>
+            <div className="list-page-container">
+                <div className="search-container">
+                    <div className="search-tool-container">
+                        <div className="search-tool-antd-form">
+                            <Form layout="inline" ref={this.form} >
+                                <Form.Item name="YHM" label="用户名">
+                                    <Input placeholder="用户名"></Input>
+                                </Form.Item>
+                                <Form.Item name="XM" label="姓名">
+                                    <Input placeholder="姓名"></Input>
+                                </Form.Item>
+                                <Form.Item name="SJH" label="手机号">
+                                    <Input placeholder="手机号"></Input>
+                                </Form.Item>
+                                <Form.Item name="SYZT" label="使用状态" initialValue="1">
+                                    <Select
+                                        placeholder="请选择"
+                                        style={{ width: "120px" }}
+                                    >
+                                        <Option value="">-请选择-</Option>
+                                        <Option value="1">启用</Option>
+                                        <Option value="0">禁用</Option>
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item name="SSKH" label="所属客户">
+                                    <AutoComplete
+                                        key="autocompl_sskh"
+                                        style={{ width: "120px" }}
+                                        options={[{ value: "本公司", id: 0 }]}
+                                        placeholder="请选择单位"
+                                        onSelect={(v, opt) => { this.autoCompleteSelectHandle(opt); }}
+                                        onChange={v => this.autoCompleteChangeHandle(v)}
+                                    >
+                                    </AutoComplete>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Space>
+                                        <Button type="primary" onClick={() => this.searchHandle()}>查询</Button>
+                                        <Button onClick={() => this.resetHandle()}>重置</Button>
+                                    </Space>
+                                </Form.Item>
+                            </Form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="list-container">
-                <div className="list-grid-container">
-                    <div className="list-grid-head">
-                        <div className="list-grid-head-tool">
-                            <div className="list-grid-head-tool-text">用户管理</div>
-                            <div className="list-grid-head-tool-bar">
-                                <div>
-                                    <Button type="primary" onClick={() => { }}>添加用户</Button>
+                <div className="list-container">
+                    <div className="list-grid-container">
+                        <div className="list-grid-head">
+                            <div className="list-grid-head-tool">
+                                <div className="list-grid-head-tool-text">用户管理</div>
+                                <div className="list-grid-head-tool-bar">
+                                    <div>
+                                        <Button type="primary" onClick={() => this.setState({ userFormVis: true })}>添加用户</Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="list-grid-body">
-                        <Table columns={this.columns} dataSource={this.state.dataSource}
-                            bordered
-                            size="small"
-                            pagination={{
-                                onShowSizeChange: (pageIndex, pageSize) => {
-                                    const pagnt = { ...this.state.pagination };
+                        <div className="list-grid-body">
+                            <Table columns={this.columns} dataSource={this.state.dataSource}
+                                bordered
+                                size="small"
+                                pagination={{
+                                    onShowSizeChange: (pageIndex, pageSize) => {
+                                        const pagnt = { ...this.state.pagination };
 
-                                    pagnt.pageIndex = pageIndex;
-                                    pagnt.pageSize = pageSize;
+                                        pagnt.pageIndex = pageIndex;
+                                        pagnt.pageSize = pageSize;
 
-                                    this.setState({ pagination: pagnt });
-                                },
-                                defaultCurrent: 1,
-                                current: this.state.pagination.pageIndex,
-                                defaultPageSize: this.state.pagination.pageSize,
-                                total: this.state.pagination.total
-                            }}></Table>
+                                        this.setState({ pagination: pagnt });
+                                    },
+                                    defaultCurrent: 1,
+                                    current: this.state.pagination.pageIndex,
+                                    defaultPageSize: this.state.pagination.pageSize,
+                                    total: this.state.pagination.total
+                                }}></Table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <Modal
+                destroyOnClose={true}
+                title="用户编辑"
+                footer={null}
+                visible={this.state.userFormVis}
+                onCancel={() => this.setState({ userFormVis: false })}
+                maskClosable={false}
+                centered
+            >
+                <UserEdit></UserEdit>
+            </Modal>
+        </>
+        )
     }
 }
 
