@@ -106,8 +106,8 @@ namespace Bul.Authority.Application
                     return BulResult.FailNonData(-6, "未检索到数据");
 
                 userModel.XM = userRo.XM;
-                userModel.SSYGID = userRo.SSYGID;
-                userModel.SFGLY = userRo.SFGLY;
+                userModel.SSYGID = userRo.SSYGID ?? 0;
+                userModel.SFGLY = userRo.SFGLY ?? 0;
                 userModel.SJH = userRo.SJH;
                 userModel.SYZT = userRo.SYZT;
 
@@ -146,9 +146,9 @@ namespace Bul.Authority.Application
                     XM = userRo.XM,
                     MM = userRo.QRMM,
                     SJH = userRo.SJH,
-                    SSYGID = userRo.SSYGID,
+                    SSYGID = userRo.SSYGID ?? 0,
                     SSGSID = this.CurrentLoginUser.SSGSID,
-                    SFGLY = userRo.SFGLY,
+                    SFGLY = userRo.SFGLY ?? 0,
                     SYZT = userRo.SYZT,
                     SFSC = 0,
                     Creater = this.CurrentLoginUser.ID,

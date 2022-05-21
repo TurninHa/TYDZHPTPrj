@@ -2,7 +2,7 @@ import React from "react";
 import { Input, Form, Button, Table, Select, AutoComplete, Modal, message, Space } from "antd";
 import '../index.css';
 import "../Css/glb.css";
-import { getUserList, getModel, disEnUser, deleteUser } from '../Api/yhgl'
+import { getUserList,disEnUser, deleteUser } from '../Api/yhgl'
 import UserEdit from "./UserEdit";
 
 
@@ -240,7 +240,12 @@ class UserList extends React.Component {
                 maskClosable={false}
                 centered
             >
-                <UserEdit></UserEdit>
+                <UserEdit saveEffect={(isSuc = false) => {
+                    if (isSuc) {
+                        this.loadUserDataList();
+                    }
+                    this.setState({ userFormVis: false });
+                }}></UserEdit>
             </Modal>
         </>
         )

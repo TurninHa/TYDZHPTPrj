@@ -30,15 +30,15 @@ namespace Bul.Authority.Application.RequestObject
         /// <summary>
         /// 
         /// </summary>
-        public long SSYGID { get; set; }
+        public long? SSYGID { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public long SSGSID { get; set; }
+        public long? SSGSID { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int SFGLY { get; set; }
+        public int? SFGLY { get; set; }
         /// <summary>
         /// 
         /// </summary>
