@@ -14,7 +14,7 @@ export const getUserList = (search = {}) => {
 export const getModel = (id) => {
     return new Promise((resolve, reject) => {
 
-        get("/api/User/model", { id }).then(resp => {
+        post("/api/User/model", { id }).then(resp => {
             resolve(resp);
         }).catch(er => {
             reject(er);

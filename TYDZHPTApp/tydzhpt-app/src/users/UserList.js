@@ -2,7 +2,7 @@ import React from "react";
 import { Input, Form, Button, Table, Select, AutoComplete, Modal, message, Space } from "antd";
 import '../index.css';
 import "../Css/glb.css";
-import { getUserList,disEnUser, deleteUser } from '../Api/yhgl'
+import { getUserList, disEnUser, deleteUser } from '../Api/yhgl'
 import UserEdit from "./UserEdit";
 
 
@@ -21,7 +21,8 @@ class UserList extends React.Component {
                 pageSize: 20,
                 total: 0
             },
-            userFormVis: false
+            userFormVis: false,
+            userId: -1
         }
     }
 
@@ -80,7 +81,21 @@ class UserList extends React.Component {
         dataIndex: "ID",
         key: "ID",
         render: (text, record) => {
-            return "编辑";
+            if (record.SSGSID === 0) {
+                return (
+                    <Space>
+                        <a onClick={() => this.setState({ userFormVis: true, userId: text })}> 编辑</a>
+                        <a onClick={()=>{}}>删除</a>
+                    </Space>
+                );
+            }
+            else {
+                return (
+                    <>
+                        <a>查看</a>
+                    </>
+                );
+            }
         }
     }];
 
@@ -204,7 +219,7 @@ class UserList extends React.Component {
                                 <div className="list-grid-head-tool-text">用户管理</div>
                                 <div className="list-grid-head-tool-bar">
                                     <div>
-                                        <Button type="primary" onClick={() => this.setState({ userFormVis: true })}>添加用户</Button>
+                                        <Button type="primary" onClick={() => this.setState({ userFormVis: true,userId:-1 })}>添加用户</Button>
                                     </div>
                                 </div>
                             </div>
@@ -240,12 +255,15 @@ class UserList extends React.Component {
                 maskClosable={false}
                 centered
             >
-                <UserEdit saveEffect={(isSuc = false) => {
-                    if (isSuc) {
-                        this.loadUserDataList();
-                    }
-                    this.setState({ userFormVis: false });
-                }}></UserEdit>
+                <UserEdit
+                    saveEffect={(isSuc = false) => {
+                        if (isSuc) {
+                            this.loadUserDataList();
+                        }
+                        this.setState({ userFormVis: false });
+                    }}
+                    id={this.state.userId}
+                ></UserEdit>
             </Modal>
         </>
         )
