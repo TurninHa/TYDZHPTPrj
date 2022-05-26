@@ -28,6 +28,7 @@ class UserList extends React.Component {
 
     form = React.createRef();
     SltSSGID = -1;
+    SltRowKeys = [];
 
     columns = [{
         title: "序号",
@@ -85,7 +86,7 @@ class UserList extends React.Component {
                 return (
                     <Space>
                         <a onClick={() => this.setState({ userFormVis: true, userId: text })}> 编辑</a>
-                        <a onClick={()=>{}}>删除</a>
+                        <a onClick={() => { }}>删除</a>
                     </Space>
                 );
             }
@@ -120,6 +121,7 @@ class UserList extends React.Component {
 
                 data.Data.Data.forEach((element, i) => {
                     element.XH = i + 1;
+                    element.key = element.ID;
                 });
 
                 this.setState({
@@ -165,6 +167,11 @@ class UserList extends React.Component {
         });
     }
 
+    rowCheckboxChangedHandle(keys, rows) {
+        console.log(keys);
+        this.SltRowKeys = keys;
+    }
+
     render() {
         return (<>
             <div className="list-page-container">
@@ -204,7 +211,7 @@ class UserList extends React.Component {
                                 </Form.Item>
                                 <Form.Item>
                                     <Space>
-                                        <Button type="primary" onClick={() => this.searchHandle()}>查询</Button>
+                                        <Button onClick={() => this.searchHandle()}>查询</Button>
                                         <Button onClick={() => this.resetHandle()}>重置</Button>
                                     </Space>
                                 </Form.Item>
@@ -218,14 +225,19 @@ class UserList extends React.Component {
                             <div className="list-grid-head-tool">
                                 <div className="list-grid-head-tool-text">用户管理</div>
                                 <div className="list-grid-head-tool-bar">
-                                    <div>
-                                        <Button type="primary" onClick={() => this.setState({ userFormVis: true,userId:-1 })}>添加用户</Button>
-                                    </div>
+                                    <Space>
+                                        <Button type="primary" onClick={() => this.setState({ userFormVis: true, userId: -1 })}>添加用户</Button>
+                                        <Button type="default" onClick={() => { }}>启用</Button>
+                                        <Button type="default" onClick={() => { }}>禁用</Button>
+                                    </Space>
                                 </div>
                             </div>
                         </div>
                         <div className="list-grid-body">
-                            <Table columns={this.columns} dataSource={this.state.dataSource}
+                            <Table
+                                rowSelection={{ type: "checkbox", onChange: (keys, rows) => this.rowCheckboxChangedHandle(keys, rows) }}
+                                columns={this.columns}
+                                dataSource={this.state.dataSource}
                                 bordered
                                 size="small"
                                 pagination={{

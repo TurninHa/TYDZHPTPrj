@@ -78,7 +78,7 @@ namespace Bul.Authority.Application
             if (string.IsNullOrEmpty(userRo.XM))
                 return BulResult.FailNonData(-3, "请输入姓名");
 
-            if (string.IsNullOrEmpty(userRo.MM) || string.IsNullOrEmpty(userRo.QRMM) || userRo.MM != userRo.QRMM)
+            if (userRo.Id <= 0 && (string.IsNullOrEmpty(userRo.MM) || string.IsNullOrEmpty(userRo.QRMM) || userRo.MM != userRo.QRMM))
                 return BulResult.FailNonData(-4, "两次密码输入不一致");
 
 

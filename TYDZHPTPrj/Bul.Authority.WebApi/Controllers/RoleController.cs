@@ -5,6 +5,7 @@ using Bul.Authority.Entity;
 using Bul.Authority.Service;
 using Bul.System.Extension.NetCore;
 using Bul.System.Result;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,6 +33,23 @@ namespace Bul.Authority.WebApi.Controllers
         public async Task<BulResult<Page<IEnumerable<SqRoleDto>>>> GetRoleList(RoleRo ro)
         {
             return await this.SqRoleApplication.GetRoleList(ro);
+        }
+
+        /// <summary>
+        /// 获取所属公司的所有角色
+        /// </summary>
+        /// <returns></returns>
+        [Route("gsroles")]
+        [HttpGet]
+        public async Task<BulResult<IEnumerable<SqRoleAllDataDto>>> GetAllRoles()
+        {
+            var sqRolesServices = HttpContext.GetService<SqRoleServices>();
+
+            var roleList = await sqRolesServices.DbContext.Query<SqRoles>().Where(w => w.SSGSID == this.CurrentUser.SSGSID && w.SYZT == 1 && w.SFSC == 0).ToListAsync();
+
+            var roleResult = roleList.Adapt<IEnumerable<SqRoleAllDataDto>>();
+
+            return BulResult<IEnumerable<SqRoleAllDataDto>>.Success(roleResult);
         }
 
         /// <summary>

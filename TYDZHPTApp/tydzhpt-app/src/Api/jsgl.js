@@ -22,6 +22,17 @@ export const getModel = (id) => {
     });
 }
 
+export const getAllJs = () => {
+    return new Promise((resolve, reject) => {
+
+        get("/api/Role/gsroles", {}).then(resp => {
+            resolve(resp);
+        }).catch(er => {
+            reject(er);
+        });
+    });
+}
+
 export const saveRole = (formData = {}) => {
     return new Promise((resolve, reject) => {
 
@@ -44,7 +55,7 @@ export const deleteRole = (id) => {
     });
 }
 
-export const disEnRole = (disenData={}) => {
+export const disEnRole = (disenData = {}) => {
     return new Promise((resolve, reject) => {
 
         post("/api/Role/disen", disenData).then(resp => {

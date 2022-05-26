@@ -182,10 +182,10 @@ namespace Bul.Authority.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("model")]
-        public async Task<BulResult<SqUsers>> GetUser(EntityIdRo ro)
+        public async Task<BulResult<SqUserRolesDto>> GetUser(EntityIdRo ro)
         {
             if (ro == null || ro.Id <= 0)
-                return BulResult<SqUsers>.Fail(-1, "参数错误");
+                return BulResult<SqUserRolesDto>.Fail(-1, "参数错误");
 
             var userService = HttpContext.GetService<SqUsersService>();
 
@@ -197,9 +197,24 @@ namespace Bul.Authority.WebApi.Controllers
             var model = await query.FirstOrDefaultAsync();
 
             if (model == null)
-                return BulResult<SqUsers>.Fail(-2, "未检索到用户信息");
+                return BulResult<SqUserRolesDto>.Fail(-2, "未检索到用户信息");
 
-            return BulResult<SqUsers>.Success(model);
+            var userRoleService = HttpContext.GetService<SqUserRoleService>();
+
+            var userRoleQuery = userRoleService.DbContext.Query<SqUserRole>().LeftJoin<SqRoles>((ur, rl) => ur.RoleID == rl.ID);
+
+            userRoleQuery = userRoleQuery.Where((ur, rl) => ur.SSGSID == this.CurrentUser.SSGSID && ur.UserID == model.ID);
+
+            var userRoleList = await userRoleQuery.Select((ur, rl) => rl).ToListAsync();
+
+            if (userRoleList == null || userRoleList.Count <= 0)
+                return BulResult<SqUserRolesDto>.Fail(-3, "未检索到用户角色信息");
+
+            var userRoleDto = model.Adapt<SqUserRolesDto>();
+
+            userRoleDto.Roles = userRoleList;
+
+            return BulResult<SqUserRolesDto>.Success(userRoleDto);
         }
 
         /// <summary>

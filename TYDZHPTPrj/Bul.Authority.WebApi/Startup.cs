@@ -4,10 +4,13 @@ using Bul.Authority.DBConnection.ConnectionFactory;
 using Bul.Authority.Service;
 using Bul.System.Common;
 using Bul.System.Extension.NetCore;
+using Bul.System.Result;
 using Chloe;
 using Chloe.Infrastructure;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -85,10 +88,30 @@ namespace Bul.Authority.WebApi
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bul.Authority.WebApi v1"));
             }
+
+            app.UseExceptionHandler(config =>
+            {
+                config.Run(async context =>
+                {
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = "application/json";
+
+                    var error = context.Features.Get<IExceptionHandlerFeature>();
+
+                    if (error != null)
+                    {
+                        var ex = error.Error;
+
+                        BulLogger.Error(ex);
+                        
+                        await context.Response.WriteAsJsonAsync(BulResult.FailNonData(-1000, "³öÏÖ´íÎó"));
+                    }
+                });
+            });
 
             app.AppServiceExtention();
 
