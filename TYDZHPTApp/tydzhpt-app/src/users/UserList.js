@@ -172,6 +172,37 @@ class UserList extends React.Component {
         this.SltRowKeys = keys;
     }
 
+    setEnableOrDis(status) {
+        if (this.SltRowKeys.length <= 0) {
+            message.warn("请选择需要启用禁用的用户");
+            return;
+        }
+
+        let requestData = this.SltRowKeys.map(item => { return { Id: item, RoleStatue: status }; });
+
+        Modal.confirm({
+            title: "提示",
+            content: "确认" + ((status == 1) ? "启用" : "禁用") + "吗？",
+            okText: "确认",
+            cancelText: "取消",
+            onOk: () => {
+
+                return disEnUser(requestData).then(resp => {
+                    if (resp.data.Code === 0) {
+                        this.loadUserDataList();
+                    }
+                    else {
+                        message.warn(resp.data.Message);
+                        return;
+                    }
+                }).catch(er => {
+                    console.error(er);
+                });
+            },
+            centered: true
+        });
+    }
+
     render() {
         return (<>
             <div className="list-page-container">
@@ -227,8 +258,8 @@ class UserList extends React.Component {
                                 <div className="list-grid-head-tool-bar">
                                     <Space>
                                         <Button type="primary" onClick={() => this.setState({ userFormVis: true, userId: -1 })}>添加用户</Button>
-                                        <Button type="default" onClick={() => { }}>启用</Button>
-                                        <Button type="default" onClick={() => { }}>禁用</Button>
+                                        <Button type="default" onClick={() => this.setEnableOrDis(1)}>启用</Button>
+                                        <Button type="default" onClick={() => this.setEnableOrDis(0)}>禁用</Button>
                                     </Space>
                                 </div>
                             </div>

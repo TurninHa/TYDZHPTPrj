@@ -44,7 +44,7 @@ export const deleteUser = (id) => {
     });
 }
 
-export const disEnUser = (disenData={}) => {
+export const disEnUser = (disenData=[]) => {
     return new Promise((resolve, reject) => {
 
         post("/api/User/disablen", disenData).then(resp => {

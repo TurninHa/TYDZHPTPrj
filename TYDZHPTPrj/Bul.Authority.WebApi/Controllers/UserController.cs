@@ -262,39 +262,64 @@ namespace Bul.Authority.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("disablen")]
-        public async Task<AbstractResult> SetEnableAndDis(DisEnRoleRo userRo)
+        public async Task<AbstractResult> SetEnableAndDis(IList<DisEnRoleRo> userRo)
         {
-            if (userRo == null || userRo.Id <= 0)
-                return BulResult.FailNonData(-1, "参数错误");
-
-            if (userRo.RoleStatue != 1 && userRo.RoleStatue != 0)
+            if (userRo == null || userRo.Count <= 0)
                 return BulResult.FailNonData(-1, "参数错误");
 
             var userService = HttpContext.GetService<SqUsersService>();
 
-            var userQuery = userService.DbContext.Query<SqUsers>().Where(w => w.ID == userRo.Id);
+            var userIds = userRo.Select(s => s.Id);
 
-            var userModel = await userQuery.FirstOrDefaultAsync();
+            var userQuery = userService.DbContext.Query<SqUsers>().Where(w => userIds.Contains(w.ID));
 
-            if (userModel == null)
+            var userModelList = await userQuery.ToListAsync();
+
+            if (userModelList == null || userModelList.Count <= 0)
                 return BulResult.FailNonData(-1, "参数错误");
 
             if (this.CurrentUser.SSGSID != 0)
             {
-                if (this.CurrentUser.SSGSID != userModel.SSGSID)
+                userModelList = userModelList.Where(w => w.SSGSID == this.CurrentUser.SSGSID).ToList();
+
+                if (userModelList == null || userModelList.Count <= 0)
                     return BulResult.FailNonData(-2, "您没有权限修改禁用启用此用户");
             }
 
-            userModel.SYZT = userRo.RoleStatue;
-            userModel.Updater = this.CurrentUser.ID;
-            userModel.UpdateTime = DateTime.Now;
+            userService.DbContext.BeginTransaction();
+            try
+            {
+                foreach (var item in userModelList)
+                {
+                    if (!userRo.Any(a => a.Id == item.ID)) continue;
 
-            var isUdpdSuc = await userService.DbContext.UpdateAsync(userModel);
+                    var disEnRole = userRo.FirstOrDefault(f => f.Id == item.ID);
 
-            if (isUdpdSuc > 0)
-                return BulResult.SuccessNonData();
+                    if (disEnRole != null)
+                    {
+                        item.SYZT = disEnRole.RoleStatue;
+                        item.Updater = this.CurrentUser.ID;
+                        item.UpdateTime = DateTime.Now;
+                    }
 
-            return BulResult.FailNonData(-3, "启用禁用失败");
+                    await userService.DbContext.UpdateAsync(item);
+                }
+
+                userService.DbContext.Session.CommitTransaction();
+
+            }
+            catch (Exception er)
+            {
+                if (userService.DbContext.Session.IsInTransaction)
+                    userService.DbContext.Session.RollbackTransaction();
+
+                BulLogger.Error(er);
+
+                return BulResult.FailNonData(-3, "启用禁用失败");
+            }
+
+            return BulResult.SuccessNonData();
+
         }
 
     }
