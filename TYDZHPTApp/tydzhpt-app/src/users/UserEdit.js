@@ -144,7 +144,10 @@ class UserEdit extends React.Component {
                 </div>
                 <div style={{ textAlign: "center" }}>
                     <Space>
-                        <Button type="primary" htmlType="button" onClick={() => this.saveHandle()}>保存</Button>
+                        {
+                            (this.props.id === -100) ? <></> : <Button type="primary" htmlType="button" onClick={() => this.saveHandle()}>保存</Button>
+                        }
+
                         <Button htmlType="button" onClick={() => this.props.saveEffect(false)}>取消</Button>
                     </Space>
                 </div>

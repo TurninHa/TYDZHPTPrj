@@ -86,14 +86,14 @@ class UserList extends React.Component {
                 return (
                     <Space>
                         <a onClick={() => this.setState({ userFormVis: true, userId: text })}> 编辑</a>
-                        <a onClick={() => { }}>删除</a>
+                        <a onClick={() => this.delUserHandle(text)}>删除</a>
                     </Space>
                 );
             }
             else {
                 return (
                     <>
-                        <a>查看</a>
+                        <a onClick={() => this.setState({ userFormVis: true, userId: -100 })}>查看</a>
                     </>
                 );
             }
@@ -200,6 +200,35 @@ class UserList extends React.Component {
                 });
             },
             centered: true
+        });
+    }
+
+    delUserHandle(id) {
+        if (!id || id <= 0) {
+            message.warn("参数错误");
+            return;
+        }
+        Modal.confirm({
+            title: "提示",
+            content: "确定删除吗？",
+            okText: "确认",
+            cancelText: "取消",
+            centered: true,
+            onOk: () => {
+                return deleteUser(id)
+                    .then(resp => {
+                        if (resp.data.Code === 0) {
+                            this.loadUserDataList();
+                        }
+                        else {
+                            message.warn(resp.data.Message);
+                            return;
+                        }
+                    })
+                    .catch(er => {
+                        console.log(er);
+                    });
+            }
         });
     }
 

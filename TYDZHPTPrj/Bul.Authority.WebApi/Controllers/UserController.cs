@@ -119,6 +119,8 @@ namespace Bul.Authority.WebApi.Controllers
             if (ro.SYZT != null)
                 userQuery = userQuery.Where(w => w.SYZT == ro.SYZT.Value);
 
+            userQuery = userQuery.Where(w => w.SFSC == 0);
+
             var userList = await userQuery.TakePage(ro.PageIndex, ro.PageSize).ToListAsync();
 
             var totalCount = await userQuery.CountAsync();
