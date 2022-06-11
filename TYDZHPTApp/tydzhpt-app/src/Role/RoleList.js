@@ -62,6 +62,7 @@ const RoleList = (props) => {
         dataIndex: "ID",
         key: "col__role_ID_CZ",
         render: (text, rec) => {
+            let Op=<a>设置权限</a>;
             if (rec.SSGSID !== 0) {
                 return (
                     <Space>
@@ -77,6 +78,7 @@ const RoleList = (props) => {
             else {
                 return (
                     <Space>
+                        {Op}
                         <a onClick={() => {
                             setRoleModalVisb(true);
                             setRoleId(rec.ID);
