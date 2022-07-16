@@ -2,6 +2,7 @@
 using Bul.Authority.Application.DataTranslateObject;
 using Bul.Authority.Application.RequestObject;
 using Bul.Authority.Entity;
+using Bul.Authority.Entity.ExtObj;
 using Bul.Authority.Service;
 using Bul.System.Common;
 using Bul.System.Extension.NetCore;
@@ -324,5 +325,18 @@ namespace Bul.Authority.WebApi.Controllers
 
         }
 
+        /// <summary>
+        /// 输出当前用户信息到前端
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("loginData")]
+        public BulResult<SqLoginUser> GetLoginDataInfo()
+        {
+            if (HttpContext.User == null || HttpContext.User.Claims == null || !HttpContext.User.Claims.Any())
+                return BulResult<SqLoginUser>.Fail(-1, "未登录");
+
+            return BulResult<SqLoginUser>.Success(this.CurrentUser);
+        }
     }
 }

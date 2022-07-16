@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./Css/login.css";
-import { userLogin } from "./Api/userlogin";
+import { userLogin, userLoginData } from "./Api/userlogin";
 
 class Login extends React.Component {
     constructor(props) {
@@ -34,6 +34,17 @@ class Login extends React.Component {
             console.log("Result", response);
             if (response.Code === 0) {
                 sessionStorage.setItem("user", JSON.stringify({ name: userName, token: response.Data }));
+                
+                userLoginData().then(resp => {
+                    //console.log(resp);
+                    if (resp.Code == 0)
+                        sessionStorage.setItem("userData", JSON.stringify(resp.Data));
+                    else
+                        console.log(resp.Message);
+                }).catch(error => {
+                    console.error(error);
+                });
+
                 window.location.replace("/layout");
             }
             else {
